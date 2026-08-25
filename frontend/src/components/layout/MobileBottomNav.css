@@ -1,35 +1,37 @@
 /* =========================================================
-   Floating Capsule Mobile Bottom Navigation
-   Rendered in Mobile View Only (<= 768px)
+   AAAN ENTERPRISES — CURVED FLUID NOTCH BOTTOM NAVIGATION
+   Pitch Black Solid Bar with Sliding Elevated Notch Circle
    ========================================================= */
 
-/* Hide completely on Desktop & Tablets */
+/* Hide on Desktop & Tablets (>= 769px) */
 @media (min-width: 769px) {
-  .floating-mobile-bottom-nav {
+  .curved-fluid-bottom-nav {
     display: none !important;
   }
 }
 
-/* Floating Capsule Bar for Mobile View */
+/* Floating Bottom Navigation Bar for Mobile */
 @media (max-width: 768px) {
-  .floating-mobile-bottom-nav {
+  .curved-fluid-bottom-nav {
     position: fixed;
-    bottom: 14px;
+    bottom: 12px;
     left: 50%;
     transform: translateX(-50%);
-    width: calc(100% - 28px);
-    max-width: 370px;
+    width: calc(100% - 24px);
+    max-width: 380px;
     z-index: 9990;
     pointer-events: auto;
     display: block;
-    animation: floatingNavSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    animation: curvedNavEntrance 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   }
 }
 
-@keyframes floatingNavSlideUp {
+@keyframes curvedNavEntrance {
   0% {
     opacity: 0;
-    transform: translate3d(-50%, 28px, 0) scale(0.96);
+    transform: translate3d(-50%, 28px, 0) scale(0.95);
   }
   100% {
     opacity: 1;
@@ -37,101 +39,135 @@
   }
 }
 
-/* White Pill Island Track */
-.floating-nav-pill-track {
-  background: rgba(255, 255, 255, 0.96);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border-radius: 9999px;
-  box-shadow: 0 10px 32px rgba(15, 23, 42, 0.14), 0 2px 6px rgba(15, 23, 42, 0.04);
-  border: 1.5px solid rgba(226, 232, 240, 0.85);
+/* Main Black Island Bar */
+.curved-nav-island-bar {
+  position: relative;
+  background: #000000;
+  height: 60px;
+  border-radius: 26px;
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.42), 0 2px 8px rgba(0, 0, 0, 0.2);
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 6px 10px;
-  position: relative;
 }
 
-/* Base Navigation Item Button */
-.floating-nav-item {
+/* =========================================================
+   Sliding Fluid Notch & Elevated Floating Circle
+   ========================================================= */
+.fluid-sliding-notch {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 20%; /* 100% / 5 tabs */
+  height: 100%;
+  pointer-events: none;
+  transition: transform 0.42s cubic-bezier(0.34, 1.56, 0.64, 1);
+  will-change: transform;
+  z-index: 1;
+}
+
+/* Elevated Floating Circle */
+.notch-elevated-circle {
+  position: absolute;
+  top: -16px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 50px;
+  height: 50px;
+  background: #000000;
+  border-radius: 50%;
+  border: 4px solid #F8FAFC;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 7px;
-  background: transparent;
-  border: none;
-  color: #94A3B8;
-  padding: 8px 14px;
-  border-radius: 9999px;
-  cursor: pointer;
-  outline: none;
-  transition: all 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
-  position: relative;
-  user-select: none;
-  -webkit-tap-highlight-color: transparent;
+  box-sizing: border-box;
 }
 
-.floating-nav-item:active {
+.notch-circle-glow {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, rgba(255, 255, 255, 0.25) 0%, transparent 60%);
+}
+
+/* Fluid Concave Inverted Wings */
+.notch-wing {
+  position: absolute;
+  top: 0;
+  width: 16px;
+  height: 16px;
+  background: transparent;
+  pointer-events: none;
+}
+
+.notch-wing.wing-left {
+  left: calc(50% - 40px);
+  border-top-right-radius: 14px;
+  box-shadow: 0 -6px 0 0 #F8FAFC;
+}
+
+.notch-wing.wing-right {
+  right: calc(50% - 40px);
+  border-top-left-radius: 14px;
+  box-shadow: 0 -6px 0 0 #F8FAFC;
+}
+
+/* =========================================================
+   Tabs Grid & Icon Animation Physics
+   ========================================================= */
+.curved-nav-tabs-grid {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  position: relative;
+  z-index: 2;
+}
+
+.curved-nav-tab-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  outline: none;
+  position: relative;
+}
+
+.curved-nav-tab-btn:active {
   transform: scale(0.92);
 }
 
-.floating-nav-icon {
-  color: #94A3B8;
-  transition: all 0.25s ease;
-  flex-shrink: 0;
-}
-
-/* Active State: Dark Navy Capsule Pill */
-.floating-nav-item.active-capsule {
-  background: #0F172A;
-  color: #FFFFFF;
-  padding: 8px 18px;
-  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.22);
-  transform: scale(1.02);
-}
-
-.floating-nav-item.active-capsule .floating-nav-icon {
-  color: #FFFFFF;
-}
-
-/* Golden Accent on Active Home Icon */
-.floating-nav-item.active-capsule .home-icon {
-  color: #FBBF24 !important;
-  stroke: #FBBF24 !important;
-}
-
-.floating-nav-text {
-  font-size: 0.82rem;
-  font-weight: 800;
-  color: #FFFFFF;
-  letter-spacing: 0.2px;
-  white-space: nowrap;
-  animation: capsuleTextPop 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-}
-
-@keyframes capsuleTextPop {
-  0% {
-    opacity: 0;
-    transform: scale(0.85);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-/* Badge Indicator on Inactive Tabs */
-.floating-icon-wrapper {
+.tab-icon-holder {
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 100%;
+  height: 100%;
 }
 
-.floating-pill-badge {
+.tab-glyph-icon {
+  color: rgba(255, 255, 255, 0.7);
+  transition: all 0.38s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transform: translateY(0);
+}
+
+/* Active State: Icon is elevated into the floating circular notch */
+.curved-nav-tab-btn.is-active .tab-glyph-icon {
+  color: #FFFFFF;
+  transform: translateY(-16px) scale(1.15);
+  filter: drop-shadow(0 2px 6px rgba(255, 255, 255, 0.4));
+}
+
+/* Badge Bubbles */
+.tab-badge-bubble {
   position: absolute;
-  top: -6px;
-  right: -8px;
+  top: 10px;
+  right: 20%;
   background: #10B981;
   color: #FFFFFF;
   font-size: 0.6rem;
@@ -143,15 +179,15 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 2px solid #FFFFFF;
+  border: 1.5px solid #000000;
 }
 
-.floating-pill-badge.dot {
+.tab-badge-bubble.dot {
   min-width: 8px;
   width: 8px;
   height: 8px;
   padding: 0;
   background: #EF4444;
-  top: -2px;
-  right: -3px;
+  top: 14px;
+  right: 26%;
 }
