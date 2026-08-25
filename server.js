@@ -184,6 +184,8 @@ app.get('/sitemap.xml', async (_req, res) => {
 // -----------------------------------------------------------------------------
 // FRONTEND STATIC SERVING & SPA FALLBACK (Checks all candidate paths)
 // -----------------------------------------------------------------------------
+import { execSync } from 'child_process';
+
 const candidateDistPaths = [
   path.join(__dirname, 'frontend/dist'),
   path.join(__dirname, 'backend/public'),
@@ -191,7 +193,24 @@ const candidateDistPaths = [
   path.join(__dirname, 'dist'),
 ];
 
-let activeStaticPath = candidateDistPaths.find((p) => fs.existsSync(path.join(p, 'index.html'))) || candidateDistPaths[0];
+function ensureFrontendBuilt() {
+  let found = candidateDistPaths.find((p) => fs.existsSync(path.join(p, 'index.html')));
+  if (!found) {
+    console.log('⚡ Frontend build not found — automatically building frontend now...');
+    try {
+      execSync('npm run build --prefix frontend', {
+        cwd: __dirname,
+        stdio: 'inherit',
+      });
+      found = candidateDistPaths.find((p) => fs.existsSync(path.join(p, 'index.html')));
+    } catch (e) {
+      console.warn('Auto-build notice:', e.message);
+    }
+  }
+  return found;
+}
+
+const activeStaticPath = ensureFrontendBuilt() || candidateDistPaths[0];
 
 if (fs.existsSync(activeStaticPath)) {
   console.log(`✓ Serving frontend static files from: [${activeStaticPath}]`);

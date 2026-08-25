@@ -3,9 +3,10 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
+    "postinstall": "npm install --prefix frontend && npm run build --prefix frontend",
     "build": "npm install --prefix backend && npm install --prefix frontend && npm run build --prefix frontend",
-    "start": "node backend/server.js",
-    "dev": "node --watch backend/server.js",
+    "start": "node server.js",
+    "dev": "node --watch server.js",
     "seed": "node backend/src/seed.js",
     "test": "node --test backend"
   },
