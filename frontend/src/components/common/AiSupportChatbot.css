@@ -1,25 +1,25 @@
 /* =========================================================
    AAAN ENTERPRISES — 3D ANIMATED ROBOT SUPPORT BOT
-   Moves Head, Hands, Eyes & Floats in 3D Space
+   Compact Size · Clean 3D Visor · Small Text Messages
    ========================================================= */
 
 .aaan-ai-support-wrapper {
   position: fixed;
-  bottom: 80px;
-  right: 16px;
+  bottom: 74px;
+  right: 14px;
   z-index: 99999;
   font-family: -apple-system, BlinkMacSystemFont, 'Plus Jakarta Sans', 'Segoe UI', Roboto, sans-serif;
 }
 
 @media (min-width: 1024px) {
   .aaan-ai-support-wrapper {
-    bottom: 24px;
-    right: 24px;
+    bottom: 20px;
+    right: 20px;
   }
 }
 
 /* =========================================================
-   Floating 3D Robot Mascot Launcher Trigger
+   Floating 3D Robot Mascot Launcher (Compact)
    ========================================================= */
 .floating-3d-robot-launcher {
   position: relative;
@@ -32,24 +32,24 @@
 }
 
 .floating-3d-robot-launcher:hover {
-  transform: scale(1.08) translateY(-4px);
+  transform: scale(1.06) translateY(-3px);
 }
 
 .floating-3d-robot-launcher:active {
   transform: scale(0.95);
 }
 
-/* Interactive Speech Bubble Prompt */
+/* Small Floating Speech Bubble Prompt */
 .robot-speech-bubble-pop {
   background: #0F172A;
   color: #FFFFFF;
-  padding: 6px 14px;
-  border-radius: 20px;
-  font-size: 0.75rem;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 0.68rem;
   font-weight: 700;
   white-space: nowrap;
-  margin-bottom: 6px;
-  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.25);
+  margin-bottom: 4px;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.22);
   border: 1px solid rgba(255, 255, 255, 0.15);
   animation: speechBubbleFloat 3s infinite ease-in-out;
   position: relative;
@@ -58,10 +58,10 @@
 .robot-speech-bubble-pop::after {
   content: '';
   position: absolute;
-  bottom: -5px;
+  bottom: -4px;
   left: 50%;
   transform: translateX(-50%);
-  border-width: 5px 5px 0;
+  border-width: 4px 4px 0;
   border-style: solid;
   border-color: #0F172A transparent;
   display: block;
@@ -70,7 +70,7 @@
 
 @keyframes speechBubbleFloat {
   0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-4px); }
+  50% { transform: translateY(-3px); }
 }
 
 /* =========================================================
@@ -85,40 +85,40 @@
 }
 
 .robot-3d-mascot-wrapper.size-sm {
-  width: 32px;
-  height: 32px;
+  width: 26px;
+  height: 26px;
 }
 
 .robot-3d-mascot-wrapper.size-md {
-  width: 52px;
-  height: 52px;
+  width: 40px;
+  height: 40px;
 }
 
 .robot-3d-mascot-wrapper.size-lg {
-  width: 86px;
-  height: 86px;
+  width: 58px;
+  height: 58px;
 }
 
-/* Floating Soft Shadow underneath 3D Character */
+/* Floating Soft Shadow */
 .robot-3d-floating-shadow {
   position: absolute;
   bottom: 0px;
   left: 50%;
   transform: translateX(-50%);
   width: 60%;
-  height: 10px;
-  background: radial-gradient(ellipse at center, rgba(16, 185, 129, 0.35) 0%, rgba(15, 23, 42, 0.2) 50%, transparent 80%);
+  height: 8px;
+  background: radial-gradient(ellipse at center, rgba(16, 185, 129, 0.3) 0%, rgba(15, 23, 42, 0.18) 50%, transparent 80%);
   border-radius: 50%;
   animation: robotShadowPulse 4.2s infinite ease-in-out;
   pointer-events: none;
 }
 
 @keyframes robotShadowPulse {
-  0%, 100% { transform: translateX(-50%) scale(1); opacity: 0.6; }
-  50% { transform: translateX(-50%) scale(0.75); opacity: 0.3; }
+  0%, 100% { transform: translateX(-50%) scale(1); opacity: 0.55; }
+  50% { transform: translateX(-50%) scale(0.8); opacity: 0.25; }
 }
 
-/* Character Container with 3D Head & Hand Float Movement */
+/* Character Container with Smooth Floating Movement */
 .robot-3d-character-container {
   width: 100%;
   height: 100%;
@@ -135,128 +135,50 @@
   width: 100%;
   height: 100%;
   object-fit: contain;
-  filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.22));
+  filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.18));
 }
 
-/* Automatic Head Tilt, Body Levitation & Hand Gesturing Keyframes */
 @keyframes robot3DHeadAndHandMovement {
   0%, 100% {
     transform: translateY(0px) rotateZ(0deg) rotateY(0deg);
   }
-  /* Tilt head left, hand gesture up */
   22% {
-    transform: translateY(-8px) rotateZ(-3.5deg) rotateY(-6deg) scale(1.02);
+    transform: translateY(-5px) rotateZ(-2.5deg) rotateY(-4deg) scale(1.02);
   }
-  /* Look center & float */
   50% {
-    transform: translateY(-12px) rotateZ(0.5deg) rotateY(0deg) scale(1.03);
+    transform: translateY(-8px) rotateZ(0.5deg) rotateY(0deg) scale(1.02);
   }
-  /* Tilt head right, waving hand */
   74% {
-    transform: translateY(-6px) rotateZ(3.5deg) rotateY(6deg) scale(1.01);
+    transform: translateY(-4px) rotateZ(2.5deg) rotateY(4deg) scale(1.01);
   }
 }
 
 /* =========================================================
-   Live Neon Green Visor Eyes (Animated Automatic Movement)
-   ========================================================= */
-.robot-visor-eyes-overlay {
-  position: absolute;
-  top: 28%;
-  left: 36%;
-  width: 30%;
-  height: 18%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  pointer-events: none;
-}
-
-.live-neon-eye {
-  width: 36%;
-  height: 72%;
-  border-radius: 50%;
-  background: #00F5A0;
-  box-shadow: 0 0 8px #00F5A0, 0 0 16px rgba(0, 245, 160, 0.85);
-  animation: neonEyesLifeMovement 5s infinite ease-in-out;
-  transform-origin: center center;
-}
-
-/* Lifelike automatic eye movement: Looking Left, Right, Up, and Cute Blinking */
-@keyframes neonEyesLifeMovement {
-  0%, 100% {
-    transform: translate3d(0, 0, 0) scaleY(1);
-    opacity: 0.95;
-  }
-  /* Look left */
-  16%, 28% {
-    transform: translate3d(-3px, 0, 0) scaleY(1);
-    opacity: 1;
-  }
-  /* Quick Blink */
-  32% {
-    transform: translate3d(-3px, 0, 0) scaleY(0.08);
-    opacity: 0.3;
-  }
-  34% {
-    transform: translate3d(-3px, 0, 0) scaleY(1);
-    opacity: 1;
-  }
-  /* Look right */
-  52%, 64% {
-    transform: translate3d(3px, -1px, 0) scaleY(1);
-    opacity: 1;
-  }
-  /* Look up happily */
-  74%, 82% {
-    transform: translate3d(0, -2px, 0) scale(1.1, 1.1);
-    opacity: 1;
-  }
-  /* Double Blink */
-  86% {
-    transform: translate3d(0, 0, 0) scaleY(0.08);
-    opacity: 0.3;
-  }
-  88% {
-    transform: translate3d(0, 0, 0) scaleY(1);
-    opacity: 1;
-  }
-  90% {
-    transform: translate3d(0, 0, 0) scaleY(0.08);
-    opacity: 0.3;
-  }
-  92% {
-    transform: translate3d(0, 0, 0) scaleY(1);
-    opacity: 0.95;
-  }
-}
-
-/* =========================================================
-   Support Bot Chat Drawer Container
+   Compact Support Bot Chat Drawer Container
    ========================================================= */
 .ai-chat-drawer {
-  width: 380px;
-  height: 600px;
-  max-height: calc(100vh - 40px);
+  width: 326px;
+  height: 480px;
+  max-height: calc(100vh - 30px);
   background: #FFFFFF;
-  border-radius: 26px;
-  box-shadow: 0 24px 65px rgba(15, 23, 42, 0.3);
+  border-radius: 20px;
+  box-shadow: 0 18px 50px rgba(15, 23, 42, 0.26);
   border: 1px solid rgba(226, 232, 240, 0.9);
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  animation: supportBotPopIn 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: supportBotPopIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @keyframes supportBotPopIn {
-  from { opacity: 0; transform: translateY(18px) scale(0.96); }
+  from { opacity: 0; transform: translateY(14px) scale(0.96); }
   to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 /* Header */
 .chat-drawer-header {
   background: #FFFFFF;
-  padding: 12px 18px;
+  padding: 10px 14px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -267,7 +189,7 @@
 .header-brand-info {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
 }
 
 .bot-header-text {
@@ -277,34 +199,34 @@
 
 .bot-title {
   margin: 0;
-  font-size: 1.05rem;
+  font-size: 0.94rem;
   font-weight: 800;
   color: #0F172A;
   line-height: 1.2;
 }
 
 .bot-status-text {
-  font-size: 0.78rem;
+  font-size: 0.72rem;
   color: #64748B;
   font-weight: 600;
   display: flex;
   align-items: center;
-  gap: 5px;
-  margin-top: 2px;
+  gap: 4px;
+  margin-top: 1px;
 }
 
 .live-green-pulse-dot {
-  width: 7px;
-  height: 7px;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
   background: #10B981;
-  box-shadow: 0 0 6px #10B981;
+  box-shadow: 0 0 5px #10B981;
 }
 
 .role-indicator-badge {
-  font-size: 0.72rem;
+  font-size: 0.68rem;
   font-weight: 800;
-  padding: 4px 10px;
+  padding: 3px 8px;
   border-radius: 50px;
   letter-spacing: 0.2px;
 }
@@ -325,8 +247,8 @@
   background: #F1F5F9;
   border: 1px solid #E2E8F0;
   color: #64748B;
-  width: 32px;
-  height: 32px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
   cursor: pointer;
   display: flex;
@@ -343,18 +265,18 @@
 /* Messages Thread Area */
 .chat-messages-thread {
   flex: 1;
-  padding: 16px 14px;
+  padding: 12px 10px;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  background: #F1F5F9; /* Soft cool grey-blue */
+  gap: 12px;
+  background: #F1F5F9;
 }
 
 .msg-wrapper {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 3px;
   max-width: 88%;
 }
 
@@ -367,84 +289,82 @@
   align-items: flex-end;
 }
 
-/* Header Labels above Bubbles */
+/* Sender Labels */
 .msg-sender-label {
   display: flex;
   align-items: center;
-  gap: 6px;
-  font-size: 0.75rem;
+  gap: 4px;
+  font-size: 0.7rem;
   font-weight: 600;
 }
 
 .bot-label-pill {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
   color: #475569;
   font-weight: 700;
 }
 
 .customer-label {
   color: #94A3B8;
-  font-size: 0.72rem;
+  font-size: 0.68rem;
   font-weight: 600;
   text-align: right;
-  margin-right: 4px;
+  margin-right: 3px;
 }
 
-/* Message Bubbles */
+/* Small, Compact Message Bubbles */
 .msg-bubble {
-  padding: 13px 16px;
-  font-size: 0.88rem;
-  line-height: 1.48;
+  padding: 9px 12px;
+  font-size: 0.81rem;
+  line-height: 1.42;
   word-break: break-word;
 }
 
-/* Bot Message: White Bubble with Left Tail */
+/* Bot Bubble */
 .bot-bubble {
   background: #FFFFFF;
   color: #1E293B;
-  border-radius: 18px 18px 18px 4px;
-  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.05);
+  border-radius: 14px 14px 14px 3px;
+  box-shadow: 0 1.5px 6px rgba(15, 23, 42, 0.04);
   border: 1px solid rgba(226, 232, 240, 0.8);
 }
 
-/* Customer Message: Vibrant Royal Blue with Right Tail */
+/* Customer Bubble */
 .customer-bubble {
   background: #0066FF;
   color: #FFFFFF;
-  border-radius: 18px 18px 4px 18px;
-  box-shadow: 0 4px 14px rgba(0, 102, 255, 0.25);
+  border-radius: 14px 14px 3px 14px;
+  box-shadow: 0 3px 10px rgba(0, 102, 255, 0.22);
 }
 
 .msg-text strong {
   font-weight: 700;
 }
 
-/* =========================================================
-   Action Question Pills Card (Matches Mockup 1)
-   ========================================================= */
+/* Compact Action Question Pills Card */
 .action-pills-card-box {
   background: #FFFFFF;
-  border-radius: 20px;
-  padding: 14px 14px 12px;
+  border-radius: 16px;
+  padding: 10px 10px 8px;
   border: 1px solid #E2E8F0;
-  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.04);
-  margin-top: 4px;
+  box-shadow: 0 1.5px 6px rgba(15, 23, 42, 0.03);
+  margin-top: 2px;
 }
 
 .action-card-prompt-header {
-  font-size: 0.82rem;
+  font-size: 0.74rem;
   font-weight: 700;
   color: #0F172A;
-  margin-bottom: 12px;
+  margin-bottom: 8px;
   padding-left: 2px;
 }
 
 .action-pills-list {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
 }
 
 .action-pill-btn {
@@ -452,18 +372,18 @@
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  padding: 10px 14px;
+  padding: 7px 11px;
   border-radius: 50px;
-  font-size: 0.82rem;
+  font-size: 0.75rem;
   font-weight: 700;
   cursor: pointer;
   text-align: left;
-  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: all 0.18s ease;
   box-sizing: border-box;
 }
 
 .action-pill-btn:hover {
-  transform: translateX(4px);
+  transform: translateX(3px);
 }
 
 .action-pill-btn:active {
@@ -471,8 +391,8 @@
 }
 
 .pill-emoji-badge {
-  font-size: 0.95rem;
-  margin-right: 8px;
+  font-size: 0.85rem;
+  margin-right: 6px;
   flex-shrink: 0;
 }
 
@@ -484,12 +404,12 @@
 }
 
 .pill-arrow-icon {
-  margin-left: 8px;
+  margin-left: 6px;
   flex-shrink: 0;
   opacity: 0.7;
 }
 
-/* Mockup Pill Color Themes */
+/* Themes */
 .pill-green {
   background: #ECFDF5;
   border: 1.5px solid #A7F3D0;
@@ -528,18 +448,18 @@
 /* Escalation Form Card */
 .escalation-form-card {
   background: #FFFFFF;
-  border-radius: 16px;
-  padding: 14px;
+  border-radius: 14px;
+  padding: 12px;
   border: 1px solid #BFDBFE;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.04);
 }
 
 .esc-head {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-size: 0.82rem;
-  margin-bottom: 10px;
+  font-size: 0.76rem;
+  margin-bottom: 8px;
   color: #0F172A;
 }
 
@@ -553,15 +473,15 @@
 .esc-form {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
 }
 
 .esc-form input, .esc-form textarea {
   width: 100%;
-  padding: 8px 12px;
-  border-radius: 10px;
+  padding: 6px 10px;
+  border-radius: 8px;
   border: 1px solid #CBD5E1;
-  font-size: 0.82rem;
+  font-size: 0.76rem;
   outline: none;
   box-sizing: border-box;
 }
@@ -574,34 +494,29 @@
   background: #0066FF;
   color: white;
   border: none;
-  padding: 10px;
-  border-radius: 10px;
+  padding: 8px;
+  border-radius: 8px;
   font-weight: 800;
-  font-size: 0.82rem;
+  font-size: 0.76rem;
   cursor: pointer;
-  transition: opacity 0.2s;
 }
 
-.btn-submit-esc:hover {
-  opacity: 0.92;
-}
-
-/* Input Footer Bar */
+/* Compact Input Footer Bar */
 .chat-input-bar {
-  padding: 12px 14px;
+  padding: 10px 12px;
   background: #FFFFFF;
   border-top: 1px solid #E5E7EB;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
 }
 
 .chat-input-bar input {
   flex: 1;
-  padding: 10px 14px;
-  border-radius: 24px;
+  padding: 8px 12px;
+  border-radius: 20px;
   border: 1.5px solid #E2E8F0;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   outline: none;
   color: #0F172A;
   background: #F8FAFC;
@@ -611,12 +526,12 @@
 .chat-input-bar input:focus {
   background: #FFFFFF;
   border-color: #0066FF;
-  box-shadow: 0 0 0 3px rgba(0, 102, 255, 0.12);
+  box-shadow: 0 0 0 2.5px rgba(0, 102, 255, 0.12);
 }
 
 .chat-send-btn {
-  width: 38px;
-  height: 38px;
+  width: 34px;
+  height: 34px;
   border-radius: 50%;
   background: #0066FF;
   color: white;
@@ -625,30 +540,29 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.2s ease;
   flex-shrink: 0;
+  transition: all 0.18s ease;
 }
 
 .chat-send-btn:hover {
   background: #0052CC;
-  transform: scale(1.04);
 }
 
 .chat-send-btn:disabled {
-  opacity: 0.4;
+  opacity: 0.35;
   cursor: not-allowed;
 }
 
 /* Typing Bubble */
 .typing-dots {
   display: flex;
-  gap: 4px;
-  padding: 4px 6px;
+  gap: 3px;
+  padding: 3px 5px;
 }
 
 .typing-dots span {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
   border-radius: 50%;
   background: #0066FF;
   animation: typingBlink 1.4s infinite ease-in-out both;
@@ -664,10 +578,10 @@
 
 @media (max-width: 480px) {
   .ai-chat-drawer {
-    width: 92vw;
-    right: 4vw;
-    bottom: 16px;
-    height: 80vh;
-    border-radius: 20px;
+    width: 90vw;
+    right: 5vw;
+    bottom: 14px;
+    height: 75vh;
+    border-radius: 18px;
   }
 }

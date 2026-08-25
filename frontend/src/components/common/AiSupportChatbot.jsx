@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { X, Send, ChevronRight, AlertCircle, Sparkles } from 'lucide-react';
+import { X, Send, ChevronRight, AlertCircle } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { processAiSupportQuery } from '../../utils/aiSupportEngine';
 import { submitContact } from '../../api';
@@ -7,7 +7,7 @@ import { toastSuccess, toastError } from '../../utils/toast.js';
 import { ROBOT_3D_BASE64 } from '../../assets/robotImage.js';
 import './AiSupportChatbot.css';
 
-// 3D Animated Robot Mascot Component with Head, Hand & Moving Eyes Physics
+// 3D Animated Robot Mascot Component (Clean Visor, Floating Physics)
 function Animated3DRobotMascot({ size = 'md', interactive = false }) {
   return (
     <div className={`robot-3d-mascot-wrapper size-${size} ${interactive ? 'interactive-mascot' : ''}`}>
@@ -21,12 +21,6 @@ function Animated3DRobotMascot({ size = 'md', interactive = false }) {
           alt="3D AI Support Robot"
           className="robot-3d-img"
         />
-
-        {/* Live Neon Green Eyes & Visor Glow Overlay (Animated Looking & Blinking) */}
-        <div className="robot-visor-eyes-overlay">
-          <span className="live-neon-eye eye-left" />
-          <span className="live-neon-eye eye-right" />
-        </div>
       </div>
     </div>
   );
@@ -43,8 +37,8 @@ export default function AiSupportChatbot() {
       id: 'm-1',
       sender: 'bot',
       text: userIsAdmin
-        ? `👑 Welcome Admin ${user?.name || ''}! I am your AI Store Management Bot. You can query live DB metrics, orders, revenue & stock below.`
-        : `👋 Welcome to Support Bot. I'm ChatBot, your AI assistant. Let me know how I can help you.`,
+        ? `👑 Welcome Admin ${user?.name || ''}! Query live store DB metrics, orders, revenue & stock below.`
+        : `👋 Welcome! I'm ChatBot, your 24/7 assistant. How can I help you today?`,
       time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
     }
   ]);
@@ -107,7 +101,7 @@ export default function AiSupportChatbot() {
         if (aiResult.escalate) {
           setShowEscalationForm(true);
         }
-      }, 400);
+      }, 350);
     } catch {
       setTyping(false);
     }
@@ -135,7 +129,7 @@ export default function AiSupportChatbot() {
       const confirmMsg = {
         id: `b-sys-${Date.now()}`,
         sender: 'bot',
-        text: '✅ Your high-priority support ticket has been dispatched to our Human Support Executives. We will contact you via email and phone shortly.',
+        text: '✅ Priority support ticket dispatched. Our team will contact you shortly.',
         time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       };
       setMessages((prev) => [...prev, confirmMsg]);
@@ -146,7 +140,7 @@ export default function AiSupportChatbot() {
     }
   };
 
-  // User Action Question Pills (Styled exactly like mockup)
+  // User Action Question Pills
   const customerPillQuestions = [
     {
       theme: 'pill-green',
@@ -180,7 +174,7 @@ export default function AiSupportChatbot() {
     }
   ];
 
-  // Admin Action Question Pills (Styled exactly like mockup)
+  // Admin Action Question Pills
   const adminPillQuestions = [
     {
       theme: 'pill-green',
@@ -205,12 +199,6 @@ export default function AiSupportChatbot() {
       iconEmoji: '👥 🗃️',
       label: 'Audit Total Registered Customer Count (DB)',
       prompt: 'How many total registered customers are in database?'
-    },
-    {
-      theme: 'pill-slate',
-      iconEmoji: '🛍️ 📈',
-      label: 'Inspect Live Catalog Count & Prices (DB)',
-      prompt: 'What 3D wall stickers do you have in stock?'
     }
   ];
 
@@ -218,44 +206,43 @@ export default function AiSupportChatbot() {
 
   return (
     <div className="aaan-ai-support-wrapper">
-      {/* Floating 3D Robot Mascot Launcher Button (Moves head, hands, eyes & floats) */}
+      {/* Floating Compact 3D Robot Mascot Launcher Button */}
       {!isOpen && (
         <div className="floating-3d-robot-launcher" onClick={() => setIsOpen(true)}>
           <div className="robot-speech-bubble-pop">
-            <span>Hi! Ask me anything 👋</span>
+            <span>Help? 👋</span>
           </div>
           <Animated3DRobotMascot size="lg" interactive={true} />
         </div>
       )}
 
-      {/* Support Chat Card Drawer */}
+      {/* Compact Support Chat Card Drawer */}
       {isOpen && (
         <div className="ai-chat-drawer">
           
-          {/* Card Header with Animated 3D Mascot */}
+          {/* Card Header */}
           <div className="chat-drawer-header">
             <div className="header-brand-info">
               <Animated3DRobotMascot size="md" />
               <div className="bot-header-text">
                 <h3 className="bot-title">Support Bot</h3>
                 <span className="bot-status-text">
-                  <span className="live-green-pulse-dot" /> Online · AI Active
+                  <span className="live-green-pulse-dot" /> Online
                 </span>
               </div>
             </div>
             
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              {/* Role Indicator Badge */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
               <span className={`role-indicator-badge ${userIsAdmin ? 'admin-badge' : 'user-badge'}`}>
-                {userIsAdmin ? '👑 Admin Mode' : '👤 Customer'}
+                {userIsAdmin ? '👑 Admin' : '👤 User'}
               </span>
               <button className="chat-close-btn" onClick={() => setIsOpen(false)} aria-label="Close Chat">
-                <X size={18} />
+                <X size={16} />
               </button>
             </div>
           </div>
 
-          {/* Messages Thread Container (Matches Chat Design) */}
+          {/* Messages Thread Container */}
           <div className="chat-messages-thread">
             {messages.map((m) => (
               <div key={m.id} className={`msg-wrapper ${m.sender === 'user' ? 'user-wrapper' : 'bot-wrapper'}`}>
@@ -295,10 +282,10 @@ export default function AiSupportChatbot() {
               </div>
             )}
 
-            {/* Action Questions Card Section (Matches Mockup 1) */}
+            {/* Action Questions Card Section */}
             <div className="action-pills-card-box">
               <div className="action-card-prompt-header">
-                Select an action below or ask a question:
+                Select an action or ask a question:
               </div>
 
               <div className="action-pills-list">
@@ -310,7 +297,7 @@ export default function AiSupportChatbot() {
                   >
                     <span className="pill-emoji-badge">{q.iconEmoji}</span>
                     <span className="pill-text">{q.label}</span>
-                    <ChevronRight size={16} className="pill-arrow-icon" />
+                    <ChevronRight size={14} className="pill-arrow-icon" />
                   </button>
                 ))}
               </div>
@@ -320,8 +307,8 @@ export default function AiSupportChatbot() {
             {showEscalationForm && (
               <div className="escalation-form-card">
                 <div className="esc-head">
-                  <AlertCircle size={18} color="#0066FF" />
-                  <strong>Submit Priority Ticket</strong>
+                  <AlertCircle size={16} color="#0066FF" />
+                  <strong>Submit Support Ticket</strong>
                   <button onClick={() => setShowEscalationForm(false)} className="esc-close">✕</button>
                 </div>
                 <form onSubmit={handleEscalationSubmit} className="esc-form">
@@ -352,7 +339,7 @@ export default function AiSupportChatbot() {
                     onChange={(e) => setEscalationForm({ ...escalationForm, message: e.target.value })}
                   />
                   <button type="submit" className="btn-submit-esc" disabled={submittingTicket}>
-                    {submittingTicket ? 'Dispatching…' : '📩 Dispatch Ticket to Team'}
+                    {submittingTicket ? 'Dispatching…' : '📩 Dispatch Ticket'}
                   </button>
                 </form>
               </div>
@@ -365,13 +352,13 @@ export default function AiSupportChatbot() {
           <div className="chat-input-bar">
             <input
               type="text"
-              placeholder={userIsAdmin ? "Ask a DB question (e.g., revenue, stock, orders)..." : "Ask about returns, tracking, stickers..."}
+              placeholder={userIsAdmin ? "Ask DB metrics..." : "Ask a question..."}
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => { if (e.key === 'Enter') handleSend(); }}
             />
             <button className="chat-send-btn" onClick={() => handleSend()} disabled={!input.trim()} aria-label="Send">
-              <Send size={15} />
+              <Send size={14} />
             </button>
           </div>
 
