@@ -219,7 +219,7 @@ router.post('/google', async (req, res) => {
     const payload = await response.json();
     const { sub, email, name, picture, email_verified } = payload;
 
-    const clientId = process.env.GOOGLE_CLIENT_ID || '798271672760-tsfmas0ibge6te3532tuhn8btkv3q6ad.apps.googleusercontent.com';
+    const clientId = process.env.GOOGLE_CLIENT_ID || '798271672760-6ud5snsd4ga49og0u0jhnqj27hueh209.apps.googleusercontent.com';
     if (payload.aud !== clientId) {
       return res.status(400).json({ message: 'Invalid client application ID' });
     }

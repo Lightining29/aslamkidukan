@@ -12,7 +12,7 @@ export default function GoogleSignInButton({ onSuccess, onError, text = 'signin_
         if (!window.google || !window.google.accounts) return;
         
         window.google.accounts.id.initialize({
-          client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID || '798271672760-tsfmas0ibge6te3532tuhn8btkv3q6ad.apps.googleusercontent.com',
+          client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID || '798271672760-6ud5snsd4ga49og0u0jhnqj27hueh209.apps.googleusercontent.com',
           callback: (res) => {
             if (res.credential) {
               onSuccess(res.credential);
