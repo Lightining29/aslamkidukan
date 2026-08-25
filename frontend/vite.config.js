@@ -1,8 +1,23 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import fs from 'fs';
+import path from 'path';
+
+// Plugin to ensure .htaccess is copied to dist on every build
+const copyHtaccessPlugin = () => ({
+  name: 'copy-htaccess',
+  closeBundle() {
+    const src = path.resolve(__dirname, 'public/.htaccess');
+    const dest = path.resolve(__dirname, 'dist/.htaccess');
+    if (fs.existsSync(src)) {
+      fs.copyFileSync(src, dest);
+      console.log('✓ Successfully copied .htaccess to dist/.htaccess');
+    }
+  },
+});
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react(), copyHtaccessPlugin()],
   server: {
     port: 3000,
     proxy: {

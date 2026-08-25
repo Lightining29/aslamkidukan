@@ -125,18 +125,18 @@ export default function AaanLogo({
             <span>AAAN</span>
             <span
               style={{
-                fontSize: `calc(${currentSize.title} * 0.4)`,
-                padding: '2px 6px',
-                borderRadius: '6px',
-                background: 'linear-gradient(135deg, #EC4899 0%, #8B5CF6 100%)',
+                fontSize: `calc(${currentSize.title} * 0.5)`,
+                padding: '2px 8px',
+                borderRadius: '8px',
+                background: 'linear-gradient(135deg, #10B981 0%, #059669 100%)',
                 color: '#FFFFFF',
                 WebkitTextFillColor: '#FFFFFF',
-                fontWeight: 700,
-                letterSpacing: '0.5px',
-                boxShadow: '0 2px 8px rgba(236, 72, 153, 0.3)'
+                fontWeight: 800,
+                letterSpacing: '1px',
+                boxShadow: '0 2px 8px rgba(16, 185, 129, 0.3)'
               }}
             >
-              PRO
+              CART
             </span>
           </div>
           <span
@@ -144,13 +144,13 @@ export default function AaanLogo({
               fontFamily: "'Plus Jakarta Sans', sans-serif",
               fontSize: currentSize.sub,
               fontWeight: 700,
-              letterSpacing: '3px',
-              color: light ? '#F8FAFC' : '#64748B',
+              letterSpacing: '2px',
+              color: light ? '#F8FAFC' : '#10B981',
               textTransform: 'uppercase',
               marginTop: '3px'
             }}
           >
-            ENTERPRISES
+            3D STICKERS STUDIO
           </span>
         </div>
       )}

@@ -45,6 +45,7 @@ import { ProtectedRoute } from './components/ProtectedRoute';
 import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
 import LoginModal from './components/LoginModal';
+import MobileBottomNav from './components/layout/MobileBottomNav';
 import { useAuth } from './context/AuthContext';
 import './pages/shop/Home.css';
 
@@ -204,7 +205,13 @@ function App() {
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>
-      {showLoginModal && <LoginModal onClose={() => setShowLoginModal(false)} />}
+      {showLoginModal && (
+        <LoginModal
+          initialMode={typeof showLoginModal === 'string' ? showLoginModal : 'login'}
+          onClose={() => setShowLoginModal(false)}
+        />
+      )}
+      {!location.pathname.startsWith('/admin') && <MobileBottomNav />}
       <AiSupportChatbot />
       <PromotionalExitPopup />
     </>

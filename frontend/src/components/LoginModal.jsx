@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
+import { useNavigate } from 'react-router-dom';
 import { X, Droplets } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { forgotPassword, resetPassword, changePassword } from '../api';
@@ -6,9 +8,10 @@ import GoogleSignInButton from './GoogleSignInButton';
 import { toastSuccess, toastError, toastInfo } from '../utils/toast.js';
 import './LoginModal.css';
 
-export default function LoginModal({ onClose }) {
+export default function LoginModal({ onClose, initialMode = 'login' }) {
   const { login, register, loginWithGoogle, requirePasswordSetup, setRequirePasswordSetup } = useAuth();
-  const [mode, setMode] = useState(requirePasswordSetup ? 'setup-password' : 'login');
+  const navigate = useNavigate();
+  const [mode, setMode] = useState(requirePasswordSetup ? 'setup-password' : initialMode);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
@@ -20,6 +23,13 @@ export default function LoginModal({ onClose }) {
   const [error, setError] = useState('');
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
+  const [shaking, setShaking] = useState(false);
+
+  const triggerError = (msg) => {
+    setError(msg);
+    setShaking(true);
+    setTimeout(() => setShaking(false), 550);
+  };
 
   useEffect(() => {
     if (requirePasswordSetup) {
@@ -30,6 +40,14 @@ export default function LoginModal({ onClose }) {
   const handleClose = () => {
     setRequirePasswordSetup(false);
     onClose();
+  };
+
+  const handleRedirect = (u) => {
+    handleClose();
+    if (u) {
+      const dest = (u.role === 'admin' || u.isAdmin) ? '/admin' : '/account';
+      navigate(dest);
+    }
   };
 
   const handleModalClick = (e) => {
@@ -43,18 +61,16 @@ export default function LoginModal({ onClose }) {
     try {
       const u = await loginWithGoogle(credential);
       toastSuccess('Welcome!', `Signed in as ${u.name}`);
-      onClose();
+      handleRedirect(u);
     } catch (err) {
-      setError(err.message || 'Google Sign-In failed');
-      toastError('Google Sign-In failed', err.message);
+      triggerError(err?.message || 'Google Sign-In failed');
     } finally {
       setLoading(false);
     }
   };
 
   const handleGoogleError = (err) => {
-    setError(err.message || 'Google Sign-In failed');
-    toastError('Google Sign-In failed', err.message);
+    triggerError(err?.message || 'Google Sign-In failed');
   };
 
   const handleSubmit = async (e) => {
@@ -67,65 +83,114 @@ export default function LoginModal({ onClose }) {
       if (mode === 'login') {
         const u = await login(email, password);
         toastSuccess('Welcome back!', `Signed in as ${u.name}`);
-        onClose();
+        handleRedirect(u);
       } else if (mode === 'register') {
-        const res = await register(name, email, password);
-        if (res?.requireVerification) {
-          toastInfo('Check your email', 'A verification code has been sent to your inbox.');
-          setMessage('Account created! Check your email for the OTP.');
-          setTimeout(() => onClose(), 2500);
-        } else {
-          toastSuccess('Account created!', 'Welcome to Afsha Enterprises.');
-          onClose();
-        }
-      } else if (mode === 'forgot') {
-        if (forgotStep === 1) {
-          const res = await forgotPassword(email);
-          toastInfo('Code sent!', res.message || 'Check your email for the reset code.');
-          setMessage(res.message || 'Verification code sent to your email.');
-          setForgotStep(2);
-        } else {
-          await resetPassword(email, code, newPassword);
-          await login(email, newPassword);
-          toastSuccess('Password reset!', 'You have been signed in with your new password.');
-          setTimeout(() => onClose(), 1200);
-        }
-      } else if (mode === 'setup-password') {
-        if (newPassword !== confirmPassword) {
-          toastError('Passwords do not match', 'Please make sure both fields match.');
-          return setError('Passwords do not match');
-        }
-        if (newPassword.length < 6) {
-          toastError('Password too short', 'Password must be at least 6 characters.');
-          return setError('Password must be at least 6 characters');
-        }
-        await changePassword('', newPassword);
-        toastSuccess('Password saved!', 'You can now sign in with email and password.');
-        setRequirePasswordSetup(false);
-        setTimeout(() => onClose(), 1200);
+        const u = await register(name, email, password);
+        toastSuccess('Account created!', `Welcome to AAAN Cart, ${u.name}!`);
+        handleRedirect(u);
       }
     } catch (err) {
-      setError(err.message || 'Something went wrong. Please try again.');
-      toastError('Error', err.message || 'Something went wrong.');
+      triggerError(err?.message || (mode === 'login' ? 'Wrong password or email. Please check your credentials.' : 'Registration failed'));
     } finally {
       setLoading(false);
     }
   };
 
-  return (
-    <div className="modal-overlay" onClick={handleClose}>
-      <div className="modal-container" onClick={handleModalClick}>
+  const handleForgotSendOtp = async (e) => {
+    e.preventDefault();
+    setError('');
+    setMessage('');
+    setLoading(true);
+    try {
+      await forgotPassword(email);
+      setMessage('Verification code sent to your email.');
+      toastInfo('OTP Sent', 'Check your email for the reset code');
+      setForgotStep(2);
+    } catch (err) {
+      triggerError(err?.message || 'Failed to send OTP. Please check your email.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleForgotVerify = async (e) => {
+    e.preventDefault();
+    if (newPassword !== confirmPassword) {
+      triggerError('Passwords do not match');
+      return;
+    }
+    setError('');
+    setMessage('');
+    setLoading(true);
+    try {
+      await resetPassword(email, code, newPassword);
+      toastSuccess('Password Reset', 'You can now sign in with your new password.');
+      setMode('login');
+      setForgotStep(1);
+      setPassword('');
+      setMessage('Password reset successfully! Please sign in.');
+    } catch (err) {
+      triggerError(err?.message || 'Invalid or expired OTP code');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSetupPassword = async (e) => {
+    e.preventDefault();
+    if (newPassword !== confirmPassword) {
+      triggerError('Passwords do not match');
+      return;
+    }
+    setError('');
+    setMessage('');
+    setLoading(true);
+    try {
+      await changePassword(newPassword);
+      toastSuccess('Password Created', 'Your password has been saved.');
+      setRequirePasswordSetup(false);
+      handleClose();
+    } catch (err) {
+      triggerError(err?.message || 'Failed to set password');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const modalContent = (
+    <div className="login-modal-overlay" onClick={handleClose}>
+      <div className={`login-modal-card ${shaking ? 'is-shaking' : ''}`} onClick={handleModalClick}>
         <button className="modal-close-btn" onClick={handleClose} aria-label="Close modal">
           <X size={20} />
         </button>
 
         <div className="modal-logo">
-          <Droplets size={28} /> Glowora
+          <span style={{ fontSize: '1.6rem' }}>🌿</span> AAAN Cart
         </div>
+
+        {/* Segmented Auth Mode Switcher (Login / Register) */}
+        {(mode === 'login' || mode === 'register') && (
+          <div className="modal-mode-tabs">
+            <button
+              type="button"
+              className={`modal-tab-btn ${mode === 'login' ? 'active' : ''}`}
+              onClick={() => { setMode('login'); setError(''); setMessage(''); }}
+            >
+              Sign In
+            </button>
+            <button
+              type="button"
+              className={`modal-tab-btn ${mode === 'register' ? 'active' : ''}`}
+              onClick={() => { setMode('register'); setError(''); setMessage(''); }}
+            >
+              Create Account
+            </button>
+          </div>
+        )}
 
         {mode === 'login' && (
           <>
-            <p className="modal-subtitle">Welcome back — sign in to your account</p>
+            <p className="modal-subtitle">Welcome back — sign in to your AAAN Cart account</p>
             <form className="modal-form" onSubmit={handleSubmit}>
               {error && <div className="modal-error">{error}</div>}
               {message && <div className="modal-success">{message}</div>}
@@ -175,7 +240,7 @@ export default function LoginModal({ onClose }) {
 
         {mode === 'register' && (
           <>
-            <p className="modal-subtitle">Create your Glowora account</p>
+            <p className="modal-subtitle">Create your AAAN Cart account</p>
             <form className="modal-form" onSubmit={handleSubmit}>
               {error && <div className="modal-error">{error}</div>}
               {message && <div className="modal-success">{message}</div>}
@@ -211,7 +276,7 @@ export default function LoginModal({ onClose }) {
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Min. 6 characters"
+                  placeholder="At least 6 characters"
                   minLength={6}
                   required
                 />
@@ -233,18 +298,16 @@ export default function LoginModal({ onClose }) {
 
         {mode === 'forgot' && (
           <>
-            <p className="modal-subtitle">
-              {forgotStep === 1 ? 'Reset your password' : 'Enter reset code and new password'}
-            </p>
-            <form className="modal-form" onSubmit={handleSubmit}>
-              {error && <div className="modal-error">{error}</div>}
-              {message && <div className="modal-success">{message}</div>}
+            <p className="modal-subtitle">Reset your password</p>
+            {error && <div className="modal-error">{error}</div>}
+            {message && <div className="modal-success">{message}</div>}
 
-              {forgotStep === 1 ? (
+            {forgotStep === 1 ? (
+              <form className="modal-form" onSubmit={handleForgotSendOtp}>
                 <div className="form-group">
-                  <label htmlFor="modal-forgot-email">Email</label>
+                  <label htmlFor="forgot-email">Enter your account email</label>
                   <input
-                    id="modal-forgot-email"
+                    id="forgot-email"
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
@@ -252,45 +315,58 @@ export default function LoginModal({ onClose }) {
                     required
                   />
                 </div>
-              ) : (
-                <>
-                  <div className="form-group">
-                    <label htmlFor="modal-forgot-code">Verification Code (OTP)</label>
-                    <input
-                      id="modal-forgot-code"
-                      type="text"
-                      value={code}
-                      onChange={(e) => setCode(e.target.value)}
-                      placeholder="Enter 6-digit code"
-                      required
-                    />
-                  </div>
-                  <div className="form-group">
-                    <label htmlFor="modal-forgot-new-password">New Password</label>
-                    <input
-                      id="modal-forgot-new-password"
-                      type="password"
-                      value={newPassword}
-                      onChange={(e) => setNewPassword(e.target.value)}
-                      placeholder="Min. 6 characters"
-                      minLength={6}
-                      required
-                    />
-                  </div>
-                </>
-              )}
-
-              <button type="submit" className="btn btn-sky modal-submit" disabled={loading}>
-                {loading
-                  ? 'Processing...'
-                  : forgotStep === 1
-                  ? 'Send Verification Code'
-                  : 'Update Password'}
-              </button>
-            </form>
+                <button type="submit" className="btn btn-sky modal-submit" disabled={loading}>
+                  {loading ? 'Sending OTP...' : 'Send Reset Code'}
+                </button>
+              </form>
+            ) : (
+              <form className="modal-form" onSubmit={handleForgotVerify}>
+                <div className="form-group">
+                  <label htmlFor="forgot-code">6-digit OTP Code</label>
+                  <input
+                    id="forgot-code"
+                    type="text"
+                    value={code}
+                    onChange={(e) => setCode(e.target.value)}
+                    placeholder="123456"
+                    maxLength={6}
+                    required
+                  />
+                </div>
+                <div className="form-group">
+                  <label htmlFor="forgot-new-pass">New Password</label>
+                  <input
+                    id="forgot-new-pass"
+                    type="password"
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                    placeholder="New password (min 6 chars)"
+                    minLength={6}
+                    required
+                  />
+                </div>
+                <div className="form-group">
+                  <label htmlFor="forgot-confirm-pass">Confirm Password</label>
+                  <input
+                    id="forgot-confirm-pass"
+                    type="password"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    placeholder="Confirm new password"
+                    minLength={6}
+                    required
+                  />
+                </div>
+                <button type="submit" className="btn btn-sky modal-submit" disabled={loading}>
+                  {loading ? 'Updating...' : 'Update Password'}
+                </button>
+              </form>
+            )}
 
             <p className="modal-footer">
-              Remembered password? <span onClick={() => { setMode('login'); setError(''); setMessage(''); }}>Sign in</span>
+              <span onClick={() => { setMode('login'); setForgotStep(1); setError(''); setMessage(''); }}>
+                Back to Sign In
+              </span>
             </p>
           </>
         )}
@@ -298,38 +374,34 @@ export default function LoginModal({ onClose }) {
         {mode === 'setup-password' && (
           <>
             <p className="modal-subtitle">Set a password for your account</p>
-            <p className="settings-help-text" style={{ marginBottom: '16px', fontSize: '0.85rem', color: 'var(--text-muted)', background: 'var(--off-white)', padding: '10px 14px', borderLeft: '4px solid var(--sky-blue)', borderRadius: '4px' }}>
-              Set a password below to allow logging in with your email and password in the future.
-            </p>
-            <form className="modal-form" onSubmit={handleSubmit}>
-              {error && <div className="modal-error">{error}</div>}
-              {message && <div className="modal-success">{message}</div>}
+            {error && <div className="modal-error">{error}</div>}
+            {message && <div className="modal-success">{message}</div>}
 
+            <form className="modal-form" onSubmit={handleSetupPassword}>
               <div className="form-group">
-                <label htmlFor="modal-setup-password">New Password</label>
+                <label htmlFor="setup-new-pass">New Password</label>
                 <input
-                  id="modal-setup-password"
+                  id="setup-new-pass"
                   type="password"
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
-                  placeholder="Min. 6 characters"
+                  placeholder="Min 6 characters"
                   minLength={6}
                   required
                 />
               </div>
-
               <div className="form-group">
-                <label htmlFor="modal-setup-confirm">Confirm Password</label>
+                <label htmlFor="setup-confirm-pass">Confirm Password</label>
                 <input
-                  id="modal-setup-confirm"
+                  id="setup-confirm-pass"
                   type="password"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
-                  placeholder="••••••••"
+                  placeholder="Confirm password"
+                  minLength={6}
                   required
                 />
               </div>
-
               <button type="submit" className="btn btn-sky modal-submit" disabled={loading}>
                 {loading ? 'Saving...' : 'Save Password'}
               </button>
@@ -339,4 +411,8 @@ export default function LoginModal({ onClose }) {
       </div>
     </div>
   );
+
+  return typeof document !== 'undefined'
+    ? createPortal(modalContent, document.body)
+    : modalContent;
 }

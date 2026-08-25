@@ -1,11 +1,12 @@
 import 'dotenv/config';
 import express from 'express';
+import http from 'http';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import cors from 'cors';
 import { Server } from 'socket.io';
-import http from 'http';
 import { connectDB } from './src/config/database.js';
+import { initMySQLDatabase } from './src/config/mysql.js';
 import categoryRoutes from './src/routes/categories.js';
 import productRoutes from './src/routes/products.js';
 import authRoutes from './src/routes/auth.js';
@@ -300,6 +301,7 @@ app.get('*', (_req, res) => {
 });
 
 connectDB();
+initMySQLDatabase();
 
 // Socket.IO real-time banner updates using MongoDB change streams
 io.on('connection', (socket) => {

@@ -1,0 +1,271 @@
+/* =========================================================
+   Microinteractions, Liquid Motion & UI Animation Suite
+   Zero-lag · GPU Accelerated · Pure Hardware Performance
+   ========================================================= */
+
+:root {
+  --liquid-emerald: rgba(16, 185, 129, 0.15);
+  --liquid-cyan: rgba(6, 182, 212, 0.15);
+  --liquid-violet: rgba(139, 92, 246, 0.15);
+  --ease-elastic: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-smooth: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-liquid: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* =========================================================
+   1. Scroll Reveal Animations (Intersection Observer)
+   ========================================================= */
+
+.reveal-on-scroll {
+  opacity: 0;
+  transform: translate3d(0, 36px, 0);
+  transition: opacity 0.7s var(--ease-smooth), transform 0.7s var(--ease-smooth);
+  will-change: opacity, transform;
+}
+
+.reveal-on-scroll.revealed {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+.reveal-scale {
+  opacity: 0;
+  transform: scale3d(0.92, 0.92, 1) translate3d(0, 20px, 0);
+  transition: opacity 0.6s var(--ease-elastic), transform 0.6s var(--ease-elastic);
+  will-change: opacity, transform;
+}
+
+.reveal-scale.revealed {
+  opacity: 1;
+  transform: scale3d(1, 1, 1) translate3d(0, 0, 0);
+}
+
+/* Stagger Delays for Grid Children */
+.stagger-1 { transition-delay: 0.05s; }
+.stagger-2 { transition-delay: 0.12s; }
+.stagger-3 { transition-delay: 0.19s; }
+.stagger-4 { transition-delay: 0.26s; }
+.stagger-5 { transition-delay: 0.33s; }
+.stagger-6 { transition-delay: 0.40s; }
+.stagger-7 { transition-delay: 0.47s; }
+.stagger-8 { transition-delay: 0.54s; }
+
+/* =========================================================
+   2. Liquid Background Gradient Orbs Layer (Feather-Light GPU)
+   ========================================================= */
+
+.liquid-motion-ambient-bg {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+  opacity: 0.85;
+  background:
+    radial-gradient(circle at 8% 10%, rgba(16, 185, 129, 0.09) 0%, transparent 42%),
+    radial-gradient(circle at 92% 38%, rgba(99, 102, 241, 0.07) 0%, transparent 48%),
+    radial-gradient(circle at 25% 85%, rgba(16, 185, 129, 0.07) 0%, transparent 42%);
+  contain: strict;
+}
+
+/* =========================================================
+   3. Wishlist Heart Particle Explosion Microinteraction
+   ========================================================= */
+
+.heart-burst-wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.heart-burst-active {
+  animation: heartPump 0.4s var(--ease-elastic) forwards;
+}
+
+@keyframes heartPump {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.35) rotate(-10deg); }
+  75% { transform: scale(0.92) rotate(4deg); }
+  100% { transform: scale(1) rotate(0deg); }
+}
+
+.heart-sparkle-particle {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.heart-burst-active .particle-1 { animation: burstUp 0.5s ease-out forwards; background: #EF4444; }
+.heart-burst-active .particle-2 { animation: burstRight 0.5s ease-out 0.05s forwards; background: #F43F5E; }
+.heart-burst-active .particle-3 { animation: burstDown 0.5s ease-out forwards; background: #FB7185; }
+.heart-burst-active .particle-4 { animation: burstLeft 0.5s ease-out 0.05s forwards; background: #10B981; }
+
+@keyframes burstUp {
+  0% { transform: translate3d(0, 0, 0) scale(1); opacity: 1; }
+  100% { transform: translate3d(0, -18px, 0) scale(0); opacity: 0; }
+}
+
+@keyframes burstRight {
+  0% { transform: translate3d(0, 0, 0) scale(1); opacity: 1; }
+  100% { transform: translate3d(16px, -10px, 0) scale(0); opacity: 0; }
+}
+
+@keyframes burstDown {
+  0% { transform: translate3d(0, 0, 0) scale(1); opacity: 1; }
+  100% { transform: translate3d(0, 16px, 0) scale(0); opacity: 0; }
+}
+
+@keyframes burstLeft {
+  0% { transform: translate3d(0, 0, 0) scale(1); opacity: 1; }
+  100% { transform: translate3d(-16px, -10px, 0) scale(0); opacity: 0; }
+}
+
+/* =========================================================
+   4. Cart Badge Bump & Shake Microinteraction
+   ========================================================= */
+
+.cart-bump-anim {
+  animation: cartJiggle 0.45s var(--ease-elastic) forwards;
+}
+
+@keyframes cartJiggle {
+  0% { transform: scale(1); }
+  25% { transform: scale(1.2) rotate(-8deg); }
+  50% { transform: scale(0.95) rotate(6deg); }
+  75% { transform: scale(1.08) rotate(-3deg); }
+  100% { transform: scale(1) rotate(0deg); }
+}
+
+.badge-pop-anim {
+  animation: badgePop 0.4s var(--ease-elastic) forwards;
+}
+
+@keyframes badgePop {
+  0% { transform: scale(0); }
+  60% { transform: scale(1.35); }
+  100% { transform: scale(1); }
+}
+
+/* =========================================================
+   5. Liquid Button Shimmer Wave & Ripple Effect
+   ========================================================= */
+
+.liquid-btn-effect {
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.25s var(--ease-elastic), box-shadow 0.25s ease;
+}
+
+.liquid-btn-effect::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.25),
+    transparent
+  );
+  transform: skewX(-20deg);
+  transition: none;
+}
+
+.liquid-btn-effect:hover::before {
+  left: 100%;
+  transition: left 0.75s ease-in-out;
+}
+
+.liquid-btn-effect:active {
+  transform: scale(0.96);
+}
+
+/* =========================================================
+   6. Full Page Reveal Effect (Cinematic Screen Entrance)
+   ========================================================= */
+
+.page-reveal-curtain-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+}
+
+.page-reveal-panel-top,
+.page-reveal-panel-bottom {
+  position: absolute;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 50%;
+  background: #0F172A;
+  will-change: transform;
+}
+
+.page-reveal-panel-top {
+  top: 0;
+  transform-origin: top;
+  animation: revealSlideUp 0.7s cubic-bezier(0.77, 0, 0.175, 1) 0.15s forwards;
+}
+
+.page-reveal-panel-bottom {
+  bottom: 0;
+  transform-origin: bottom;
+  animation: revealSlideDown 0.7s cubic-bezier(0.77, 0, 0.175, 1) 0.15s forwards;
+}
+
+@keyframes revealSlideUp {
+  0% { transform: translate3d(0, 0, 0); }
+  100% { transform: translate3d(0, -100%, 0); }
+}
+
+@keyframes revealSlideDown {
+  0% { transform: translate3d(0, 0, 0); }
+  100% { transform: translate3d(0, 100%, 0); }
+}
+
+.page-reveal-center-emblem {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate3d(-50%, -50%, 0);
+  z-index: 10;
+  color: #FFFFFF;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  animation: emblemFadeOut 0.6s ease 0.2s forwards;
+  will-change: opacity, transform;
+}
+
+@keyframes emblemFadeOut {
+  0% { opacity: 1; transform: translate3d(-50%, -50%, 0) scale(1); }
+  100% { opacity: 0; transform: translate3d(-50%, -50%, 0) scale(1.15); }
+}
+
+/* =========================================================
+   7. Liquid Category Pill Morph
+   ========================================================= */
+
+.category-pill-liquid {
+  position: relative;
+  transition: all 0.25s var(--ease-elastic);
+}
+
+.category-pill-liquid:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(16, 185, 129, 0.15);
+}
+
+.category-pill-liquid:active {
+  transform: scale(0.95);
+}

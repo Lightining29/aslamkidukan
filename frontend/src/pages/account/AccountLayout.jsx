@@ -1,16 +1,36 @@
-import { useState } from 'react';
-import { NavLink, Outlet, useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { NavLink, Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { Package, Heart, ShoppingBag, LogOut, Shield, User, Menu, X, Award, Sparkles } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import Navbar from '../../components/layout/Navbar';
 import Footer from '../../components/layout/Footer';
+import PageTransitionCutout from '../../components/common/PageTransitionCutout';
 import '../../styles/Panel.css';
+import '../../styles/pageTransitions.css';
 import './CustomerDashboard.css';
 
 export default function AccountLayout() {
   const { user, logout, isAdmin } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  // Close drawer on route change
+  useEffect(() => {
+    setMobileMenuOpen(false);
+  }, [location.pathname]);
+
+  // Lock body scroll while mobile drawer is open
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [mobileMenuOpen]);
 
   const handleLogout = () => {
     logout();
@@ -18,11 +38,12 @@ export default function AccountLayout() {
   };
 
   return (
-    <div className="account-page-wrapper" style={{ background: '#F8FAFC', minHeight: '100vh' }}>
+    <div className="account-page-wrapper pull-page-into-view" style={{ background: '#F8FAFC', minHeight: '100vh' }}>
+      <PageTransitionCutout key={location.pathname} variant="curtain" title="CUSTOMER DASHBOARD" subtitle="MY ORDERS & WISHLIST" />
       <Navbar />
 
       {/* Mobile Top Bar (Visible ≤ 900px) */}
-      <div className="customer-mobile-topbar">
+      <div className="customer-mobile-topbar pull-stagger-header">
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
           <button className="cust-menu-toggle" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
             {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
@@ -46,6 +67,15 @@ export default function AccountLayout() {
         <aside className={`panel-sidebar cust-account-sidebar ${mobileMenuOpen ? 'open' : ''}`}>
           
           <div className="panel-sidebar-header cust-profile-box">
+            <div className="cust-drawer-top-close">
+              <button
+                className="cust-drawer-close-btn"
+                onClick={() => setMobileMenuOpen(false)}
+                aria-label="Close"
+              >
+                <X size={18} />
+              </button>
+            </div>
             {user?.photoUrl ? (
               <img 
                 src={user.photoUrl} 
@@ -92,7 +122,7 @@ export default function AccountLayout() {
 
         </aside>
 
-        <main className="panel-content cust-main-content">
+        <main className="panel-content cust-main-content pull-stagger-2">
           <Outlet />
         </main>
 

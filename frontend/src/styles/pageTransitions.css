@@ -1,0 +1,294 @@
+/* =========================================================
+   Silky 60FPS Page Transitions & Cutout Reveals
+   Pure GPU Layer · Zero Paint Cost · Hardware Accelerated
+   ========================================================= */
+
+/* 1. Silky Page Slide & Zoom-In Entry */
+.page-slide-zoom-enter {
+  animation: pageSlideZoomIn 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: transform, opacity;
+  transform-origin: top center;
+  backface-visibility: hidden;
+}
+
+@keyframes pageSlideZoomIn {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 14px, 0) scale3d(0.99, 0.99, 1);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale3d(1, 1, 1);
+  }
+}
+
+/* =========================================================
+   2. Luxury Obsidian & Emerald Silk Curtain Page Reveal
+   Pure GPU Layer · Zero Paint Cost · Ultra Smooth 60 FPS
+   ========================================================= */
+
+.luxury-curtain-overlay,
+.cutout-page-transition-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  pointer-events: none;
+  overflow: hidden;
+  display: flex;
+}
+
+/* Left & Right Silk Curtain Leaves */
+.luxury-curtain-leaf {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 50.5%;
+  background: radial-gradient(circle at 50% 50%, #1E293B 0%, #0F172A 40%, #030712 100%);
+  will-change: transform;
+  display: flex;
+  align-items: center;
+}
+
+.leaf-left {
+  left: 0;
+  transform-origin: left center;
+  animation: curtainPartLeft 0.58s cubic-bezier(0.77, 0, 0.175, 1) 0.08s forwards;
+  justify-content: flex-end;
+}
+
+.leaf-right {
+  right: 0;
+  transform-origin: right center;
+  animation: curtainPartRight 0.58s cubic-bezier(0.77, 0, 0.175, 1) 0.08s forwards;
+  justify-content: flex-start;
+}
+
+/* Luminous Emerald Seam along the parting line */
+.curtain-laser-seam {
+  width: 2.5px;
+  height: 100%;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(16, 185, 129, 0.3) 15%,
+    rgba(16, 185, 129, 0.95) 50%,
+    rgba(52, 211, 153, 1) 52%,
+    rgba(16, 185, 129, 0.3) 85%,
+    transparent 100%
+  );
+  box-shadow: 0 0 16px rgba(16, 185, 129, 0.8), 0 0 32px rgba(16, 185, 129, 0.4);
+}
+
+@keyframes curtainPartLeft {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-102%, 0, 0);
+  }
+}
+
+@keyframes curtainPartRight {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(102%, 0, 0);
+  }
+}
+
+/* Floating Luxury Glass Seal in Center */
+.luxury-curtain-seal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate3d(-50%, -50%, 0);
+  z-index: 10;
+  animation: sealFadeDissolve 0.45s cubic-bezier(0.16, 1, 0.3, 1) 0.14s forwards;
+  will-change: opacity, transform;
+}
+
+.seal-glass-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  padding: 12px 28px;
+  border-radius: 9999px;
+  border: 1.5px solid rgba(16, 185, 129, 0.5);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 0 0 25px rgba(16, 185, 129, 0.35);
+}
+
+.seal-icon {
+  font-size: 1.8rem;
+  filter: drop-shadow(0 2px 8px rgba(16, 185, 129, 0.6));
+}
+
+.seal-texts {
+  display: flex;
+  flex-direction: column;
+}
+
+.seal-brand {
+  font-family: var(--font-serif, 'Outfit', sans-serif);
+  font-size: 1.15rem;
+  font-weight: 900;
+  letter-spacing: 2px;
+  color: #FFFFFF;
+  background: linear-gradient(135deg, #FFFFFF 0%, #A7F3D0 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.seal-sub {
+  font-size: 0.65rem;
+  letter-spacing: 1.5px;
+  color: #94A3B8;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+@keyframes sealFadeDissolve {
+  0% {
+    opacity: 1;
+    transform: translate3d(-50%, -50%, 0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(-50%, -50%, 0) scale(1.12);
+  }
+}
+
+/* =========================================================
+   Home Page: Dual Diagonal Slice Cutout Panels (Original)
+   ========================================================= */
+
+.cutout-slice-top {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 52%;
+  background: #0F172A;
+  clip-path: polygon(0 0, 100% 0, 100% 88%, 0 100%);
+  animation: sliceSlideUp 0.65s cubic-bezier(0.77, 0, 0.175, 1) 0.1s forwards;
+  will-change: transform;
+}
+
+.cutout-slice-bottom {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 52%;
+  background: #0F172A;
+  clip-path: polygon(0 12%, 100% 0, 100% 100%, 0 100%);
+  animation: sliceSlideDown 0.65s cubic-bezier(0.77, 0, 0.175, 1) 0.1s forwards;
+  will-change: transform;
+}
+
+@keyframes sliceSlideUp {
+  0% { transform: translate3d(0, 0, 0); }
+  100% { transform: translate3d(0, -102%, 0); }
+}
+
+@keyframes sliceSlideDown {
+  0% { transform: translate3d(0, 0, 0); }
+  100% { transform: translate3d(0, 102%, 0); }
+}
+
+/* Cutout Center Brand Emblem */
+.cutout-brand-emblem {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate3d(-50%, -50%, 0);
+  z-index: 10;
+  color: #FFFFFF;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  animation: cutoutEmblemFade 0.55s ease 0.22s forwards;
+  will-change: opacity, transform;
+}
+
+@keyframes cutoutEmblemFade {
+  0% {
+    opacity: 1;
+    transform: translate3d(-50%, -50%, 0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(-50%, -50%, 0) scale(1.18);
+  }
+}
+
+/* =========================================================
+   3. Slide-Up Entry Transition (Triggered as Cutout Completes)
+   ========================================================= */
+
+.slide-up-page-enter,
+.pull-page-into-view {
+  animation: slideUpAfterCutout 0.65s cubic-bezier(0.16, 1, 0.3, 1) 0.28s both;
+  transform-origin: bottom center;
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+}
+
+@keyframes slideUpAfterCutout {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 48px, 0) scale3d(0.985, 0.985, 1);
+  }
+  60% {
+    opacity: 1;
+    transform: translate3d(0, -3px, 0) scale3d(1.003, 1.003, 1);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale3d(1, 1, 1);
+  }
+}
+
+/* Staggered Element Slide Up Rises */
+.pull-stagger-header {
+  animation: slideUpItem 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.32s both;
+}
+
+.pull-stagger-1 {
+  animation: slideUpItem 0.55s cubic-bezier(0.16, 1, 0.3, 1) 0.4s both;
+}
+
+.pull-stagger-2 {
+  animation: slideUpItem 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.48s both;
+}
+
+.pull-stagger-3 {
+  animation: slideUpItem 0.65s cubic-bezier(0.16, 1, 0.3, 1) 0.56s both;
+}
+
+@keyframes slideUpItem {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 32px, 0);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+/* =========================================================
+   Smooth 60FPS Content Visibility (No Scroll Lag)
+   ========================================================= */
+
+.catalog-main-section,
+.niche-spotlight-feature-section,
+.about-3d-section,
+.trust-strip-section {
+  content-visibility: auto;
+  contain-intrinsic-size: 0 450px;
+}

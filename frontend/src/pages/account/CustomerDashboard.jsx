@@ -54,10 +54,10 @@ export default function CustomerDashboard({ defaultTab }) {
   }
 
   return (
-    <div className="customer-dashboard-shell">
+    <div className="customer-dashboard-shell pull-page-into-view">
       
       {/* Welcome & Loyalty KPI Header Banner */}
-      <div className="dash-hero-banner">
+      <div className="dash-hero-banner pull-stagger-1">
         <div className="hero-profile-info">
           <div className="vip-badge-pill">
             <Award size={16} color="#FFE600" />
@@ -95,7 +95,7 @@ export default function CustomerDashboard({ defaultTab }) {
       </div>
 
       {/* Navigation Sub-Tabs */}
-      <div className="dash-tabs-bar">
+      <div className="dash-tabs-bar pull-stagger-2">
         <button className={`dash-tab ${activeTab === 'live_tracking' ? 'active' : ''}`} onClick={() => setActiveTab('live_tracking')}>
           <Navigation size={16} /> Live Order Tracking
         </button>

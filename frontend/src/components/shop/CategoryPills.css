@@ -1,0 +1,74 @@
+/* =========================================================
+   Category Pills Bar - Liquid Fluid Motion Styles
+   ========================================================= */
+
+.mobile-category-pills-bar {
+  padding: 8px 0;
+  width: 100%;
+  overflow: hidden;
+}
+
+.mobile-category-pills-scroll {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 6px 16px;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE */
+}
+
+.mobile-category-pills-scroll::-webkit-scrollbar {
+  display: none; /* Chrome/Safari */
+}
+
+.category-pill-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 16px;
+  border-radius: 24px;
+  background: #F1F5F9;
+  color: #64748B;
+  border: 1px solid #E2E8F0;
+  font-size: 0.82rem;
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  flex-shrink: 0;
+  user-select: none;
+}
+
+.category-pill-btn:hover {
+  transform: translateY(-2px);
+  background: #FFFFFF;
+  border-color: #CBD5E1;
+  color: #0F172A;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.category-pill-btn:active {
+  transform: scale(0.94);
+}
+
+.category-pill-btn.active {
+  background: #0F172A;
+  color: #FFFFFF;
+  border-color: #0F172A;
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.2);
+  transform: scale(1.03);
+}
+
+.category-pill-icon {
+  font-size: 0.95rem;
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.category-pill-btn:hover .category-pill-icon {
+  transform: scale(1.2) rotate(6deg);
+}
+
+.category-pill-name {
+  line-height: 1;
+}

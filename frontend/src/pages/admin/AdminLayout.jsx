@@ -7,7 +7,9 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import AaanLogo from '../../components/common/AaanLogo';
+import PageTransitionCutout from '../../components/common/PageTransitionCutout';
 import '../../styles/Panel.css';
+import '../../styles/pageTransitions.css';
 
 export default function AdminLayout() {
   const { user, logout } = useAuth();
@@ -41,9 +43,10 @@ export default function AdminLayout() {
   };
 
   return (
-    <div className="panel-layout">
+    <div className="panel-layout pull-page-into-view">
+      <PageTransitionCutout key={location.pathname} variant="curtain" title="AAAN SUPPLIER PORTAL" subtitle="MANAGEMENT & DISPATCH HUB" />
       {/* AAAN Enterprises Top Header Bar */}
-      <header className="meesho-top-header">
+      <header className="meesho-top-header pull-stagger-header">
         <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
           <button
             className="admin-menu-toggle"
@@ -88,7 +91,7 @@ export default function AdminLayout() {
       </header>
 
       {/* Meesho Admin Navigation Sidebar */}
-      <aside className={`panel-sidebar ${menuOpen ? 'open' : ''}`}>
+      <aside className={`panel-sidebar pull-stagger-1 ${menuOpen ? 'open' : ''}`}>
         <div>
           <div className="panel-sidebar-header">
             <div style={{ fontSize: '0.9rem', fontWeight: 800, color: 'var(--meesho-magenta)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
@@ -169,7 +172,7 @@ export default function AdminLayout() {
       </aside>
 
       {/* Main Content Area */}
-      <main className="panel-content">
+      <main className="panel-content pull-stagger-2">
         <Outlet />
       </main>
     </div>

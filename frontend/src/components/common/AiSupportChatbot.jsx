@@ -108,21 +108,19 @@ export default function AiSupportChatbot() {
 
   return (
     <div className="aaan-ai-support-wrapper">
-      {/* Floating Toggle Button */}
+      {/* Floating Small Toggle Button */}
       {!isOpen && (
         <button
-          className="ai-chat-fab"
+          className="ai-chat-fab small-chat-fab"
           onClick={() => setIsOpen(true)}
-          aria-label="Open 24/7 AI Customer Support"
+          aria-label="Open 24/7 AI Support"
+          title="24/7 AI Support Chat"
         >
           <div className="fab-icon-box">
-            <AaanLogo size="sm" light={true} variant="icon" />
+            <MessageSquare size={20} color="#FFFFFF" />
             <span className="fab-online-dot" />
           </div>
-          <div className="fab-label">
-            <strong>AAAN AI Support</strong>
-            <span>24/7 Live Assistance</span>
-          </div>
+          <span className="fab-mini-text">Chat</span>
         </button>
       )}
 

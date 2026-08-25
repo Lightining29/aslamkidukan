@@ -22,6 +22,7 @@ import ReviewSection from '../../components/shop/ReviewSection';
 import ProductRow from '../../components/shop/ProductRow';
 import { useRecentlyViewed } from '../../hooks/useRecentlyViewed';
 import { toastWishlist, toastSuccess } from '../../utils/toast.js';
+import { STICKER_PRODUCTS } from '../../data/stickersCatalog';
 import './ProductDetail.css';
 
 const COLOR_SWATCHES = [
@@ -113,6 +114,13 @@ export default function ProductDetail() {
       })
       .catch((err) => {
         console.error('Failed to fetch product:', err);
+        const found = STICKER_PRODUCTS.find(p => p.slug === slug || p._id === slug);
+        if (found && mounted) {
+          setProduct(found);
+          track(found);
+          setSelectedSize(found.sizes ? found.sizes[0] : '40 × 60 cm');
+          setSimilar(STICKER_PRODUCTS.filter(p => p.slug !== slug).slice(0, 4));
+        }
       })
       .finally(() => {
         if (mounted) setLoading(false);

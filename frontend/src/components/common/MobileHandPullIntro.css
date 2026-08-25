@@ -1,0 +1,172 @@
+/* =========================================================
+   3D Hand Pinching Cloth Animation Styles
+   Zero Lag · GPU Hardware Accelerated · Pinterest Style
+   ========================================================= */
+
+.cloth-pull-wrapper {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  background: #FFFFFF;
+  overflow-x: hidden;
+}
+
+/* =========================================================
+   Desktop Screen Passthrough (>= 1024px) - 0% Lag
+   ========================================================= */
+@media (min-width: 1024px) {
+  .cloth-pull-top-notch,
+  .cloth-pinch-stage {
+    display: none !important;
+  }
+
+  .cloth-ui-sheet {
+    transform: none !important;
+    opacity: 1 !important;
+  }
+}
+
+/* =========================================================
+   Mobile Cloth Pull Physics (< 1024px)
+   ========================================================= */
+@media (max-width: 1023px) {
+
+  /* Top Dynamic Island Notch */
+  .cloth-pull-top-notch {
+    position: fixed;
+    top: 8px;
+    left: 50%;
+    transform: translate3d(-50%, 0, 0);
+    z-index: 10000;
+    pointer-events: none;
+  }
+
+  .notch-capsule {
+    width: 110px;
+    height: 28px;
+    background: #000000;
+    border-radius: 20px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+  }
+
+  /* 3D Hand Pinching Cloth Stage */
+  .cloth-pinch-stage {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 380px;
+    z-index: 9999;
+    pointer-events: none;
+    display: flex;
+    justify-content: center;
+    overflow: visible;
+    transform: translate3d(0, 0, 0);
+    will-change: transform, opacity;
+  }
+
+  .cloth-pinch-image-box {
+    position: absolute;
+    top: -20px;
+    width: 320px;
+    height: 320px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform-origin: top center;
+    will-change: transform, opacity;
+  }
+
+  .cloth-pinch-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    mix-blend-mode: multiply; /* Blends white cloth seamlessly onto white background */
+    filter: drop-shadow(0 15px 25px rgba(0, 0, 0, 0.08));
+    pointer-events: none;
+  }
+
+  /* Soft fade mask at bottom of cloth image to blend into content */
+  .cloth-bottom-blend-gradient {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.95) 100%);
+  }
+
+  /* Phase 1: Pulling - Hand pulls cloth upward with elastic tension (0 to 1.2s) */
+  .cloth-pinch-stage.pulling .cloth-pinch-image-box {
+    animation: handPullClothUp 1.2s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+  }
+
+  @keyframes handPullClothUp {
+    0% {
+      transform: translate3d(0, 40px, 0) scale(1.05);
+      opacity: 1;
+    }
+    40% {
+      /* Strong upward pull with fabric stretch */
+      transform: translate3d(0, -60px, 0) scale(0.96);
+      opacity: 0.95;
+    }
+    85% {
+      /* Hand retracts up near notch */
+      transform: translate3d(0, -140px, 0) scale(0.88);
+      opacity: 0.5;
+    }
+    100% {
+      /* Complete retraction & fade out */
+      transform: translate3d(0, -180px, 0) scale(0.8);
+      opacity: 0;
+    }
+  }
+
+  /* Phase 2: Settling (1.2s - 1.7s) */
+  .cloth-pinch-stage.settling {
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+
+  /* =========================================================
+     The Website Content Sheet (Cloth Tension Physics)
+     ========================================================= */
+
+  .cloth-ui-sheet {
+    position: relative;
+    width: 100%;
+    transform-origin: top center;
+    will-change: transform;
+    backface-visibility: hidden;
+    transform: translate3d(0, 0, 0);
+  }
+
+  .cloth-ui-sheet.pulling {
+    animation: sheetClothSnapUp 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  }
+
+  @keyframes sheetClothSnapUp {
+    0% {
+      transform: translate3d(0, 160px, 0) scale3d(0.97, 0.97, 1);
+    }
+    50% {
+      /* Cloth elastic stretch during upward pull */
+      transform: translate3d(0, 20px, 0) scale3d(0.99, 1.02, 1);
+    }
+    80% {
+      /* Gentle elastic overshoot */
+      transform: translate3d(0, -10px, 0) scale3d(1.005, 0.995, 1);
+    }
+    100% {
+      /* Rest at normal position */
+      transform: translate3d(0, 0, 0) scale3d(1, 1, 1);
+    }
+  }
+
+  .cloth-ui-sheet.settling,
+  .cloth-ui-sheet.done {
+    transform: translate3d(0, 0, 0) scale3d(1, 1, 1);
+  }
+
+}

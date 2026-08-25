@@ -1,146 +1,321 @@
+/* =========================================================
+   Luxury Login & Register Modal Styles
+   Cut-In Transition · Centered Modal · Pure Glassmorphism
+   ========================================================= */
+
+.login-modal-overlay,
 .modal-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(15, 23, 42, 0.6);
-  backdrop-filter: blur(8px);
+  inset: 0;
+  background: rgba(15, 23, 42, 0.72);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1000;
-  animation: fadeIn 0.3s ease-out;
+  z-index: 100000;
+  padding: 16px;
+  overflow-y: auto;
+  box-sizing: border-box;
+  animation: modalOverlayFadeIn 0.25s ease-out forwards;
 }
 
+@keyframes modalOverlayFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.login-modal-card,
 .modal-container {
-  background: var(--white);
-  border-radius: var(--radius);
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  background: #FFFFFF;
+  border-radius: 28px;
+  box-shadow: 0 25px 60px -12px rgba(15, 23, 42, 0.35);
   width: 100%;
   max-width: 440px;
-  padding: 40px;
+  padding: 32px 28px;
   position: relative;
-  animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  border: 1px solid rgba(135, 206, 235, 0.15);
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  max-height: 90vh;
+  overflow-y: auto;
+  margin: auto;
+  transform-origin: center center;
+  animation: loginModalCutIn 0.36s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: clip-path, transform, opacity;
+}
+
+/* Cut-In Geometric Aperture Transition */
+@keyframes loginModalCutIn {
+  0% {
+    opacity: 0;
+    clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+    transform: scale3d(0.82, 0.82, 1);
+  }
+  55% {
+    clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+    transform: scale3d(1.02, 1.02, 1);
+    opacity: 1;
+  }
+  100% {
+    clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+    transform: scale3d(1, 1, 1);
+    opacity: 1;
+  }
+}
+
+/* Tactile Error Shake Effect on Wrong Password / Invalid Input / Error */
+.login-modal-card.is-shaking,
+.modal-container.is-shaking {
+  animation: modalErrorShake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both !important;
+  border-color: #EF4444 !important;
+  box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.18), 0 25px 60px -12px rgba(15, 23, 42, 0.35) !important;
+}
+
+.login-modal-card.is-shaking input {
+  border-color: #F87171 !important;
+  background: #FFF5F5 !important;
+  transition: all 0.2s ease;
+}
+
+@keyframes modalErrorShake {
+  0%, 100% {
+    transform: translate3d(0, 0, 0);
+  }
+  15%, 45%, 75% {
+    transform: translate3d(-12px, 0, 0);
+  }
+  30%, 60%, 90% {
+    transform: translate3d(12px, 0, 0);
+  }
 }
 
 .modal-close-btn {
   position: absolute;
-  top: 20px;
-  right: 20px;
-  background: none;
-  border: none;
-  color: var(--text-muted);
+  top: 18px;
+  right: 18px;
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  color: #64748B;
   cursor: pointer;
-  padding: 4px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
-  transition: background-color 0.2s, color 0.2s;
+  transition: all 0.2s ease;
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 5;
 }
 
 .modal-close-btn:hover {
-  background-color: var(--off-white);
-  color: var(--text-dark);
+  background: #F1F5F9;
+  color: #0F172A;
+  transform: scale(1.08);
 }
 
 .modal-logo {
   display: flex;
   align-items: center;
-  justify-content: center;
   gap: 8px;
-  font-family: var(--font-serif);
-  font-size: 1.75rem;
-  font-weight: 600;
-  color: var(--sky-blue-deep);
-  margin-bottom: 8px;
+  font-family: var(--font-serif, 'Outfit', sans-serif);
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: #0F172A;
+  margin-bottom: 6px;
+}
+
+/* Segmented Auth Mode Switcher Tabs */
+.modal-mode-tabs,
+.modal-tab-switcher {
+  display: flex;
+  background: #F1F5F9;
+  padding: 4px;
+  border-radius: 16px;
+  margin: 16px 0 20px 0;
+  border: 1px solid #E2E8F0;
+}
+
+.modal-tab-btn,
+.tab-switch-btn {
+  flex: 1;
+  padding: 10px 0;
+  border: none;
+  background: transparent;
+  color: #64748B;
+  font-size: 0.88rem;
+  font-weight: 700;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  text-align: center;
+}
+
+.modal-tab-btn.active,
+.tab-switch-btn.active {
+  background: #0F172A;
+  color: #FFFFFF;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15);
+  transform: scale(1.02);
 }
 
 .modal-subtitle {
-  text-align: center;
-  color: var(--text-muted);
-  margin-bottom: 24px;
-  font-size: 0.95rem;
+  color: #64748B;
+  font-size: 0.88rem;
+  margin-bottom: 14px;
+  line-height: 1.4;
 }
 
 .modal-form {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 14px;
 }
 
-.modal-form .form-group {
-  margin-bottom: 0;
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  text-align: left;
 }
 
-.modal-error {
-  background: #FEF2F2;
-  color: #DC2626;
-  padding: 10px 14px;
-  border-radius: var(--radius-sm);
-  font-size: 0.85rem;
-  text-align: center;
+.form-group label {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #334155;
 }
 
-.modal-success {
-  background: #ECFDF5;
-  color: #059669;
-  padding: 10px 14px;
-  border-radius: var(--radius-sm);
-  font-size: 0.85rem;
-  text-align: center;
+.form-group input {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 1.5px solid #CBD5E1;
+  background: #F8FAFC;
+  color: #0F172A;
+  font-size: 0.92rem;
+  outline: none;
+  box-sizing: border-box;
+  transition: all 0.2s ease;
 }
 
-.modal-forgot-link {
-  font-size: 0.85rem;
-  color: var(--sky-blue-deep);
-  text-align: right;
-  margin-top: 4px;
+.form-group input:focus {
+  border-color: #10B981;
+  background: #FFFFFF;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15);
+}
+
+.modal-forgot-link,
+.forgot-link {
+  color: #10B981;
+  font-size: 0.78rem;
+  font-weight: 700;
   cursor: pointer;
-  font-weight: 600;
+  background: none;
+  border: none;
+  padding: 0;
 }
 
-.modal-forgot-link:hover {
+.modal-forgot-link:hover,
+.forgot-link:hover {
   text-decoration: underline;
 }
 
-.modal-submit {
+.modal-submit,
+.btn.btn-sky.modal-submit {
   width: 100%;
+  padding: 13px;
+  border-radius: 14px;
+  background: #0F172A;
+  color: #FFFFFF;
+  border: none;
+  font-size: 0.95rem;
+  font-weight: 800;
+  cursor: pointer;
+  margin-top: 6px;
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.2);
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.modal-submit:hover {
+  background: #1E293B;
+  transform: translateY(-1px);
+}
+
+.modal-submit:active {
+  transform: scale(0.98);
+}
+
+.auth-divider,
+.modal-divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 18px 0;
+  color: #94A3B8;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.auth-divider::before,
+.auth-divider::after,
+.modal-divider::before,
+.modal-divider::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid #E2E8F0;
+}
+
+.auth-divider::before,
+.modal-divider::before {
+  margin-right: 10px;
+}
+
+.auth-divider::after,
+.modal-divider::after {
+  margin-left: 10px;
+}
+
+.google-btn-container {
+  display: flex;
   justify-content: center;
-  margin-top: 4px;
+  width: 100%;
+}
+
+.modal-alert,
+.modal-error {
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: #FEE2E2;
+  border: 1px solid #FECACA;
+  color: #DC2626;
+  font-size: 0.82rem;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.modal-alert-success,
+.modal-success {
+  background: #ECFDF5;
+  border-color: #A7F3D0;
+  color: #065F46;
 }
 
 .modal-footer {
+  margin-top: 18px;
+  font-size: 0.82rem;
+  color: #64748B;
   text-align: center;
-  margin-top: 20px;
-  color: var(--text-muted);
-  font-size: 0.9rem;
 }
 
-.modal-footer span {
-  color: var(--sky-blue-deep);
-  font-weight: 600;
+.modal-footer span,
+.link-btn {
+  color: #10B981;
+  font-weight: 700;
   cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
 }
 
-.modal-footer span:hover {
+.modal-footer span:hover,
+.link-btn:hover {
   text-decoration: underline;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px) scale(0.98);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
 }

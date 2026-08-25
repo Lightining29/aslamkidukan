@@ -58,9 +58,23 @@ export default function CheckoutPage() {
     );
   }
 
-  const openRazorpay = (result) => {
-    if (!window.Razorpay) {
-      const msg = 'Razorpay payment SDK failed to load. Please refresh the page or check your connection.';
+  const loadRazorpayScript = () => {
+    return new Promise((resolve) => {
+      if (window.Razorpay) {
+        return resolve(true);
+      }
+      const script = document.createElement('script');
+      script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+      script.onload = () => resolve(true);
+      script.onerror = () => resolve(false);
+      document.body.appendChild(script);
+    });
+  };
+
+  const openRazorpay = async (result) => {
+    const loaded = await loadRazorpayScript();
+    if (!loaded || !window.Razorpay) {
+      const msg = 'Razorpay payment SDK failed to load. Please check your connection and try again.';
       setError(msg);
       toastError('Payment failed', msg);
       setLoading(false);
@@ -70,11 +84,19 @@ export default function CheckoutPage() {
     const rzp = new window.Razorpay({
       key: result.key,
       amount: result.amount,
-      currency: result.currency,
-      name: 'Glowora',
-      description: `Order ${result.orderId}`,
+      currency: result.currency || 'INR',
+      name: 'AAAN Cart',
+      description: `3D Wall Art Order #${result.orderId}`,
+      image: '/favicon.svg',
       order_id: result.razorpayOrderId,
-      prefill: { name: form.fullName, email: form.email, contact: form.phone },
+      prefill: { 
+        name: form.fullName, 
+        email: form.email, 
+        contact: form.phone 
+      },
+      theme: {
+        color: '#10B981',
+      },
       handler: async (response) => {
         try {
           await verifyPayment(result.orderId, {
@@ -90,7 +112,11 @@ export default function CheckoutPage() {
           setLoading(false);
         }
       },
-      modal: { ondismiss: () => setLoading(false) },
+      modal: { 
+        ondismiss: () => setLoading(false),
+        escape: false,
+        backdropclose: false
+      },
     });
 
     rzp.on('payment.failed', (resp) => {

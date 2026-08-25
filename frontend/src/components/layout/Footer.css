@@ -1,241 +1,398 @@
-/* =========================================
-   FOOTER — Premium Dark
-   ========================================= */
-.footer {
-  background: linear-gradient(135deg, #0F172A 0%, #1E1B4B 40%, #311B92 80%, #4A148C 100%);
-  color: rgba(255, 255, 255, 0.72);
-  padding-top: 72px;
+/* =========================================================
+   AAAN CART — Luxury Footer Styling
+   Premium Dark Atmosphere · Glassmorphism · Ambient Glow
+   ========================================================= */
+
+.luxury-footer-root {
+  background: radial-gradient(circle at 12% 15%, rgba(16, 185, 129, 0.08) 0%, transparent 45%),
+              radial-gradient(circle at 88% 75%, rgba(99, 102, 241, 0.08) 0%, transparent 45%),
+              #0B0F19;
+  color: #94A3B8;
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
   position: relative;
   overflow: hidden;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
 }
 
-/* Decorative top-right glow */
-.footer::before {
-  content: '';
-  position: absolute;
-  top: -120px;
-  right: -80px;
-  width: 420px;
-  height: 420px;
-  background: radial-gradient(circle, rgba(135, 206, 235, 0.07) 0%, transparent 70%);
-  pointer-events: none;
+/* =========================================================
+   1. Feature Trust Badges Strip (Top of Footer)
+   ========================================================= */
+.footer-trust-strip {
+  background: rgba(255, 255, 255, 0.02);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 32px 0;
 }
 
-.footer-grid {
-  position: relative;
-  z-index: 1;
+.footer-trust-grid {
   display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1.6fr;
-  gap: 48px;
-  padding-bottom: 56px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
 }
 
-/* Logo */
-.footer-logo {
-  margin-bottom: 18px;
-}
-
-.footer-logo-img {
-  height: 48px;
-  width: auto;
-  object-fit: contain;
-  filter: brightness(1.1);
-}
-
-.footer-brand p {
-  font-size: 0.88rem;
-  line-height: 1.8;
-  max-width: 280px;
-  margin-bottom: 24px;
-}
-
-/* Social icons row */
-.footer-social {
+.trust-card-item {
   display: flex;
-  gap: 10px;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 16px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-.footer-social-btn {
-  width: 38px;
-  height: 38px;
-  border-radius: 10px;
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(255,255,255,0.1);
+.trust-card-item:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.12);
+  transform: translateY(-3px);
+}
+
+.trust-icon-wrap {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: rgba(255,255,255,0.6);
-  font-size: 0.8rem;
-  font-weight: 700;
-  transition: background 0.2s, color 0.2s, border-color 0.2s;
-  cursor: pointer;
-  font-family: var(--font-sans);
+  flex-shrink: 0;
 }
 
-.footer-social-btn:hover {
-  background: rgba(135, 206, 235, 0.15);
-  border-color: rgba(135, 206, 235, 0.3);
-  color: var(--sky-blue-light);
+.trust-icon-wrap.emerald {
+  background: rgba(16, 185, 129, 0.12);
+  color: #10B981;
+  border: 1px solid rgba(16, 185, 129, 0.25);
 }
 
-/* Link columns */
-.footer-links {
+.trust-icon-wrap.blue {
+  background: rgba(59, 130, 246, 0.12);
+  color: #3B82F6;
+  border: 1px solid rgba(59, 130, 246, 0.25);
+}
+
+.trust-icon-wrap.amber {
+  background: rgba(245, 158, 11, 0.12);
+  color: #F59E0B;
+  border: 1px solid rgba(245, 158, 11, 0.25);
+}
+
+.trust-icon-wrap.violet {
+  background: rgba(139, 92, 246, 0.12);
+  color: #8B5CF6;
+  border: 1px solid rgba(139, 92, 246, 0.25);
+}
+
+.trust-card-item strong {
+  display: block;
+  font-size: 0.88rem;
+  font-weight: 800;
+  color: #FFFFFF;
+  line-height: 1.25;
+  margin-bottom: 2px;
+}
+
+.trust-card-item span {
+  display: block;
+  font-size: 0.72rem;
+  color: #64748B;
+  line-height: 1.35;
+}
+
+/* =========================================================
+   2. Main Footer Grid & Columns
+   ========================================================= */
+.footer-main-content {
+  padding: 56px 0 44px;
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1.8fr 1fr 1fr 1.8fr;
+  gap: 40px;
+}
+
+/* Brand Column */
+.footer-brand-header {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  margin-bottom: 16px;
+}
+
+.footer-brand-logo-icon {
+  font-size: 1.8rem;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: rgba(16, 185, 129, 0.15);
+  border: 1.5px solid rgba(16, 185, 129, 0.3);
   display: flex;
-  flex-direction: column;
-  gap: 4px;
+  align-items: center;
+  justify-content: center;
 }
 
-.footer-links h4,
-.footer-contact h4 {
-  color: white;
-  font-size: 0.9rem;
-  font-weight: 600;
-  margin-bottom: 18px;
+.footer-brand-title strong {
+  display: block;
+  font-size: 1.25rem;
+  font-weight: 900;
+  color: #FFFFFF;
   letter-spacing: 0.3px;
 }
 
-.footer-links a {
-  font-size: 0.84rem;
-  color: rgba(255,255,255,0.6);
-  padding: 5px 0;
-  transition: color 0.2s, padding-left 0.2s;
-  display: inline-block;
+.footer-brand-title span {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #10B981;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
-.footer-links a:hover {
-  color: var(--sky-blue-light);
-  padding-left: 4px;
+.footer-brand-desc {
+  font-size: 0.85rem;
+  line-height: 1.7;
+  color: #94A3B8;
+  margin-bottom: 24px;
+  max-width: 320px;
 }
 
-/* Contact */
-.footer-contact h4 {
-  margin-bottom: 18px;
-}
-
-.contact-item {
+/* Social Media Pills */
+.footer-social-row {
   display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.luxury-social-pill {
+  display: inline-flex;
   align-items: center;
-  gap: 12px;
+  gap: 7px;
+  padding: 8px 14px;
+  border-radius: 50px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #CBD5E1;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  text-decoration: none;
+  transition: all 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.luxury-social-pill:hover {
+  transform: translateY(-2px);
+  color: #FFFFFF;
+}
+
+.luxury-social-pill.instagram:hover {
+  background: rgba(225, 48, 108, 0.2);
+  border-color: rgba(225, 48, 108, 0.4);
+}
+
+.luxury-social-pill.youtube:hover {
+  background: rgba(239, 68, 68, 0.2);
+  border-color: rgba(239, 68, 68, 0.4);
+}
+
+.luxury-social-pill.whatsapp:hover {
+  background: rgba(37, 211, 102, 0.2);
+  border-color: rgba(37, 211, 102, 0.4);
+}
+
+/* Link Columns */
+.footer-links-col h4,
+.footer-newsletter-col h4 {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #FFFFFF;
+  margin-bottom: 20px;
+  letter-spacing: 0.2px;
+}
+
+.footer-links-col a {
+  display: block;
   font-size: 0.84rem;
-  margin-bottom: 14px;
-  color: rgba(255,255,255,0.6);
+  color: #94A3B8;
+  text-decoration: none;
+  padding: 6px 0;
+  transition: all 0.2s ease;
 }
 
-.contact-item svg {
-  color: var(--sky-blue-light);
-  flex-shrink: 0;
-  opacity: 0.8;
+.footer-links-col a:hover {
+  color: #10B981;
+  transform: translateX(4px);
 }
 
-/* Newsletter strip inside footer */
-.footer-newsletter {
-  margin-top: 4px;
-}
-
-.footer-newsletter p {
+/* Newsletter Column */
+.newsletter-caption {
   font-size: 0.82rem;
-  margin-bottom: 10px;
-  color: rgba(255,255,255,0.5);
+  color: #94A3B8;
+  margin-bottom: 14px;
+  line-height: 1.5;
 }
 
-.footer-newsletter-row {
+.footer-newsletter-box {
   display: flex;
   gap: 8px;
+  margin-bottom: 22px;
 }
 
-.footer-newsletter-input {
+.newsletter-input-wrap {
+  position: relative;
   flex: 1;
-  padding: 10px 14px;
-  border-radius: 10px;
-  border: 1px solid rgba(255,255,255,0.12);
-  background: rgba(255,255,255,0.06);
-  color: white;
-  font-size: 0.83rem;
-  font-family: var(--font-sans);
-  outline: none;
-  transition: border-color 0.2s;
 }
 
-.footer-newsletter-input::placeholder {
-  color: rgba(255,255,255,0.3);
+.newsletter-input-wrap .newsletter-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #64748B;
 }
 
-.footer-newsletter-input:focus {
-  border-color: rgba(135, 206, 235, 0.4);
-}
-
-.footer-newsletter-btn {
-  padding: 10px 18px;
-  border-radius: 10px;
-  background: var(--sky-blue-dark);
-  color: white;
+.newsletter-input-wrap input {
+  width: 100%;
+  padding: 10px 12px 10px 36px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #FFFFFF;
   font-size: 0.82rem;
-  font-weight: 600;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.newsletter-input-wrap input:focus {
+  border-color: #10B981;
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 0 12px rgba(16, 185, 129, 0.2);
+}
+
+.newsletter-input-wrap input::placeholder {
+  color: #64748B;
+}
+
+.footer-subscribe-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 16px;
+  border-radius: 12px;
+  background: #10B981;
+  color: #FFFFFF;
+  font-size: 0.8rem;
+  font-weight: 800;
   border: none;
   cursor: pointer;
-  font-family: var(--font-sans);
-  transition: background 0.2s, transform 0.2s;
   white-space: nowrap;
+  transition: all 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-.footer-newsletter-btn:hover {
-  background: var(--sky-blue-deep);
-  transform: translateY(-1px);
+.footer-subscribe-btn:hover {
+  background: #059669;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(16, 185, 129, 0.3);
 }
 
-/* Bottom bar */
-.footer-bottom {
-  position: relative;
-  z-index: 1;
-  border-top: 1px solid rgba(255, 255, 255, 0.07);
-  padding: 22px 0;
+/* Contact Items List */
+.footer-contact-items-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.footer-contact-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 0.8rem;
+  color: #94A3B8;
+  line-height: 1.45;
+}
+
+.contact-accent-icon {
+  color: #10B981;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+/* =========================================
+   3. Bottom Bar & Payment Trust Badges
+   ========================================= */
+.footer-bottom-bar {
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 20px 0;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.footer-bottom-inner {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
   gap: 16px;
+}
+
+.copyright-text {
+  font-size: 0.8rem;
+  color: #64748B;
+  margin: 0;
+}
+
+.copyright-text strong {
+  color: #CBD5E1;
+}
+
+.footer-payment-badges {
+  display: flex;
+  gap: 8px;
   flex-wrap: wrap;
 }
 
-.footer-bottom p {
-  font-size: 0.8rem;
-  color: rgba(255,255,255,0.35);
+.pay-pill {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #CBD5E1;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 4px 10px;
+  border-radius: 6px;
 }
 
-.footer-bottom-container {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 12px;
-}
-
-.footer-bottom-links {
-  display: flex;
-  gap: 20px;
-}
-
-.footer-bottom-links a {
-  font-size: 0.8rem;
-  color: rgba(255,255,255,0.35);
-  transition: color 0.2s;
-}
-
-.footer-bottom-links a:hover {
-  color: rgba(255,255,255,0.7);
-}
-
-@media (max-width: 900px) {
-  .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
-}
-
-@media (max-width: 540px) {
-  .footer-grid { grid-template-columns: 1fr; }
-  .footer-bottom { justify-content: center; text-align: center; }
-  .footer-bottom-container {
-    flex-direction: column;
-    justify-content: center;
-    text-align: center;
-    gap: 16px;
+/* =========================================
+   4. Responsive Breakpoints
+   ========================================= */
+@media (max-width: 1024px) {
+  .footer-trust-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
-  .footer-bottom-links { justify-content: center; }
+
+  .footer-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+  }
+}
+
+@media (max-width: 640px) {
+  .footer-trust-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .footer-grid {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+
+  .footer-brand-desc {
+    max-width: 100%;
+  }
+
+  .footer-bottom-inner {
+    flex-direction: column;
+    text-align: center;
+    justify-content: center;
+  }
+
+  .footer-payment-badges {
+    justify-content: center;
+  }
 }
