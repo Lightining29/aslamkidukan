@@ -27,8 +27,15 @@ export default function LoginModal({ onClose, initialMode = 'login' }) {
 
   const triggerError = (msg) => {
     setError(msg);
-    setShaking(true);
-    setTimeout(() => setShaking(false), 550);
+    setShaking(false);
+    // Use requestAnimationFrame to guarantee CSS animation re-triggers
+    requestAnimationFrame(() => {
+      setShaking(true);
+      if (typeof navigator !== 'undefined' && navigator.vibrate) {
+        try { navigator.vibrate([80, 40, 80]); } catch {}
+      }
+    });
+    setTimeout(() => setShaking(false), 700);
   };
 
   useEffect(() => {

@@ -65,26 +65,33 @@
 /* Tactile Error Shake Effect on Wrong Password / Invalid Input / Error */
 .login-modal-card.is-shaking,
 .modal-container.is-shaking {
-  animation: modalErrorShake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both !important;
-  border-color: #EF4444 !important;
-  box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.18), 0 25px 60px -12px rgba(15, 23, 42, 0.35) !important;
+  animation: intenseTactileShake 0.65s cubic-bezier(0.36, 0.07, 0.19, 0.97) both !important;
+  border: 2px solid #EF4444 !important;
+  box-shadow: 0 0 0 6px rgba(239, 68, 68, 0.25), 0 25px 60px -12px rgba(239, 68, 68, 0.4) !important;
 }
 
 .login-modal-card.is-shaking input {
-  border-color: #F87171 !important;
-  background: #FFF5F5 !important;
+  border-color: #EF4444 !important;
+  background: #FEF2F2 !important;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2) !important;
   transition: all 0.2s ease;
 }
 
-@keyframes modalErrorShake {
+@keyframes intenseTactileShake {
   0%, 100% {
     transform: translate3d(0, 0, 0);
   }
-  15%, 45%, 75% {
-    transform: translate3d(-12px, 0, 0);
+  10%, 90% {
+    transform: translate3d(-14px, 0, 0);
   }
-  30%, 60%, 90% {
-    transform: translate3d(12px, 0, 0);
+  20%, 80% {
+    transform: translate3d(14px, 0, 0);
+  }
+  30%, 50%, 70% {
+    transform: translate3d(-10px, 0, 0);
+  }
+  40%, 60% {
+    transform: translate3d(10px, 0, 0);
   }
 }
 

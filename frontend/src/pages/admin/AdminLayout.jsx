@@ -45,20 +45,27 @@ export default function AdminLayout() {
   return (
     <div className="panel-layout pull-page-into-view">
       <PageTransitionCutout key={location.pathname} variant="curtain" title="AAAN SUPPLIER PORTAL" subtitle="MANAGEMENT & DISPATCH HUB" />
+      
+      {/* Mobile Drawer Dark Backdrop */}
+      <div 
+        className={`admin-mobile-backdrop ${menuOpen ? 'active' : ''}`} 
+        onClick={() => setMenuOpen(false)}
+        aria-hidden="true"
+      />
+
       {/* AAAN Enterprises Top Header Bar */}
       <header className="meesho-top-header pull-stagger-header">
-        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+        <div className="meesho-header-left">
           <button
             className="admin-menu-toggle"
-            style={{ display: 'none' }} // Mobile responsive toggle
             aria-label={menuOpen ? 'Close menu' : 'Open menu'}
             onClick={() => setMenuOpen((v) => !v)}
           >
             {menuOpen ? <X size={22} /> : <Menu size={22} />}
           </button>
-          <div className="meesho-brand-title" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <div className="meesho-brand-title">
             <AaanLogo size="sm" light={true} />
-            <span style={{ fontWeight: 800 }}>AAAN Supplier Portal</span>
+            <span className="meesho-brand-name-text">AAAN Portal</span>
             <span className="meesho-hub-badge">Verified Hub</span>
           </div>
         </div>
@@ -67,7 +74,7 @@ export default function AdminLayout() {
           <Search size={16} />
           <input
             type="text"
-            placeholder="Search catalog, order ID, product name, or SKU..."
+            placeholder="Search catalog, order ID, product name..."
             value={globalSearch}
             onChange={(e) => setGlobalSearch(e.target.value)}
           />
@@ -76,28 +83,37 @@ export default function AdminLayout() {
         <div className="meesho-top-right">
           <div className="meesho-status-pill">
             <span className="meesho-status-dot" />
-            <span>Store Live · Express Shipping</span>
+            <span>Store Live</span>
           </div>
-          <button style={{ border: 'none', background: 'rgba(255,255,255,0.15)', color: 'white', width: '36px', height: '36px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+          <button className="admin-icon-btn" aria-label="Notifications">
             <Bell size={18} />
           </button>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', background: 'rgba(255,255,255,0.15)', padding: '4px 12px', borderRadius: '50px' }}>
-            <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: '#FFE600', color: '#9f2089', fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.8rem' }}>
-              {user?.name ? user.name.charAt(0).toUpperCase() : 'M'}
+          <div className="admin-user-badge">
+            <div className="admin-user-avatar">
+              {user?.name ? user.name.charAt(0).toUpperCase() : 'A'}
             </div>
-            <span style={{ fontSize: '0.85rem', fontWeight: 700 }}>{user?.name || 'Meesho Supplier'}</span>
+            <span className="admin-user-name">{user?.name || 'Admin'}</span>
           </div>
         </div>
       </header>
 
-      {/* Meesho Admin Navigation Sidebar */}
+      {/* Admin Navigation Sidebar */}
       <aside className={`panel-sidebar pull-stagger-1 ${menuOpen ? 'open' : ''}`}>
         <div>
           <div className="panel-sidebar-header">
-            <div style={{ fontSize: '0.9rem', fontWeight: 800, color: 'var(--meesho-magenta)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-              Supplier Portal
+            <div className="sidebar-header-top-row">
+              <div className="sidebar-brand-label">
+                Supplier Portal
+              </div>
+              <button 
+                className="sidebar-close-btn-mobile" 
+                onClick={() => setMenuOpen(false)}
+                aria-label="Close menu"
+              >
+                <X size={20} />
+              </button>
             </div>
-            <p style={{ fontSize: '0.78rem', color: '#64748B', margin: '2px 0 0' }}>Manage orders, catalogs &amp; sales</p>
+            <p className="sidebar-subtitle">Manage orders, catalogs &amp; sales</p>
           </div>
 
           <nav className="panel-nav">
@@ -124,9 +140,6 @@ export default function AdminLayout() {
             </NavLink>
             <NavLink to="/admin/products" onClick={() => setMenuOpen(false)}>
               <ShoppingCart size={18} /> Catalog &amp; Products
-            </NavLink>
-            <NavLink to="/admin/products/new" onClick={() => setMenuOpen(false)}>
-              <PlusCircle size={18} /> Add New Catalog
             </NavLink>
             <NavLink to="/admin/stock" onClick={() => setMenuOpen(false)}>
               <Boxes size={18} /> Stock &amp; Inventory
@@ -161,11 +174,11 @@ export default function AdminLayout() {
           </nav>
         </div>
 
-        <div style={{ padding: '16px 20px', borderTop: '1px solid var(--border-light)' }}>
-          <NavLink to="/" style={{ display: 'flex', alignItems: 'center', gap: '10px', color: '#475569', textDecoration: 'none', fontWeight: 600, fontSize: '0.88rem', marginBottom: '10px' }}>
+        <div className="sidebar-footer-section">
+          <NavLink to="/" className="sidebar-store-link">
             <Home size={18} /> View Storefront
           </NavLink>
-          <button onClick={handleSignOut} style={{ display: 'flex', alignItems: 'center', gap: '10px', color: '#FF4757', border: 'none', background: 'none', fontWeight: 700, fontSize: '0.88rem', cursor: 'pointer', padding: 0 }}>
+          <button onClick={handleSignOut} className="sidebar-logout-btn">
             <LogOut size={18} /> Sign Out
           </button>
         </div>
