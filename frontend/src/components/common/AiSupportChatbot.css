@@ -1,11 +1,11 @@
 /* =========================================================
-   AAAN ENTERPRISES — SUPPORT BOT (SHINY BLACK + GREEN EYES)
-   Action Question Pills & Exact UI Design
+   AAAN ENTERPRISES — 3D ANIMATED ROBOT SUPPORT BOT
+   Moves Head, Hands, Eyes & Floats in 3D Space
    ========================================================= */
 
 .aaan-ai-support-wrapper {
   position: fixed;
-  bottom: 82px;
+  bottom: 80px;
   right: 16px;
   z-index: 99999;
   font-family: -apple-system, BlinkMacSystemFont, 'Plus Jakarta Sans', 'Segoe UI', Roboto, sans-serif;
@@ -19,124 +19,221 @@
 }
 
 /* =========================================================
-   Cute Shiny Obsidian Black Robot Face with Moving Green Eyes
+   Floating 3D Robot Mascot Launcher Trigger
    ========================================================= */
-.cute-robot-face-sphere {
-  border-radius: 50%;
-  background: radial-gradient(circle at 32% 28%, #334155 0%, #0F172A 55%, #020617 100%);
+.floating-3d-robot-launcher {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.floating-3d-robot-launcher:hover {
+  transform: scale(1.08) translateY(-4px);
+}
+
+.floating-3d-robot-launcher:active {
+  transform: scale(0.95);
+}
+
+/* Interactive Speech Bubble Prompt */
+.robot-speech-bubble-pop {
+  background: #0F172A;
+  color: #FFFFFF;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  white-space: nowrap;
+  margin-bottom: 6px;
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  animation: speechBubbleFloat 3s infinite ease-in-out;
+  position: relative;
+}
+
+.robot-speech-bubble-pop::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 5px 5px 0;
+  border-style: solid;
+  border-color: #0F172A transparent;
+  display: block;
+  width: 0;
+}
+
+@keyframes speechBubbleFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+/* =========================================================
+   3D Articulated Robot Mascot & Physics Animations
+   ========================================================= */
+.robot-3d-mascot-wrapper {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  position: relative;
-  overflow: hidden;
-  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.4), 0 0 14px rgba(0, 245, 160, 0.25);
-  border: 1.5px solid rgba(255, 255, 255, 0.18);
-  flex-shrink: 0;
+  perspective: 800px;
 }
 
-.cute-robot-face-sphere.size-sm {
-  width: 26px;
-  height: 26px;
+.robot-3d-mascot-wrapper.size-sm {
+  width: 32px;
+  height: 32px;
 }
 
-.cute-robot-face-sphere.size-md {
-  width: 44px;
-  height: 44px;
+.robot-3d-mascot-wrapper.size-md {
+  width: 52px;
+  height: 52px;
 }
 
-.cute-robot-face-sphere.size-lg {
-  width: 54px;
-  height: 54px;
+.robot-3d-mascot-wrapper.size-lg {
+  width: 86px;
+  height: 86px;
 }
 
-.face-gloss-highlight {
+/* Floating Soft Shadow underneath 3D Character */
+.robot-3d-floating-shadow {
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 48%;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0) 100%);
-  border-radius: 50% 50% 0 0;
+  bottom: 0px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60%;
+  height: 10px;
+  background: radial-gradient(ellipse at center, rgba(16, 185, 129, 0.35) 0%, rgba(15, 23, 42, 0.2) 50%, transparent 80%);
+  border-radius: 50%;
+  animation: robotShadowPulse 4.2s infinite ease-in-out;
   pointer-events: none;
 }
 
-/* Eye Glow & Animations */
-.robot-green-eye {
-  filter: drop-shadow(0 0 5px #00F5A0) drop-shadow(0 0 10px rgba(0, 245, 160, 0.7));
+@keyframes robotShadowPulse {
+  0%, 100% { transform: translateX(-50%) scale(1); opacity: 0.6; }
+  50% { transform: translateX(-50%) scale(0.75); opacity: 0.3; }
 }
 
-.robot-green-smile {
-  filter: drop-shadow(0 0 4px #00F5A0);
-}
-
-.robot-eyes-anim-group {
-  transform-origin: 24px 21.5px;
-  animation: robotEyesLifeCycle 5.5s infinite ease-in-out;
-}
-
-/* Lifelike automatic eye movement: Looking Left, Right, Up, and Cute Blinking */
-@keyframes robotEyesLifeCycle {
-  0%, 100% {
-    transform: translate3d(0, 0, 0) scaleY(1);
-  }
-  /* Look left */
-  14%, 26% {
-    transform: translate3d(-3.5px, 0, 0) scaleY(1);
-  }
-  /* Quick Blink */
-  29% {
-    transform: translate3d(-3.5px, 0, 0) scaleY(0.08);
-  }
-  31% {
-    transform: translate3d(-3.5px, 0, 0) scaleY(1);
-  }
-  /* Look right */
-  46%, 58% {
-    transform: translate3d(3.5px, -0.5px, 0) scaleY(1);
-  }
-  /* Look up happily */
-  68%, 76% {
-    transform: translate3d(0, -2.5px, 0) scale(1.04, 1.04);
-  }
-  /* Double Blink */
-  80% {
-    transform: translate3d(0, 0, 0) scaleY(0.08);
-  }
-  82% {
-    transform: translate3d(0, 0, 0) scaleY(1);
-  }
-  84% {
-    transform: translate3d(0, 0, 0) scaleY(0.08);
-  }
-  86% {
-    transform: translate3d(0, 0, 0) scaleY(1);
-  }
-}
-
-.shiny-black-fab {
+/* Character Container with 3D Head & Hand Float Movement */
+.robot-3d-character-container {
+  width: 100%;
+  height: 100%;
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 54px;
-  height: 54px;
+  transform-origin: 50% 80%;
+  animation: robot3DHeadAndHandMovement 4.2s infinite ease-in-out;
+  will-change: transform;
+}
+
+.robot-3d-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.22));
+}
+
+/* Automatic Head Tilt, Body Levitation & Hand Gesturing Keyframes */
+@keyframes robot3DHeadAndHandMovement {
+  0%, 100% {
+    transform: translateY(0px) rotateZ(0deg) rotateY(0deg);
+  }
+  /* Tilt head left, hand gesture up */
+  22% {
+    transform: translateY(-8px) rotateZ(-3.5deg) rotateY(-6deg) scale(1.02);
+  }
+  /* Look center & float */
+  50% {
+    transform: translateY(-12px) rotateZ(0.5deg) rotateY(0deg) scale(1.03);
+  }
+  /* Tilt head right, waving hand */
+  74% {
+    transform: translateY(-6px) rotateZ(3.5deg) rotateY(6deg) scale(1.01);
+  }
+}
+
+/* =========================================================
+   Live Neon Green Visor Eyes (Animated Automatic Movement)
+   ========================================================= */
+.robot-visor-eyes-overlay {
+  position: absolute;
+  top: 28%;
+  left: 36%;
+  width: 30%;
+  height: 18%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  pointer-events: none;
+}
+
+.live-neon-eye {
+  width: 36%;
+  height: 72%;
   border-radius: 50%;
-  border: none;
-  background: transparent;
-  padding: 0;
-  cursor: pointer;
-  transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.2s ease;
+  background: #00F5A0;
+  box-shadow: 0 0 8px #00F5A0, 0 0 16px rgba(0, 245, 160, 0.85);
+  animation: neonEyesLifeMovement 5s infinite ease-in-out;
+  transform-origin: center center;
 }
 
-.shiny-black-fab:hover {
-  transform: scale(1.08);
-  filter: drop-shadow(0 0 12px rgba(0, 245, 160, 0.5));
+/* Lifelike automatic eye movement: Looking Left, Right, Up, and Cute Blinking */
+@keyframes neonEyesLifeMovement {
+  0%, 100% {
+    transform: translate3d(0, 0, 0) scaleY(1);
+    opacity: 0.95;
+  }
+  /* Look left */
+  16%, 28% {
+    transform: translate3d(-3px, 0, 0) scaleY(1);
+    opacity: 1;
+  }
+  /* Quick Blink */
+  32% {
+    transform: translate3d(-3px, 0, 0) scaleY(0.08);
+    opacity: 0.3;
+  }
+  34% {
+    transform: translate3d(-3px, 0, 0) scaleY(1);
+    opacity: 1;
+  }
+  /* Look right */
+  52%, 64% {
+    transform: translate3d(3px, -1px, 0) scaleY(1);
+    opacity: 1;
+  }
+  /* Look up happily */
+  74%, 82% {
+    transform: translate3d(0, -2px, 0) scale(1.1, 1.1);
+    opacity: 1;
+  }
+  /* Double Blink */
+  86% {
+    transform: translate3d(0, 0, 0) scaleY(0.08);
+    opacity: 0.3;
+  }
+  88% {
+    transform: translate3d(0, 0, 0) scaleY(1);
+    opacity: 1;
+  }
+  90% {
+    transform: translate3d(0, 0, 0) scaleY(0.08);
+    opacity: 0.3;
+  }
+  92% {
+    transform: translate3d(0, 0, 0) scaleY(1);
+    opacity: 0.95;
+  }
 }
 
-.shiny-black-fab:active {
-  transform: scale(0.92);
-}
-
-/* Support Bot Chat Drawer Container */
+/* =========================================================
+   Support Bot Chat Drawer Container
+   ========================================================= */
 .ai-chat-drawer {
   width: 380px;
   height: 600px;
@@ -156,10 +253,10 @@
   to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
-/* Support Bot Card Header */
+/* Header */
 .chat-drawer-header {
   background: #FFFFFF;
-  padding: 14px 18px;
+  padding: 12px 18px;
   display: flex;
   align-items: center;
   justify-content: space-between;

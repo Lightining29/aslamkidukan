@@ -1,45 +1,32 @@
 import { useState, useEffect, useRef } from 'react';
-import { X, Send, ChevronRight, AlertCircle } from 'lucide-react';
+import { X, Send, ChevronRight, AlertCircle, Sparkles } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { processAiSupportQuery } from '../../utils/aiSupportEngine';
 import { submitContact } from '../../api';
 import { toastSuccess, toastError } from '../../utils/toast.js';
 import './AiSupportChatbot.css';
 
-// Dedicated Cute Robot Face Component with Animated Moving Green Eyes
-function CuteRobotFace({ size = 'md' }) {
-  const pixelSize = size === 'sm' ? 20 : size === 'lg' ? 52 : 40;
+// 3D Animated Robot Mascot Component with Head, Hand & Moving Eyes Physics
+function Animated3DRobotMascot({ size = 'md', interactive = false }) {
   return (
-    <div className={`cute-robot-face-sphere size-${size}`}>
-      <div className="face-gloss-highlight" />
-      <svg
-        className="robot-face-svg"
-        width={pixelSize}
-        height={pixelSize}
-        viewBox="0 0 48 48"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        {/* Animated Eyes Group */}
-        <g className="robot-eyes-anim-group">
-          {/* Left Cute Neon Green Oval Eye */}
-          <ellipse cx="15.5" cy="21.5" rx="5.5" ry="8" fill="#00F5A0" className="robot-green-eye" />
-          <circle cx="14" cy="18" r="1.6" fill="#FFFFFF" opacity="0.9" className="eye-glint" />
+    <div className={`robot-3d-mascot-wrapper size-${size} ${interactive ? 'interactive-mascot' : ''}`}>
+      {/* Floating Shadow */}
+      <div className="robot-3d-floating-shadow" />
 
-          {/* Right Cute Neon Green Oval Eye */}
-          <ellipse cx="32.5" cy="21.5" rx="5.5" ry="8" fill="#00F5A0" className="robot-green-eye" />
-          <circle cx="31" cy="18" r="1.6" fill="#FFFFFF" opacity="0.9" className="eye-glint" />
-        </g>
-
-        {/* Cute Green Smile */}
-        <path
-          d="M19.5 32.5C21 34.5 22.8 35.2 24 35.2C25.2 35.2 27 34.5 28.5 32.5"
-          stroke="#00F5A0"
-          strokeWidth="3"
-          strokeLinecap="round"
-          className="robot-green-smile"
+      {/* Main 3D Articulated Robot Body */}
+      <div className="robot-3d-character-container">
+        <img
+          src="/support-robot-3d.png"
+          alt="3D AI Support Robot"
+          className="robot-3d-img"
         />
-      </svg>
+
+        {/* Live Neon Green Eyes & Visor Glow Overlay (Animated Looking & Blinking) */}
+        <div className="robot-visor-eyes-overlay">
+          <span className="live-neon-eye eye-left" />
+          <span className="live-neon-eye eye-right" />
+        </div>
+      </div>
     </div>
   );
 }
@@ -230,30 +217,28 @@ export default function AiSupportChatbot() {
 
   return (
     <div className="aaan-ai-support-wrapper">
-      {/* Floating Shiny Black Bot Trigger Button with Animated Moving Green Eyes */}
+      {/* Floating 3D Robot Mascot Launcher Button (Moves head, hands, eyes & floats) */}
       {!isOpen && (
-        <button
-          className="ai-chat-fab shiny-black-fab"
-          onClick={() => setIsOpen(true)}
-          aria-label="Open Support Bot"
-          title="Support Bot"
-        >
-          <CuteRobotFace size="lg" />
-        </button>
+        <div className="floating-3d-robot-launcher" onClick={() => setIsOpen(true)}>
+          <div className="robot-speech-bubble-pop">
+            <span>Hi! Ask me anything 👋</span>
+          </div>
+          <Animated3DRobotMascot size="lg" interactive={true} />
+        </div>
       )}
 
       {/* Support Chat Card Drawer */}
       {isOpen && (
         <div className="ai-chat-drawer">
           
-          {/* Card Header (Shiny Black Bot Avatar + Animated Green Eyes) */}
+          {/* Card Header with Animated 3D Mascot */}
           <div className="chat-drawer-header">
             <div className="header-brand-info">
-              <CuteRobotFace size="md" />
+              <Animated3DRobotMascot size="md" />
               <div className="bot-header-text">
                 <h3 className="bot-title">Support Bot</h3>
                 <span className="bot-status-text">
-                  <span className="live-green-pulse-dot" /> Online
+                  <span className="live-green-pulse-dot" /> Online · AI Active
                 </span>
               </div>
             </div>
@@ -278,7 +263,7 @@ export default function AiSupportChatbot() {
                 <div className="msg-sender-label">
                   {m.sender === 'bot' ? (
                     <div className="bot-label-pill">
-                      <CuteRobotFace size="sm" />
+                      <Animated3DRobotMascot size="sm" />
                       <span>Support Bot</span>
                     </div>
                   ) : (
@@ -297,7 +282,7 @@ export default function AiSupportChatbot() {
               <div className="msg-wrapper bot-wrapper">
                 <div className="msg-sender-label">
                   <div className="bot-label-pill">
-                    <CuteRobotFace size="sm" />
+                    <Animated3DRobotMascot size="sm" />
                     <span>Support Bot</span>
                   </div>
                 </div>
