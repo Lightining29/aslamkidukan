@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Home, Flame, ShoppingBag, Heart, User } from 'lucide-react';
 import { useCart } from '../../context/CartContext';
@@ -10,46 +11,43 @@ export default function MobileBottomNav({ onOpenCart, onOpenWishlist, onOpenProf
   const location = useLocation();
   const navigate = useNavigate();
 
-  const isHome = location.pathname === '/' || location.pathname === '';
-  const isShop = location.pathname.startsWith('/shop') || location.pathname.startsWith('/categories');
-  const isWishlist = location.pathname === '/account/wishlist';
-  const isCart = location.pathname === '/cart';
-  const isAccount = location.pathname.startsWith('/account') && !isWishlist;
+  const [activeTabId, setActiveTabId] = useState('home');
   const wishlistCount = Array.isArray(wishlist) ? wishlist.length : 0;
 
-  // Determine active index (0: Home, 1: Shop/Trending, 2: Wishlist, 3: Cart, 4: Account)
-  let activeIndex = 0;
-  if (isShop) activeIndex = 1;
-  else if (isWishlist) activeIndex = 2;
-  else if (isCart) activeIndex = 3;
-  else if (isAccount) activeIndex = 4;
-
-  const handleAccountClick = () => {
-    if (onOpenProfile) {
-      onOpenProfile();
-    } else if (isAuthenticated) {
-      navigate('/account');
-    } else {
-      if (typeof setShowLoginModal === 'function') {
-        setShowLoginModal('login');
-      } else {
-        navigate('/login');
-      }
+  // Sync active tab with route location
+  useEffect(() => {
+    const path = location.pathname;
+    if (path === '/' || path === '') {
+      setActiveTabId('home');
+    } else if (path.startsWith('/shop') || path.startsWith('/categories')) {
+      setActiveTabId('trending');
+    } else if (path === '/account/wishlist') {
+      setActiveTabId('wishlist');
+    } else if (path === '/cart') {
+      setActiveTabId('cart');
+    } else if (path.startsWith('/account') || path.startsWith('/admin')) {
+      setActiveTabId('account');
     }
-  };
+  }, [location.pathname]);
 
   const navItems = [
     {
       id: 'home',
       label: 'Home',
       icon: Home,
-      action: () => navigate('/')
+      handleClick: () => {
+        setActiveTabId('home');
+        navigate('/');
+      }
     },
     {
       id: 'trending',
-      label: 'Trending',
+      label: 'Shop',
       icon: Flame,
-      action: () => navigate('/shop')
+      handleClick: () => {
+        setActiveTabId('trending');
+        navigate('/shop');
+      }
     },
     {
       id: 'wishlist',
@@ -57,7 +55,11 @@ export default function MobileBottomNav({ onOpenCart, onOpenWishlist, onOpenProf
       icon: Heart,
       badge: wishlistCount > 0,
       badgeDot: true,
-      action: () => (onOpenWishlist ? onOpenWishlist() : navigate('/account/wishlist'))
+      handleClick: () => {
+        setActiveTabId('wishlist');
+        if (onOpenWishlist) onOpenWishlist();
+        else navigate('/account/wishlist');
+      }
     },
     {
       id: 'cart',
@@ -65,55 +67,66 @@ export default function MobileBottomNav({ onOpenCart, onOpenWishlist, onOpenProf
       icon: ShoppingBag,
       badge: cartCount > 0,
       badgeText: cartCount,
-      action: () => (onOpenCart ? onOpenCart() : navigate('/cart'))
+      handleClick: () => {
+        setActiveTabId('cart');
+        if (onOpenCart) onOpenCart();
+        else navigate('/cart');
+      }
     },
     {
       id: 'account',
-      label: 'Account',
+      label: 'Profile',
       icon: User,
-      action: handleAccountClick
+      handleClick: () => {
+        setActiveTabId('account');
+        if (onOpenProfile) {
+          onOpenProfile();
+        } else if (isAuthenticated) {
+          navigate('/account');
+        } else {
+          if (typeof setShowLoginModal === 'function') {
+            setShowLoginModal('login');
+          } else {
+            navigate('/login');
+          }
+        }
+      }
     }
   ];
 
-  return (
-    <nav className="curved-fluid-bottom-nav" aria-label="Mobile Bottom Navigation">
-      <div className="curved-nav-island-bar">
-        
-        {/* Sliding Fluid Notch Curve Indicator */}
-        <div 
-          className="fluid-sliding-notch"
-          style={{ transform: `translateX(calc(${activeIndex} * (100% / ${navItems.length})))` }}
-        >
-          {/* Fluid Concave Wings Cutout */}
-          <div className="notch-wing wing-left" />
-          
-          {/* Elevated Floating Active Circle Bubble */}
-          <div className="notch-elevated-circle">
-            <div className="notch-circle-glow" />
-          </div>
-          
-          <div className="notch-wing wing-right" />
-        </div>
+  const activeIndex = navItems.findIndex((item) => item.id === activeTabId);
+  const safeActiveIndex = activeIndex >= 0 ? activeIndex : 0;
 
-        {/* Navigation Tab Icons List */}
-        <div className="curved-nav-tabs-grid">
-          {navItems.map((item, index) => {
+  return (
+    <nav className="white-mobile-bottom-nav" aria-label="Mobile Bottom Navigation">
+      <div className="white-nav-island-bar">
+        
+        {/* Sliding Black Capsule Indicator */}
+        <div 
+          className="sliding-black-capsule"
+          style={{ transform: `translateX(calc(${safeActiveIndex} * 100%))` }}
+        />
+
+        {/* Navigation Tabs List */}
+        <div className="white-nav-tabs-grid">
+          {navItems.map((item) => {
             const Icon = item.icon;
-            const isActive = activeIndex === index;
+            const isActive = activeTabId === item.id;
 
             return (
               <button
                 key={item.id}
                 type="button"
-                className={`curved-nav-tab-btn ${isActive ? 'is-active' : ''}`}
-                onClick={item.action}
+                className={`white-nav-tab-btn ${isActive ? 'is-active-tab' : ''}`}
+                onClick={item.handleClick}
                 aria-label={item.label}
               >
-                <div className="tab-icon-holder">
-                  <Icon size={20} className="tab-glyph-icon" />
-                  
+                <div className="tab-btn-content">
+                  <Icon size={19} className="nav-tab-glyph" />
+                  <span className="nav-tab-label">{item.label}</span>
+
                   {item.badge && !isActive && (
-                    <span className={`tab-badge-bubble ${item.badgeDot ? 'dot' : ''}`}>
+                    <span className={`tab-counter-badge ${item.badgeDot ? 'dot' : ''}`}>
                       {item.badgeText || ''}
                     </span>
                   )}
