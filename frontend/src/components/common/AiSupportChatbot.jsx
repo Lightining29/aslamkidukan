@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { MessageSquare, X, Send, Bot, User, Sparkles, Phone, Mail, ShieldCheck, ArrowRight, RefreshCw, AlertCircle } from 'lucide-react';
-import AaanLogo from './AaanLogo';
+import { MessageSquare, X, Send, Bot, Shield, AlertCircle } from 'lucide-react';
 import { processAiSupportQuery } from '../../utils/aiSupportEngine';
 import { submitContact } from '../../api';
 import { toastSuccess, toastError } from '../../utils/toast.js';
@@ -8,11 +7,12 @@ import './AiSupportChatbot.css';
 
 export default function AiSupportChatbot() {
   const [isOpen, setIsOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState('customer'); // 'customer' | 'admin'
   const [messages, setMessages] = useState([
     {
       id: 'm-1',
       sender: 'bot',
-      text: '👋 Hello! I am your 24/7 AAAN AI Support Assistant. How can I help you today with your order, shipping, warranty, or returns?',
+      text: "👋 Welcome to Support Bot. I'm ChatBot, your AI assistant. Let me know how I can help you.",
       time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
     }
   ]);
@@ -47,7 +47,6 @@ export default function AiSupportChatbot() {
     setTyping(true);
 
     try {
-      // Process AI Query
       const aiResult = await processAiSupportQuery(textToSend, messages);
 
       setTimeout(() => {
@@ -67,7 +66,7 @@ export default function AiSupportChatbot() {
         if (aiResult.escalate) {
           setShowEscalationForm(true);
         }
-      }, 500);
+      }, 400);
     } catch {
       setTyping(false);
     }
@@ -86,16 +85,16 @@ export default function AiSupportChatbot() {
         name: escalationForm.name || 'Valued Customer',
         email: escalationForm.email,
         phone: escalationForm.phone,
-        message: `[AI Escalated Human Ticket]: ${escalationForm.message}`
+        message: `[Support Bot Escalation Ticket]: ${escalationForm.message}`
       });
 
-      toastSuccess('Ticket Submitted! 📩', 'Our support team will contact you within 15 minutes.');
+      toastSuccess('Ticket Dispatched! 📩', 'Our support executive will contact you shortly.');
       setShowEscalationForm(false);
 
       const confirmMsg = {
         id: `b-sys-${Date.now()}`,
         sender: 'bot',
-        text: '✅ Your high-priority support ticket has been dispatched to our Human Support Executives. We will email & SMS you shortly.',
+        text: '✅ Your high-priority support ticket has been dispatched to our Human Support Executives. We will contact you via email and phone shortly.',
         time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       };
       setMessages((prev) => [...prev, confirmMsg]);
@@ -106,52 +105,89 @@ export default function AiSupportChatbot() {
     }
   };
 
+  const customerQuestions = [
+    { label: '🔄 Return Time Limit', prompt: 'Hi, How much time do I have left for my order to be returned?' },
+    { label: '📦 Track My Order', prompt: 'Where is my latest order and tracking status?' },
+    { label: '🌿 3D Stickers in Stock', prompt: 'What 3D wall stickers do you have in stock?' },
+    { label: '🎟️ Active Promo Codes', prompt: 'What active coupon discount codes can I use?' },
+    { label: '🚚 Shipping & Delivery', prompt: 'What are the shipping charges and delivery timelines?' },
+    { label: '💳 Cash on Delivery', prompt: 'Do you offer Cash on Delivery payment?' }
+  ];
+
+  const adminQuestions = [
+    { label: '📊 Today’s Sales & Revenue', prompt: 'How much total sales and revenue this month?' },
+    { label: '📦 Pending Orders to Ship', prompt: 'How many total orders today and pending dispatch?' },
+    { label: '⚠️ Low Stock Products', prompt: 'Show low stock and out of stock products in DB' },
+    { label: '👥 Total Customer Count', prompt: 'How many total registered customers are in database?' }
+  ];
+
   return (
     <div className="aaan-ai-support-wrapper">
-      {/* Floating Small Toggle Button */}
+      {/* Floating Small Circular Chat Trigger Button */}
       {!isOpen && (
         <button
-          className="ai-chat-fab small-chat-fab"
+          className="ai-chat-fab"
           onClick={() => setIsOpen(true)}
-          aria-label="Open 24/7 AI Support"
-          title="24/7 AI Support Chat"
+          aria-label="Open Support Bot"
+          title="Support Bot"
         >
           <div className="fab-icon-box">
-            <MessageSquare size={20} color="#FFFFFF" />
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+              <circle cx="9" cy="10" r="1" fill="currentColor"></circle>
+              <circle cx="15" cy="10" r="1" fill="currentColor"></circle>
+              <path d="M9.5 13.5c.83.67 1.67 1 2.5 1s1.67-.33 2.5-1"></path>
+            </svg>
             <span className="fab-online-dot" />
           </div>
-          <span className="fab-mini-text">Chat</span>
         </button>
       )}
 
-      {/* Support Chat Drawer */}
+      {/* Support Chat Card Drawer */}
       {isOpen && (
         <div className="ai-chat-drawer">
           
-          {/* Header */}
+          {/* Card Header (Matches UI Mockup) */}
           <div className="chat-drawer-header">
             <div className="header-brand-info">
-              <AaanLogo size="sm" light={true} />
-              <div>
-                <strong>AAAN AI Support Executive</strong>
-                <span className="online-badge">● 24/7 AI Assistant · Fast Answers</span>
+              <div className="bot-header-avatar-circle">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                  <circle cx="9" cy="10" r="1.2" fill="currentColor"></circle>
+                  <circle cx="15" cy="10" r="1.2" fill="currentColor"></circle>
+                  <path d="M9.5 13.5c.83.67 1.67 1 2.5 1s1.67-.33 2.5-1"></path>
+                </svg>
+                <span className="avatar-online-dot" />
+              </div>
+              <div className="bot-header-text">
+                <h3 className="bot-title">Support Bot</h3>
+                <span className="bot-status-text">Online</span>
               </div>
             </div>
-            <button className="chat-close-btn" onClick={() => setIsOpen(false)}>
+            <button className="chat-close-btn" onClick={() => setIsOpen(false)} aria-label="Close Chat">
               <X size={18} />
             </button>
           </div>
 
-          {/* Quick Suggestion Chips Bar */}
+          {/* User / Admin Question Selector Tabs */}
+          <div className="chat-mode-toggle-bar">
+            <button 
+              className={`mode-tab-btn ${activeTab === 'customer' ? 'active' : ''}`}
+              onClick={() => setActiveTab('customer')}
+            >
+              👤 Customer Questions
+            </button>
+            <button 
+              className={`mode-tab-btn ${activeTab === 'admin' ? 'active' : ''}`}
+              onClick={() => setActiveTab('admin')}
+            >
+              👑 Admin DB Queries
+            </button>
+          </div>
+
+          {/* Quick Suggestion Question Chips Bar */}
           <div className="quick-chips-bar">
-            {[
-              { label: '📦 Track Order', prompt: 'Where is my order and how to track it?' },
-              { label: '🚚 Shipping Info', prompt: 'What are the shipping charges and delivery time?' },
-              { label: '🔄 Returns & Refunds', prompt: 'What is the return policy and refund timeline?' },
-              { label: '🛡️ Claim Warranty', prompt: 'How to claim 1 year AAAN official warranty?' },
-              { label: '🎟️ Promo Codes', prompt: 'What active coupon codes can I use?' },
-              { label: '🙋 Human Agent', prompt: 'I want to speak with a human support agent' }
-            ].map((chip) => (
+            {(activeTab === 'customer' ? customerQuestions : adminQuestions).map((chip) => (
               <button
                 key={chip.label}
                 className="chip-btn"
@@ -162,49 +198,47 @@ export default function AiSupportChatbot() {
             ))}
           </div>
 
-          {/* Messages Thread Container */}
+          {/* Messages Thread Container (Matches Chat Design) */}
           <div className="chat-messages-thread">
             {messages.map((m) => (
-              <div key={m.id} className={`msg-row ${m.sender === 'user' ? 'user-msg' : 'bot-msg'}`}>
-                {m.sender === 'bot' && (
-                  <div className="bot-avatar">
-                    <Bot size={16} />
-                  </div>
-                )}
-
-                <div className="msg-bubble">
-                  <div className="msg-text" dangerouslySetInnerHTML={{ __html: formatMarkdownText(m.text) }} />
-                  
-                  {m.confidence !== undefined && (
-                    <div className="msg-meta-row">
-                      <span className="confidence-pill">
-                        AI Confidence: {Math.round(m.confidence * 100)}%
-                      </span>
-                      <span className="msg-time">{m.time}</span>
+              <div key={m.id} className={`msg-wrapper ${m.sender === 'user' ? 'user-wrapper' : 'bot-wrapper'}`}>
+                
+                {/* Sender Header Label */}
+                <div className="msg-sender-label">
+                  {m.sender === 'bot' ? (
+                    <div className="bot-label-pill">
+                      <div className="mini-bot-icon">
+                        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                        </svg>
+                      </div>
+                      <span>Support Bot</span>
                     </div>
+                  ) : (
+                    <span className="customer-label">Customer</span>
                   )}
+                </div>
 
-                  {m.escalate && !showEscalationForm && (
-                    <button
-                      className="btn-trigger-escalation"
-                      onClick={() => {
-                        setEscalationForm({ ...escalationForm, message: input || m.text });
-                        setShowEscalationForm(true);
-                      }}
-                    >
-                      <Phone size={14} /> Connect to Human Representative
-                    </button>
-                  )}
+                {/* Bubble */}
+                <div className={`msg-bubble ${m.sender === 'user' ? 'customer-bubble' : 'bot-bubble'}`}>
+                  <div className="msg-text" dangerouslySetInnerHTML={{ __html: formatMarkdownText(m.text) }} />
                 </div>
               </div>
             ))}
 
             {typing && (
-              <div className="msg-row bot-msg">
-                <div className="bot-avatar">
-                  <Bot size={16} />
+              <div className="msg-wrapper bot-wrapper">
+                <div className="msg-sender-label">
+                  <div className="bot-label-pill">
+                    <div className="mini-bot-icon">
+                      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                      </svg>
+                    </div>
+                    <span>Support Bot</span>
+                  </div>
                 </div>
-                <div className="msg-bubble typing-bubble">
+                <div className="msg-bubble bot-bubble typing-bubble">
                   <div className="typing-dots">
                     <span /><span /><span />
                   </div>
@@ -216,8 +250,8 @@ export default function AiSupportChatbot() {
             {showEscalationForm && (
               <div className="escalation-form-card">
                 <div className="esc-head">
-                  <AlertCircle size={18} color="#4F46E5" />
-                  <strong>Submit Ticket for Human Support Agent</strong>
+                  <AlertCircle size={18} color="#0066FF" />
+                  <strong>Submit Ticket for Support Team</strong>
                   <button onClick={() => setShowEscalationForm(false)} className="esc-close">✕</button>
                 </div>
                 <form onSubmit={handleEscalationSubmit} className="esc-form">
@@ -248,7 +282,7 @@ export default function AiSupportChatbot() {
                     onChange={(e) => setEscalationForm({ ...escalationForm, message: e.target.value })}
                   />
                   <button type="submit" className="btn-submit-esc" disabled={submittingTicket}>
-                    {submittingTicket ? 'Dispatching…' : '📩 Send Priority Ticket'}
+                    {submittingTicket ? 'Dispatching…' : '📩 Dispatch Ticket to Admin'}
                   </button>
                 </form>
               </div>
@@ -261,13 +295,13 @@ export default function AiSupportChatbot() {
           <div className="chat-input-bar">
             <input
               type="text"
-              placeholder="Ask about orders, shipping, warranty..."
+              placeholder="Ask a question or type a message..."
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => { if (e.key === 'Enter') handleSend(); }}
             />
-            <button className="chat-send-btn" onClick={() => handleSend()} disabled={!input.trim()}>
-              <Send size={16} />
+            <button className="chat-send-btn" onClick={() => handleSend()} disabled={!input.trim()} aria-label="Send">
+              <Send size={15} />
             </button>
           </div>
 
