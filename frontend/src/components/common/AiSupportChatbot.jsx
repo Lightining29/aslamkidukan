@@ -7,12 +7,15 @@ import { toastSuccess, toastError } from '../../utils/toast.js';
 import { ROBOT_3D_BASE64 } from '../../assets/robotImage.js';
 import './AiSupportChatbot.css';
 
-// 3D Animated Robot Mascot Component (Clean Visor, Floating Physics)
+// 3D Animated Robot Mascot Component (Shiny Black Circular Portal Background)
 function Animated3DRobotMascot({ size = 'md', interactive = false }) {
   return (
     <div className={`robot-3d-mascot-wrapper size-${size} ${interactive ? 'interactive-mascot' : ''}`}>
-      {/* Floating Shadow */}
-      <div className="robot-3d-floating-shadow" />
+      {/* Shiny Obsidian Black Circle Background Pod */}
+      <div className="shiny-black-circle-bg">
+        <div className="black-circle-gloss-overlay" />
+        <div className="black-circle-glow-ring" />
+      </div>
 
       {/* Main 3D Articulated Robot Body */}
       <div className="robot-3d-character-container">
