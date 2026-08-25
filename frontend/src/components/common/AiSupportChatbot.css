@@ -1,6 +1,6 @@
 /* =========================================================
-   AAAN ENTERPRISES — SUPPORT BOT (EXACT UI REPLICA)
-   Blue & White Minimalist Support Bot with Live DB Queries
+   AAAN ENTERPRISES — SUPPORT BOT (SHINY BLACK + GREEN EYES)
+   Action Question Pills & Exact UI Design
    ========================================================= */
 
 .aaan-ai-support-wrapper {
@@ -18,59 +18,89 @@
   }
 }
 
-/* Floating Circular FAB */
-.ai-chat-fab {
+/* =========================================================
+   Shiny Obsidian Black Bot Avatar with Glowing Green Eyes
+   ========================================================= */
+.shiny-black-fab {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 52px;
-  height: 52px;
-  background: #0066FF;
-  color: #FFFFFF;
-  padding: 0;
+  width: 54px;
+  height: 54px;
+  background: radial-gradient(circle at 35% 30%, #334155 0%, #0F172A 60%, #020617 100%);
   border-radius: 50%;
-  border: none;
-  box-shadow: 0 8px 24px rgba(0, 102, 255, 0.38);
+  border: 1.5px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 10px 28px rgba(15, 23, 42, 0.45), 0 0 12px rgba(16, 185, 129, 0.25);
   cursor: pointer;
   transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease;
   position: relative;
+  overflow: hidden;
+  padding: 0;
 }
 
-.ai-chat-fab:hover {
+.shiny-black-fab:hover {
   transform: scale(1.08);
-  box-shadow: 0 10px 30px rgba(0, 102, 255, 0.48);
+  box-shadow: 0 12px 34px rgba(15, 23, 42, 0.55), 0 0 20px rgba(16, 185, 129, 0.45);
 }
 
-.ai-chat-fab:active {
+.shiny-black-fab:active {
   transform: scale(0.92);
 }
 
-.fab-icon-box {
-  position: relative;
+.glossy-reflection-highlight {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0) 100%);
+  border-radius: 50% 50% 0 0;
+  pointer-events: none;
+}
+
+.shiny-black-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #334155 0%, #0F172A 60%, #020617 100%);
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.35), 0 0 8px rgba(16, 185, 129, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
-.fab-online-dot {
-  position: absolute;
-  top: -2px;
-  right: -2px;
-  width: 10px;
-  height: 10px;
+.glowing-green-eye {
+  filter: drop-shadow(0 0 4px #10B981) drop-shadow(0 0 8px #22C55E);
+  animation: eyeGlowPulse 2.5s infinite ease-in-out;
+}
+
+@keyframes eyeGlowPulse {
+  0%, 100% { opacity: 0.9; }
+  50% { opacity: 1; filter: drop-shadow(0 0 6px #10B981) drop-shadow(0 0 12px #22C55E); }
+}
+
+.mini-bot-icon-black {
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
-  background: #22C55E;
-  border: 2px solid #0066FF;
+  background: #0F172A;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.15);
 }
 
 /* Support Bot Chat Drawer Container */
 .ai-chat-drawer {
-  width: 360px;
-  height: 560px;
+  width: 380px;
+  height: 600px;
   max-height: calc(100vh - 40px);
   background: #FFFFFF;
-  border-radius: 24px;
-  box-shadow: 0 20px 60px rgba(15, 23, 42, 0.25);
+  border-radius: 26px;
+  box-shadow: 0 24px 65px rgba(15, 23, 42, 0.3);
   border: 1px solid rgba(226, 232, 240, 0.9);
   display: flex;
   flex-direction: column;
@@ -83,7 +113,7 @@
   to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
-/* Support Bot Card Header (Matches UI Image) */
+/* Support Bot Card Header */
 .chat-drawer-header {
   background: #FFFFFF;
   padding: 14px 18px;
@@ -98,30 +128,6 @@
   display: flex;
   align-items: center;
   gap: 12px;
-}
-
-.bot-header-avatar-circle {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background: #0066FF;
-  color: #FFFFFF;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  box-shadow: 0 4px 12px rgba(0, 102, 255, 0.25);
-}
-
-.avatar-online-dot {
-  position: absolute;
-  bottom: 0px;
-  right: 0px;
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: #22C55E;
-  border: 2px solid #FFFFFF;
 }
 
 .bot-header-text {
@@ -141,7 +147,38 @@
   font-size: 0.78rem;
   color: #64748B;
   font-weight: 600;
-  margin-top: 1px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 2px;
+}
+
+.live-green-pulse-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #10B981;
+  box-shadow: 0 0 6px #10B981;
+}
+
+.role-indicator-badge {
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 4px 10px;
+  border-radius: 50px;
+  letter-spacing: 0.2px;
+}
+
+.admin-badge {
+  background: #FEF3C7;
+  color: #B45309;
+  border: 1px solid #FDE68A;
+}
+
+.user-badge {
+  background: #EFF6FF;
+  color: #1E40AF;
+  border: 1px solid #DBEAFE;
 }
 
 .chat-close-btn {
@@ -163,73 +200,7 @@
   color: #0F172A;
 }
 
-/* User / Admin Tab Switcher */
-.chat-mode-toggle-bar {
-  display: flex;
-  background: #F1F5F9;
-  padding: 4px;
-  border-bottom: 1px solid #E2E8F0;
-}
-
-.mode-tab-btn {
-  flex: 1;
-  padding: 6px 0;
-  border: none;
-  background: transparent;
-  color: #64748B;
-  font-size: 0.74rem;
-  font-weight: 700;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  text-align: center;
-}
-
-.mode-tab-btn.active {
-  background: #FFFFFF;
-  color: #0066FF;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
-}
-
-/* Quick Suggestion Chips Bar */
-.quick-chips-bar {
-  display: flex;
-  gap: 6px;
-  padding: 8px 12px;
-  overflow-x: auto;
-  background: #F8FAFC;
-  border-bottom: 1px solid #E5E7EB;
-}
-
-.quick-chips-bar::-webkit-scrollbar {
-  display: none;
-}
-
-.chip-btn {
-  background: #FFFFFF;
-  color: #0066FF;
-  border: 1px solid #BFDBFE;
-  padding: 5px 12px;
-  border-radius: 20px;
-  font-size: 0.72rem;
-  font-weight: 700;
-  white-space: nowrap;
-  cursor: pointer;
-  transition: all 0.15s ease;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
-}
-
-.chip-btn:hover {
-  background: #0066FF;
-  color: #FFFFFF;
-  border-color: #0066FF;
-}
-
-.chip-btn:active {
-  transform: scale(0.96);
-}
-
-/* Messages Thread Area (Matches Image Background) */
+/* Messages Thread Area */
 .chat-messages-thread {
   flex: 1;
   padding: 16px 14px;
@@ -237,14 +208,14 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
-  background: #EDF2F7; /* Soft cool grey-blue */
+  background: #F1F5F9; /* Soft cool grey-blue */
 }
 
 .msg-wrapper {
   display: flex;
   flex-direction: column;
   gap: 4px;
-  max-width: 86%;
+  max-width: 88%;
 }
 
 .msg-wrapper.bot-wrapper {
@@ -268,19 +239,9 @@
 .bot-label-pill {
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 6px;
   color: #475569;
-}
-
-.mini-bot-icon {
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  background: #0066FF;
-  color: #FFFFFF;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  font-weight: 700;
 }
 
 .customer-label {
@@ -291,7 +252,7 @@
   margin-right: 4px;
 }
 
-/* Message Bubbles (Exact Replica) */
+/* Message Bubbles */
 .msg-bubble {
   padding: 13px 16px;
   font-size: 0.88rem;
@@ -305,7 +266,7 @@
   color: #1E293B;
   border-radius: 18px 18px 18px 4px;
   box-shadow: 0 2px 8px rgba(15, 23, 42, 0.05);
-  border: 1px solid rgba(226, 232, 240, 0.7);
+  border: 1px solid rgba(226, 232, 240, 0.8);
 }
 
 /* Customer Message: Vibrant Royal Blue with Right Tail */
@@ -319,6 +280,110 @@
 .msg-text strong {
   font-weight: 700;
 }
+
+/* =========================================================
+   Action Question Pills Card (Matches Mockup 1)
+   ========================================================= */
+.action-pills-card-box {
+  background: #FFFFFF;
+  border-radius: 20px;
+  padding: 14px 14px 12px;
+  border: 1px solid #E2E8F0;
+  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.04);
+  margin-top: 4px;
+}
+
+.action-card-prompt-header {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #0F172A;
+  margin-bottom: 12px;
+  padding-left: 2px;
+}
+
+.action-pills-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.action-pill-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 50px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-sizing: border-box;
+}
+
+.action-pill-btn:hover {
+  transform: translateX(4px);
+}
+
+.action-pill-btn:active {
+  transform: scale(0.98);
+}
+
+.pill-emoji-badge {
+  font-size: 0.95rem;
+  margin-right: 8px;
+  flex-shrink: 0;
+}
+
+.pill-text {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pill-arrow-icon {
+  margin-left: 8px;
+  flex-shrink: 0;
+  opacity: 0.7;
+}
+
+/* Mockup Pill Color Themes */
+.pill-green {
+  background: #ECFDF5;
+  border: 1.5px solid #A7F3D0;
+  color: #065F46;
+}
+.pill-green .pill-arrow-icon { color: #059669; }
+
+.pill-purple {
+  background: #FAF5FF;
+  border: 1.5px solid #E9D5FF;
+  color: #6B21A8;
+}
+.pill-purple .pill-arrow-icon { color: #7E22CE; }
+
+.pill-blue {
+  background: #EFF6FF;
+  border: 1.5px solid #BFDBFE;
+  color: #1E40AF;
+}
+.pill-blue .pill-arrow-icon { color: #2563EB; }
+
+.pill-gold {
+  background: #FEFCE8;
+  border: 1.5px solid #FEF08A;
+  color: #854D0E;
+}
+.pill-gold .pill-arrow-icon { color: #CA8A04; }
+
+.pill-slate {
+  background: #F8FAFC;
+  border: 1.5px solid #E2E8F0;
+  color: #334155;
+}
+.pill-slate .pill-arrow-icon { color: #64748B; }
 
 /* Escalation Form Card */
 .escalation-form-card {

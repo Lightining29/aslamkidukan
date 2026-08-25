@@ -1,18 +1,24 @@
 import { useState, useEffect, useRef } from 'react';
-import { MessageSquare, X, Send, Bot, Shield, AlertCircle } from 'lucide-react';
+import { X, Send, ChevronRight, AlertCircle, Sparkles } from 'lucide-react';
+import { useAuth } from '../../context/AuthContext';
 import { processAiSupportQuery } from '../../utils/aiSupportEngine';
 import { submitContact } from '../../api';
 import { toastSuccess, toastError } from '../../utils/toast.js';
 import './AiSupportChatbot.css';
 
 export default function AiSupportChatbot() {
+  const { user, isAdmin } = useAuth();
+  const userIsAdmin = isAdmin || user?.role === 'admin';
+
   const [isOpen, setIsOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState('customer'); // 'customer' | 'admin'
+  const [activeTab, setActiveTab] = useState(userIsAdmin ? 'admin' : 'customer');
   const [messages, setMessages] = useState([
     {
       id: 'm-1',
       sender: 'bot',
-      text: "👋 Welcome to Support Bot. I'm ChatBot, your AI assistant. Let me know how I can help you.",
+      text: userIsAdmin
+        ? `👑 Welcome Admin ${user?.name || ''}! I am your AI Store Management Bot. You can query live DB metrics, orders, revenue & stock below.`
+        : `👋 Welcome to Support Bot. I'm ChatBot, your AI assistant. Let me know how I can help you.`,
       time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
     }
   ]);
@@ -24,6 +30,15 @@ export default function AiSupportChatbot() {
   const [submittingTicket, setSubmittingTicket] = useState(false);
 
   const messagesEndRef = useRef(null);
+
+  // Auto-detect role whenever user auth changes
+  useEffect(() => {
+    if (userIsAdmin) {
+      setActiveTab('admin');
+    } else {
+      setActiveTab('customer');
+    }
+  }, [userIsAdmin]);
 
   useEffect(() => {
     if (isOpen) {
@@ -82,7 +97,7 @@ export default function AiSupportChatbot() {
     setSubmittingTicket(true);
     try {
       await submitContact({
-        name: escalationForm.name || 'Valued Customer',
+        name: escalationForm.name || (user?.name || 'Valued Customer'),
         email: escalationForm.email,
         phone: escalationForm.phone,
         message: `[Support Bot Escalation Ticket]: ${escalationForm.message}`
@@ -105,40 +120,95 @@ export default function AiSupportChatbot() {
     }
   };
 
-  const customerQuestions = [
-    { label: '🔄 Return Time Limit', prompt: 'Hi, How much time do I have left for my order to be returned?' },
-    { label: '📦 Track My Order', prompt: 'Where is my latest order and tracking status?' },
-    { label: '🌿 3D Stickers in Stock', prompt: 'What 3D wall stickers do you have in stock?' },
-    { label: '🎟️ Active Promo Codes', prompt: 'What active coupon discount codes can I use?' },
-    { label: '🚚 Shipping & Delivery', prompt: 'What are the shipping charges and delivery timelines?' },
-    { label: '💳 Cash on Delivery', prompt: 'Do you offer Cash on Delivery payment?' }
+  // User Action Question Pills (Styled exactly like mockup)
+  const customerPillQuestions = [
+    {
+      theme: 'pill-green',
+      iconEmoji: '🔄 📦',
+      label: 'How much time do I have left for return?',
+      prompt: 'Hi, How much time do I have left for my order to be returned?'
+    },
+    {
+      theme: 'pill-purple',
+      iconEmoji: '🚚 🛵',
+      label: 'Where is my latest order & tracking status?',
+      prompt: 'Where is my latest order and tracking status?'
+    },
+    {
+      theme: 'pill-blue',
+      iconEmoji: '🌿 🖼️',
+      label: 'What 3D wall stickers are in stock & prices?',
+      prompt: 'What 3D wall stickers do you have in stock?'
+    },
+    {
+      theme: 'pill-gold',
+      iconEmoji: '🎟️ 🏷️',
+      label: 'What active discount coupon codes can I use?',
+      prompt: 'What active coupon discount codes can I use?'
+    },
+    {
+      theme: 'pill-slate',
+      iconEmoji: '💳 💰',
+      label: 'Do you offer Cash on Delivery & free shipping?',
+      prompt: 'Do you offer Cash on Delivery payment?'
+    }
   ];
 
-  const adminQuestions = [
-    { label: '📊 Today’s Sales & Revenue', prompt: 'How much total sales and revenue this month?' },
-    { label: '📦 Pending Orders to Ship', prompt: 'How many total orders today and pending dispatch?' },
-    { label: '⚠️ Low Stock Products', prompt: 'Show low stock and out of stock products in DB' },
-    { label: '👥 Total Customer Count', prompt: 'How many total registered customers are in database?' }
+  // Admin Action Question Pills (Styled exactly like mockup)
+  const adminPillQuestions = [
+    {
+      theme: 'pill-green',
+      iconEmoji: '💰 📊',
+      label: 'Inspect Store Gross Revenue & Sales (DB)',
+      prompt: 'How much total sales and revenue this month?'
+    },
+    {
+      theme: 'pill-purple',
+      iconEmoji: '📦 🚚',
+      label: 'Audit Pending Orders & Dispatch (DB)',
+      prompt: 'How many total orders today and pending dispatch?'
+    },
+    {
+      theme: 'pill-blue',
+      iconEmoji: '⚠️ 📦',
+      label: 'Check Low Stock & Out of Stock Products (DB)',
+      prompt: 'Show low stock and out of stock products in DB'
+    },
+    {
+      theme: 'pill-gold',
+      iconEmoji: '👥 🗃️',
+      label: 'Audit Total Registered Customer Count (DB)',
+      prompt: 'How many total registered customers are in database?'
+    },
+    {
+      theme: 'pill-slate',
+      iconEmoji: '🛍️ 📈',
+      label: 'Inspect Live Catalog Count & Prices (DB)',
+      prompt: 'What 3D wall stickers do you have in stock?'
+    }
   ];
+
+  const currentQuestions = activeTab === 'admin' ? adminPillQuestions : customerPillQuestions;
 
   return (
     <div className="aaan-ai-support-wrapper">
-      {/* Floating Small Circular Chat Trigger Button */}
+      {/* Floating Shiny Black Bot Trigger Button with Glowing Green Eyes */}
       {!isOpen && (
         <button
-          className="ai-chat-fab"
+          className="ai-chat-fab shiny-black-fab"
           onClick={() => setIsOpen(true)}
           aria-label="Open Support Bot"
           title="Support Bot"
         >
-          <div className="fab-icon-box">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-              <circle cx="9" cy="10" r="1" fill="currentColor"></circle>
-              <circle cx="15" cy="10" r="1" fill="currentColor"></circle>
-              <path d="M9.5 13.5c.83.67 1.67 1 2.5 1s1.67-.33 2.5-1"></path>
+          <div className="shiny-black-bot-avatar">
+            <div className="glossy-reflection-highlight" />
+            <svg className="bot-svg-glyph" width="28" height="28" viewBox="0 0 24 24" fill="none">
+              <path d="M20 13a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h13a2 2 0 0 1 2 2z" stroke="#FFFFFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              <circle cx="8.5" cy="9.5" r="1.5" fill="#10B981" className="glowing-green-eye" />
+              <circle cx="14.5" cy="9.5" r="1.5" fill="#10B981" className="glowing-green-eye" />
+              <path d="M9.5 12.5c.7.6 1.3.8 2 .8s1.3-.2 2-.8" stroke="#10B981" strokeWidth="1.8" strokeLinecap="round" />
+              <circle cx="19" cy="5" r="2.5" fill="#10B981" stroke="#0F172A" strokeWidth="1" />
             </svg>
-            <span className="fab-online-dot" />
           </div>
         </button>
       )}
@@ -147,55 +217,36 @@ export default function AiSupportChatbot() {
       {isOpen && (
         <div className="ai-chat-drawer">
           
-          {/* Card Header (Matches UI Mockup) */}
+          {/* Card Header (Shiny Black Bot Avatar + Green Eyes) */}
           <div className="chat-drawer-header">
             <div className="header-brand-info">
-              <div className="bot-header-avatar-circle">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-                  <circle cx="9" cy="10" r="1.2" fill="currentColor"></circle>
-                  <circle cx="15" cy="10" r="1.2" fill="currentColor"></circle>
-                  <path d="M9.5 13.5c.83.67 1.67 1 2.5 1s1.67-.33 2.5-1"></path>
+              <div className="bot-header-avatar-circle shiny-black-avatar">
+                <div className="glossy-reflection-highlight" />
+                <svg className="bot-svg-glyph" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                  <path d="M20 13a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h13a2 2 0 0 1 2 2z" stroke="#FFFFFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                  <circle cx="8.5" cy="9.5" r="1.5" fill="#10B981" className="glowing-green-eye" />
+                  <circle cx="14.5" cy="9.5" r="1.5" fill="#10B981" className="glowing-green-eye" />
+                  <path d="M9.5 12.5c.7.6 1.3.8 2 .8s1.3-.2 2-.8" stroke="#10B981" strokeWidth="1.8" strokeLinecap="round" />
+                  <circle cx="19" cy="5" r="2.5" fill="#10B981" stroke="#0F172A" strokeWidth="1" />
                 </svg>
-                <span className="avatar-online-dot" />
               </div>
               <div className="bot-header-text">
                 <h3 className="bot-title">Support Bot</h3>
-                <span className="bot-status-text">Online</span>
+                <span className="bot-status-text">
+                  <span className="live-green-pulse-dot" /> Online
+                </span>
               </div>
             </div>
-            <button className="chat-close-btn" onClick={() => setIsOpen(false)} aria-label="Close Chat">
-              <X size={18} />
-            </button>
-          </div>
-
-          {/* User / Admin Question Selector Tabs */}
-          <div className="chat-mode-toggle-bar">
-            <button 
-              className={`mode-tab-btn ${activeTab === 'customer' ? 'active' : ''}`}
-              onClick={() => setActiveTab('customer')}
-            >
-              👤 Customer Questions
-            </button>
-            <button 
-              className={`mode-tab-btn ${activeTab === 'admin' ? 'active' : ''}`}
-              onClick={() => setActiveTab('admin')}
-            >
-              👑 Admin DB Queries
-            </button>
-          </div>
-
-          {/* Quick Suggestion Question Chips Bar */}
-          <div className="quick-chips-bar">
-            {(activeTab === 'customer' ? customerQuestions : adminQuestions).map((chip) => (
-              <button
-                key={chip.label}
-                className="chip-btn"
-                onClick={() => handleSend(chip.prompt)}
-              >
-                {chip.label}
+            
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              {/* Role Indicator Badge */}
+              <span className={`role-indicator-badge ${userIsAdmin ? 'admin-badge' : 'user-badge'}`}>
+                {userIsAdmin ? '👑 Admin Mode' : '👤 Customer'}
+              </span>
+              <button className="chat-close-btn" onClick={() => setIsOpen(false)} aria-label="Close Chat">
+                <X size={18} />
               </button>
-            ))}
+            </div>
           </div>
 
           {/* Messages Thread Container (Matches Chat Design) */}
@@ -207,9 +258,11 @@ export default function AiSupportChatbot() {
                 <div className="msg-sender-label">
                   {m.sender === 'bot' ? (
                     <div className="bot-label-pill">
-                      <div className="mini-bot-icon">
-                        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                      <div className="mini-bot-icon-black">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
+                          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" stroke="#FFFFFF" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
+                          <circle cx="8.5" cy="9.5" r="1.5" fill="#10B981" />
+                          <circle cx="14.5" cy="9.5" r="1.5" fill="#10B981" />
                         </svg>
                       </div>
                       <span>Support Bot</span>
@@ -230,9 +283,11 @@ export default function AiSupportChatbot() {
               <div className="msg-wrapper bot-wrapper">
                 <div className="msg-sender-label">
                   <div className="bot-label-pill">
-                    <div className="mini-bot-icon">
-                      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                    <div className="mini-bot-icon-black">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" stroke="#FFFFFF" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
+                        <circle cx="8.5" cy="9.5" r="1.5" fill="#10B981" />
+                        <circle cx="14.5" cy="9.5" r="1.5" fill="#10B981" />
                       </svg>
                     </div>
                     <span>Support Bot</span>
@@ -246,12 +301,33 @@ export default function AiSupportChatbot() {
               </div>
             )}
 
+            {/* Action Questions Card Section (Matches Mockup 1) */}
+            <div className="action-pills-card-box">
+              <div className="action-card-prompt-header">
+                Select an action below or ask a question:
+              </div>
+
+              <div className="action-pills-list">
+                {currentQuestions.map((q) => (
+                  <button
+                    key={q.label}
+                    className={`action-pill-btn ${q.theme}`}
+                    onClick={() => handleSend(q.prompt)}
+                  >
+                    <span className="pill-emoji-badge">{q.iconEmoji}</span>
+                    <span className="pill-text">{q.label}</span>
+                    <ChevronRight size={16} className="pill-arrow-icon" />
+                  </button>
+                ))}
+              </div>
+            </div>
+
             {/* Human Escalation Form Card */}
             {showEscalationForm && (
               <div className="escalation-form-card">
                 <div className="esc-head">
                   <AlertCircle size={18} color="#0066FF" />
-                  <strong>Submit Ticket for Support Team</strong>
+                  <strong>Submit Priority Ticket</strong>
                   <button onClick={() => setShowEscalationForm(false)} className="esc-close">✕</button>
                 </div>
                 <form onSubmit={handleEscalationSubmit} className="esc-form">
@@ -282,7 +358,7 @@ export default function AiSupportChatbot() {
                     onChange={(e) => setEscalationForm({ ...escalationForm, message: e.target.value })}
                   />
                   <button type="submit" className="btn-submit-esc" disabled={submittingTicket}>
-                    {submittingTicket ? 'Dispatching…' : '📩 Dispatch Ticket to Admin'}
+                    {submittingTicket ? 'Dispatching…' : '📩 Dispatch Ticket to Team'}
                   </button>
                 </form>
               </div>
@@ -295,7 +371,7 @@ export default function AiSupportChatbot() {
           <div className="chat-input-bar">
             <input
               type="text"
-              placeholder="Ask a question or type a message..."
+              placeholder={userIsAdmin ? "Ask a DB question (e.g., revenue, stock, orders)..." : "Ask about returns, tracking, stickers..."}
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => { if (e.key === 'Enter') handleSend(); }}
