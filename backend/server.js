@@ -289,15 +289,27 @@ app.get('/sitemap.xml', async (req, res) => {
   }
 });
 
-// Serve frontend static files
+// Serve frontend static files (checks ../frontend/dist first, fallback to public)
+import fs from 'fs';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+const distPath = path.join(__dirname, '../frontend/dist');
 const publicPath = path.join(__dirname, 'public');
-app.use(express.static(publicPath));
+const staticPath = fs.existsSync(distPath) ? distPath : publicPath;
+
+app.use(express.static(staticPath));
 
 // SPA catch-all: serve index.html for any non-API route
-app.get('*', (_req, res) => {
-  res.sendFile(path.join(publicPath, 'index.html'));
+app.get('*', (req, res, next) => {
+  if (req.path.startsWith('/api') || req.path.startsWith('/socket.io')) {
+    return next();
+  }
+  const indexPath = path.join(staticPath, 'index.html');
+  if (fs.existsSync(indexPath)) {
+    res.sendFile(indexPath);
+  } else {
+    res.status(404).send('Frontend build not found. Please run npm run build inside frontend.');
+  }
 });
 
 connectDB();
