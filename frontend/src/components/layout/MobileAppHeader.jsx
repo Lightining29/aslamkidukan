@@ -1,5 +1,5 @@
 import React from 'react';
-import { Bell, Menu, Search, Sparkles } from 'lucide-react';
+import { Bell, Menu, Search } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { Link } from 'react-router-dom';
 import './MobileAppHeader.css';
@@ -13,9 +13,6 @@ export default function MobileAppHeader({ searchQuery, setSearchQuery, onSearchS
       {/* Top Brand & Greeting Row */}
       <div className="mobile-app-greeting-row">
         <Link to="/" className="mobile-brand-wrapper">
-          <div className="mobile-brand-logo-card">
-            <img src="/aaan-logo.svg" alt="AAAN Cart Logo" className="mobile-brand-logo-img" />
-          </div>
           <div className="mobile-brand-info">
             <div className="mobile-brand-name">
               <span>AAAN</span> Cart
