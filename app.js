@@ -1,5 +1,4 @@
 /**
- * Hostinger Application Root Entrypoint
- * Forwards execution to backend/server.js
+ * Hostinger Application Entrypoint
  */
-import './backend/server.js';
+import './server.js';
