@@ -1,10 +1,48 @@
 import { useState, useEffect, useRef } from 'react';
-import { X, Send, ChevronRight, AlertCircle, Sparkles } from 'lucide-react';
+import { X, Send, ChevronRight, AlertCircle } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { processAiSupportQuery } from '../../utils/aiSupportEngine';
 import { submitContact } from '../../api';
 import { toastSuccess, toastError } from '../../utils/toast.js';
 import './AiSupportChatbot.css';
+
+// Dedicated Cute Robot Face Component with Animated Moving Green Eyes
+function CuteRobotFace({ size = 'md' }) {
+  const pixelSize = size === 'sm' ? 20 : size === 'lg' ? 52 : 40;
+  return (
+    <div className={`cute-robot-face-sphere size-${size}`}>
+      <div className="face-gloss-highlight" />
+      <svg
+        className="robot-face-svg"
+        width={pixelSize}
+        height={pixelSize}
+        viewBox="0 0 48 48"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        {/* Animated Eyes Group */}
+        <g className="robot-eyes-anim-group">
+          {/* Left Cute Neon Green Oval Eye */}
+          <ellipse cx="15.5" cy="21.5" rx="5.5" ry="8" fill="#00F5A0" className="robot-green-eye" />
+          <circle cx="14" cy="18" r="1.6" fill="#FFFFFF" opacity="0.9" className="eye-glint" />
+
+          {/* Right Cute Neon Green Oval Eye */}
+          <ellipse cx="32.5" cy="21.5" rx="5.5" ry="8" fill="#00F5A0" className="robot-green-eye" />
+          <circle cx="31" cy="18" r="1.6" fill="#FFFFFF" opacity="0.9" className="eye-glint" />
+        </g>
+
+        {/* Cute Green Smile */}
+        <path
+          d="M19.5 32.5C21 34.5 22.8 35.2 24 35.2C25.2 35.2 27 34.5 28.5 32.5"
+          stroke="#00F5A0"
+          strokeWidth="3"
+          strokeLinecap="round"
+          className="robot-green-smile"
+        />
+      </svg>
+    </div>
+  );
+}
 
 export default function AiSupportChatbot() {
   const { user, isAdmin } = useAuth();
@@ -192,7 +230,7 @@ export default function AiSupportChatbot() {
 
   return (
     <div className="aaan-ai-support-wrapper">
-      {/* Floating Shiny Black Bot Trigger Button with Glowing Green Eyes */}
+      {/* Floating Shiny Black Bot Trigger Button with Animated Moving Green Eyes */}
       {!isOpen && (
         <button
           className="ai-chat-fab shiny-black-fab"
@@ -200,16 +238,7 @@ export default function AiSupportChatbot() {
           aria-label="Open Support Bot"
           title="Support Bot"
         >
-          <div className="shiny-black-bot-avatar">
-            <div className="glossy-reflection-highlight" />
-            <svg className="bot-svg-glyph" width="28" height="28" viewBox="0 0 24 24" fill="none">
-              <path d="M20 13a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h13a2 2 0 0 1 2 2z" stroke="#FFFFFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-              <circle cx="8.5" cy="9.5" r="1.5" fill="#10B981" className="glowing-green-eye" />
-              <circle cx="14.5" cy="9.5" r="1.5" fill="#10B981" className="glowing-green-eye" />
-              <path d="M9.5 12.5c.7.6 1.3.8 2 .8s1.3-.2 2-.8" stroke="#10B981" strokeWidth="1.8" strokeLinecap="round" />
-              <circle cx="19" cy="5" r="2.5" fill="#10B981" stroke="#0F172A" strokeWidth="1" />
-            </svg>
-          </div>
+          <CuteRobotFace size="lg" />
         </button>
       )}
 
@@ -217,19 +246,10 @@ export default function AiSupportChatbot() {
       {isOpen && (
         <div className="ai-chat-drawer">
           
-          {/* Card Header (Shiny Black Bot Avatar + Green Eyes) */}
+          {/* Card Header (Shiny Black Bot Avatar + Animated Green Eyes) */}
           <div className="chat-drawer-header">
             <div className="header-brand-info">
-              <div className="bot-header-avatar-circle shiny-black-avatar">
-                <div className="glossy-reflection-highlight" />
-                <svg className="bot-svg-glyph" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                  <path d="M20 13a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h13a2 2 0 0 1 2 2z" stroke="#FFFFFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                  <circle cx="8.5" cy="9.5" r="1.5" fill="#10B981" className="glowing-green-eye" />
-                  <circle cx="14.5" cy="9.5" r="1.5" fill="#10B981" className="glowing-green-eye" />
-                  <path d="M9.5 12.5c.7.6 1.3.8 2 .8s1.3-.2 2-.8" stroke="#10B981" strokeWidth="1.8" strokeLinecap="round" />
-                  <circle cx="19" cy="5" r="2.5" fill="#10B981" stroke="#0F172A" strokeWidth="1" />
-                </svg>
-              </div>
+              <CuteRobotFace size="md" />
               <div className="bot-header-text">
                 <h3 className="bot-title">Support Bot</h3>
                 <span className="bot-status-text">
@@ -258,13 +278,7 @@ export default function AiSupportChatbot() {
                 <div className="msg-sender-label">
                   {m.sender === 'bot' ? (
                     <div className="bot-label-pill">
-                      <div className="mini-bot-icon-black">
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
-                          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" stroke="#FFFFFF" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
-                          <circle cx="8.5" cy="9.5" r="1.5" fill="#10B981" />
-                          <circle cx="14.5" cy="9.5" r="1.5" fill="#10B981" />
-                        </svg>
-                      </div>
+                      <CuteRobotFace size="sm" />
                       <span>Support Bot</span>
                     </div>
                   ) : (
@@ -283,13 +297,7 @@ export default function AiSupportChatbot() {
               <div className="msg-wrapper bot-wrapper">
                 <div className="msg-sender-label">
                   <div className="bot-label-pill">
-                    <div className="mini-bot-icon-black">
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
-                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" stroke="#FFFFFF" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
-                        <circle cx="8.5" cy="9.5" r="1.5" fill="#10B981" />
-                        <circle cx="14.5" cy="9.5" r="1.5" fill="#10B981" />
-                      </svg>
-                    </div>
+                    <CuteRobotFace size="sm" />
                     <span>Support Bot</span>
                   </div>
                 </div>
