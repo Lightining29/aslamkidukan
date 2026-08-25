@@ -1,37 +1,43 @@
 import React from 'react';
 import { Bell, Menu, Search, Sparkles } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import { Link } from 'react-router-dom';
 import './MobileAppHeader.css';
 
 export default function MobileAppHeader({ searchQuery, setSearchQuery, onSearchSubmit, onOpenMenu }) {
   const { user } = useAuth();
-  const displayName = user?.name ? user.name.split(' ')[0] : 'Plant Lover';
+  const displayName = user?.name ? user.name.split(' ')[0] : 'Guest';
 
   return (
     <div className="mobile-app-header-container">
-      {/* Top Greeting Bar */}
+      {/* Top Brand & Greeting Row */}
       <div className="mobile-app-greeting-row">
-        <div className="mobile-user-profile">
-          <div className="mobile-user-avatar">
-            {user?.photoUrl ? (
-              <img src={user.photoUrl} alt={displayName} />
-            ) : (
-              <span className="avatar-letter">🌿</span>
-            )}
+        <Link to="/" className="mobile-brand-wrapper">
+          <div className="mobile-brand-logo-card">
+            <img src="/aaan-logo.svg" alt="AAAN Cart Logo" className="mobile-brand-logo-img" />
           </div>
-          <div className="mobile-user-text">
-            <span className="greeting-small">Hello,</span>
-            <span className="greeting-name">{displayName} 🪴</span>
+          <div className="mobile-brand-info">
+            <div className="mobile-brand-name">
+              <span>AAAN</span> Cart
+              <span className="mobile-brand-tag">3D</span>
+            </div>
+            <div className="mobile-greeting-sub">
+              {user ? `Hi, ${displayName} 👋` : 'Explore 3D Decals 🌿'}
+            </div>
           </div>
-        </div>
+        </Link>
 
         <div className="mobile-header-actions">
-          <button className="mobile-icon-circle-btn" aria-label="Notifications">
-            <Bell size={18} />
+          <Link to={user ? "/account" : "/"} className="mobile-icon-circle-btn" aria-label="Account">
+            {user?.photoUrl ? (
+              <img src={user.photoUrl} alt={displayName} className="mobile-user-mini-avatar" />
+            ) : (
+              <Bell size={18} />
+            )}
             <span className="notification-dot" />
-          </button>
+          </Link>
           <button className="mobile-icon-circle-btn" aria-label="Menu" onClick={onOpenMenu}>
-            <Menu size={18} />
+            <Menu size={20} />
           </button>
         </div>
       </div>

@@ -10,6 +10,13 @@ import Review from '../models/Review.js';
 import { protect, adminOnly } from '../middleware/auth.js';
 import { upload } from '../middleware/upload.js';
 import { enrichProduct } from '../utils/pricing.js';
+import {
+  isMySQLActive,
+  mysqlGetProducts,
+  mysqlCreateProduct,
+  mysqlUpdateProduct,
+  mysqlDeleteProduct,
+} from '../config/mysql.js';
 
 const router = express.Router();
 router.use(protect, adminOnly);
@@ -88,6 +95,12 @@ router.get('/analytics', async (_req, res) => {
 /* ─── PRODUCTS ───────────────────────────────────────────────────── */
 router.get('/products', async (req, res) => {
   try {
+    if (isMySQLActive()) {
+      const mysqlProds = await mysqlGetProducts();
+      if (mysqlProds && mysqlProds.length > 0) {
+        return res.json(mysqlProds);
+      }
+    }
     if (req.query.simple === 'true') {
       const products = await Product.find({}, 'name slug').sort({ name: 1 });
       return res.json(products);
@@ -107,7 +120,7 @@ router.post('/products', upload.array('images', 5), async (req, res) => {
   try {
     const {
       name, description, price, originalPrice,
-      category, stockQuantity, discountPercent, bestseller,
+      category, stockQuantity, discountPercent, bestseller, tagline, badge,
     } = req.body;
 
     if (!name || !description || !price || !category) {
@@ -118,20 +131,64 @@ router.post('/products', upload.array('images', 5), async (req, res) => {
     }
 
     const slug = slugify(name);
+    const qty = parseInt(stockQuantity ?? 50, 10);
+    const primaryImg = req.files[0];
+    const imageBase64 = `data:${primaryImg.mimetype};base64,${primaryImg.buffer.toString('base64')}`;
+
+    // 1. If MySQL is active, save directly to Hostinger MySQL
+    if (isMySQLActive()) {
+      try {
+        const mysqlProduct = await mysqlCreateProduct({
+          name,
+          slug,
+          price: parseFloat(price),
+          originalPrice: originalPrice ? parseFloat(originalPrice) : null,
+          categorySlug: typeof category === 'string' ? category : category?.slug || 'plant-decals',
+          description,
+          tagline: tagline || '',
+          badge: badge || '',
+          image: imageBase64,
+          stock: qty,
+          discountPercent: parseInt(discountPercent ?? 0, 10),
+          bestseller: bestseller === 'true' || bestseller === true,
+        });
+
+        // Also sync to MongoDB if connected
+        try {
+          const images = req.files.map((f) => ({ data: f.buffer, contentType: f.mimetype }));
+          await Product.create({
+            name, slug, description,
+            price: parseFloat(price),
+            originalPrice: originalPrice ? parseFloat(originalPrice) : undefined,
+            imageData: images[0].data,
+            imageContentType: images[0].contentType,
+            images, category, stockQuantity: qty,
+            discountPercent: parseInt(discountPercent ?? 0, 10),
+            bestseller: bestseller === 'true' || bestseller === true,
+            inStock: qty > 0,
+          });
+        } catch {
+          // Ignore Mongo error when MySQL succeeds
+        }
+
+        return res.status(201).json(mysqlProduct);
+      } catch (mysqlErr) {
+        console.error('MySQL create product error:', mysqlErr);
+      }
+    }
+
+    // 2. Fallback MongoDB creation
     const exists = await Product.findOne({ slug }).select('_id');
     if (exists) return res.status(400).json({ message: 'Product with similar name exists' });
 
-    // Build images[] from uploaded files; images[0] is the primary/cover.
     const images = req.files.map((f) => ({ data: f.buffer, contentType: f.mimetype }));
-
-    const qty = parseInt(stockQuantity ?? 50, 10);
     const product = await Product.create({
       name,
       slug,
       description,
       price: parseFloat(price),
       originalPrice: originalPrice ? parseFloat(originalPrice) : undefined,
-      imageData: images[0].data,            // mirror primary for backward compat
+      imageData: images[0].data,
       imageContentType: images[0].contentType,
       images,
       category,
@@ -264,8 +321,11 @@ router.patch('/products/:id/discount', async (req, res) => {
 
 router.delete('/products/:id', async (req, res) => {
   try {
+    if (isMySQLActive()) {
+      await mysqlDeleteProduct(req.params.id);
+    }
     const product = await Product.findByIdAndDelete(req.params.id);
-    if (!product) return res.status(404).json({ message: 'Product not found' });
+    if (!product && !isMySQLActive()) return res.status(404).json({ message: 'Product not found' });
     res.json({ message: 'Product deleted' });
   } catch (err) {
     res.status(500).json({ message: err.message });

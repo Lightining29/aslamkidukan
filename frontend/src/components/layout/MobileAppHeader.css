@@ -1,62 +1,87 @@
 /* Mobile App Header Styles */
 .mobile-app-header-container {
-  padding: 16px 16px 12px 16px;
+  padding: 14px 16px 12px 16px;
   background: #FFFFFF;
+  border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 
 .mobile-app-greeting-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 14px;
+  margin-bottom: 12px;
 }
 
-.mobile-user-profile {
+.mobile-brand-wrapper {
   display: flex;
   align-items: center;
   gap: 10px;
+  text-decoration: none;
 }
 
-.mobile-user-avatar {
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
-  background: #F1F5F9;
+.mobile-brand-logo-card {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: #FFFFFF;
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-  border: 2px solid #E2E8F0;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.15), 0 1px 3px rgba(0, 0, 0, 0.08);
+  border: 1.5px solid #E2E8F0;
+  flex-shrink: 0;
+  padding: 4px;
 }
 
-.mobile-user-avatar img {
+.mobile-brand-logo-img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
 }
 
-.avatar-letter {
-  font-size: 1.25rem;
-}
-
-.mobile-user-text {
+.mobile-brand-info {
   display: flex;
   flex-direction: column;
 }
 
-.greeting-small {
-  font-size: 0.75rem;
-  color: #64748B;
-  font-weight: 500;
-  line-height: 1.1;
+.mobile-brand-name {
+  font-size: 1.15rem;
+  font-weight: 900;
+  color: #0F172A;
+  letter-spacing: -0.02em;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  line-height: 1.15;
 }
 
-.greeting-name {
-  font-size: 1rem;
+.mobile-brand-name span:first-child {
+  background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.mobile-brand-tag {
+  background: #10B981;
+  color: #FFFFFF;
+  font-size: 0.62rem;
   font-weight: 800;
-  color: #0F172A;
-  line-height: 1.2;
+  padding: 2px 6px;
+  border-radius: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.mobile-greeting-sub {
+  font-size: 0.78rem;
+  color: #475569;
+  font-weight: 600;
+  margin-top: 2px;
 }
 
 .mobile-header-actions {
@@ -66,18 +91,20 @@
 }
 
 .mobile-icon-circle-btn {
-  width: 38px;
-  height: 38px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   background: #F8FAFC;
   border: 1px solid #E2E8F0;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #1E293B;
+  color: #0F172A;
   cursor: pointer;
   position: relative;
   transition: all 0.2s ease;
+  text-decoration: none;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.04);
 }
 
 .mobile-icon-circle-btn:active {
@@ -85,10 +112,17 @@
   background: #E2E8F0;
 }
 
+.mobile-user-mini-avatar {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
 .notification-dot {
   position: absolute;
-  top: 8px;
-  right: 8px;
+  top: 9px;
+  right: 9px;
   width: 7px;
   height: 7px;
   border-radius: 50%;
@@ -110,7 +144,7 @@
 .mobile-search-glass-icon {
   position: absolute;
   left: 14px;
-  color: #94A3B8;
+  color: #64748B;
   pointer-events: none;
 }
 
@@ -123,9 +157,14 @@
   padding: 0 36px 0 42px;
   font-size: 0.88rem;
   color: #0F172A;
-  font-weight: 500;
+  font-weight: 600;
   outline: none;
   transition: all 0.2s ease;
+}
+
+.mobile-search-input::placeholder {
+  color: #94A3B8;
+  font-weight: 500;
 }
 
 .mobile-search-input:focus {
@@ -140,7 +179,7 @@
   background: transparent;
   border: none;
   font-size: 1.2rem;
-  color: #94A3B8;
+  color: #64748B;
   cursor: pointer;
   line-height: 1;
 }

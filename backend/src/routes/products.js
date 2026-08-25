@@ -1,12 +1,18 @@
 import express from 'express';
 import Product from '../models/Product.js';
 import { enrichProduct } from '../utils/pricing.js';
+import { isMySQLActive, mysqlGetProducts, mysqlGetProductBySlug } from '../config/mysql.js';
 
 const router = express.Router();
 
 // Public: active flash sale products
-router.get('/flash-sale', async (req, res) => {
+router.get('/flash-sale', async (_req, res) => {
   try {
+    if (isMySQLActive()) {
+      const mysqlProds = await mysqlGetProducts({ bestseller: true });
+      if (mysqlProds.length > 0) return res.json(mysqlProds);
+    }
+
     const now = new Date();
     const products = await Product.find({
       flashSale: true,
@@ -28,6 +34,17 @@ router.get('/flash-sale', async (req, res) => {
 router.get('/', async (req, res) => {
   try {
     const { category, bestseller, limit } = req.query;
+
+    if (isMySQLActive()) {
+      const filter = {};
+      if (category) filter.category = category;
+      if (bestseller === 'true') filter.bestseller = true;
+      const mysqlProds = await mysqlGetProducts(filter);
+      if (mysqlProds && mysqlProds.length > 0) {
+        return res.json(limit ? mysqlProds.slice(0, parseInt(limit, 10)) : mysqlProds);
+      }
+    }
+
     const filter = {};
     if (category) filter.category = category;
     if (bestseller === 'true') filter.bestseller = true;
@@ -47,6 +64,11 @@ router.get('/', async (req, res) => {
 
 router.get('/:slug', async (req, res) => {
   try {
+    if (isMySQLActive()) {
+      const mysqlProd = await mysqlGetProductBySlug(req.params.slug);
+      if (mysqlProd) return res.json(mysqlProd);
+    }
+
     const product = await Product.findOne({ slug: req.params.slug })
       .select('-imageData -imageContentType -images.data')
       .populate('category', 'name slug');
