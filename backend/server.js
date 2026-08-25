@@ -315,6 +315,10 @@ io.on('connection', (socket) => {
 // Watch Banner collection for changes and broadcast to all connected clients
 async function setupBannerChangeStream() {
   try {
+    if (!Banner.db || !Banner.db.db) {
+      setupBannerPolling();
+      return;
+    }
     // Check if the MongoDB deployment supports change streams (requires replica set or mongos)
     const admin = Banner.db.db.admin();
     const serverStatus = await admin.command({ isMaster: 1 });
@@ -328,6 +332,10 @@ async function setupBannerChangeStream() {
     }
 
     const bannerCollection = Banner.collection;
+    if (!bannerCollection) {
+      setupBannerPolling();
+      return;
+    }
     const changeStream = bannerCollection.watch([
       { $match: { 'operationType': { $in: ['insert', 'update', 'replace'] }, 'fullDocument.singleton': true } },
     ]);
@@ -356,7 +364,6 @@ async function setupBannerChangeStream() {
 
     console.log('Banner change stream active (replica set detected).');
   } catch (err) {
-    console.error('Failed to setup banner change stream:', err.message);
     console.log('Falling back to polling for banner updates.');
     setupBannerPolling();
   }
