@@ -4,6 +4,7 @@ import { useAuth } from '../../context/AuthContext';
 import { processAiSupportQuery } from '../../utils/aiSupportEngine';
 import { submitContact } from '../../api';
 import { toastSuccess, toastError } from '../../utils/toast.js';
+import { ROBOT_3D_BASE64 } from '../../assets/robotImage.js';
 import './AiSupportChatbot.css';
 
 // 3D Animated Robot Mascot Component with Head, Hand & Moving Eyes Physics
@@ -16,7 +17,7 @@ function Animated3DRobotMascot({ size = 'md', interactive = false }) {
       {/* Main 3D Articulated Robot Body */}
       <div className="robot-3d-character-container">
         <img
-          src="/support-robot-3d.png"
+          src={ROBOT_3D_BASE64}
           alt="3D AI Support Robot"
           className="robot-3d-img"
         />
