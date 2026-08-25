@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { Link, useNavigate } from 'react-router-dom';
-import { X, Home, Grid, Sparkles, Heart, ShoppingBag, Info, User, LogIn, LogOut, ChevronRight, ShieldCheck, Truck } from 'lucide-react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { X, Home, LayoutDashboard, Heart, User, Settings, MessageSquare, MapPin, Mail, Globe, Twitter, Facebook, LogIn, LogOut } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useCart } from '../../context/CartContext';
 import './MobileNavDrawer.css';
@@ -9,13 +9,12 @@ import './MobileNavDrawer.css';
 export default function MobileNavDrawer({
   isOpen,
   onClose,
-  onSelectCategory,
-  onScrollToCatalog,
-  onScrollToAbout
+  onOpenSupport
 }) {
-  const { user, logout, setShowLoginModal } = useAuth();
-  const { cartCount, wishlist = [] } = useCart();
+  const { user, isAdmin, logout, setShowLoginModal } = useAuth();
+  const { wishlist = [] } = useCart();
   const navigate = useNavigate();
+  const location = useLocation();
   const [isClosing, setIsClosing] = useState(false);
 
   useEffect(() => {
@@ -33,6 +32,7 @@ export default function MobileNavDrawer({
   if (!isOpen && !isClosing) return null;
 
   const wishlistCount = Array.isArray(wishlist) ? wishlist.length : 0;
+  const userIsAdmin = isAdmin || user?.role === 'admin';
 
   const handleAnimatedClose = (callback) => {
     if (isClosing) return;
@@ -44,22 +44,9 @@ export default function MobileNavDrawer({
     }, 280);
   };
 
-  const handleHomeClick = () => {
+  const handleNavClick = (path) => {
     handleAnimatedClose(() => {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
-  };
-
-  const handleCatalogClick = (category = 'all') => {
-    handleAnimatedClose(() => {
-      if (onSelectCategory) onSelectCategory(category);
-      if (onScrollToCatalog) onScrollToCatalog();
-    });
-  };
-
-  const handleAboutClick = () => {
-    handleAnimatedClose(() => {
-      if (onScrollToAbout) onScrollToAbout();
+      navigate(path);
     });
   };
 
@@ -71,6 +58,27 @@ export default function MobileNavDrawer({
     });
   };
 
+  const handleSupportClick = () => {
+    handleAnimatedClose(() => {
+      if (onOpenSupport) onOpenSupport();
+    });
+  };
+
+  // Determine active tab
+  const isHome = location.pathname === '/' || location.pathname === '';
+  const isDashboard = location.pathname === '/account' || location.pathname.startsWith('/admin');
+  const isWishlist = location.pathname === '/account/wishlist';
+  const isSettings = location.pathname === '/account/settings';
+
+  const defaultAvatar = 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300&auto=format&fit=crop&q=80';
+  const userPhoto = user?.photoUrl || defaultAvatar;
+  const userName = user?.name || 'Emma Rue';
+  const userCity = user?.city || user?.shippingAddress?.city || 'New Delhi, India';
+  const userEmail = user?.email || 'customer@aaancart.com';
+  const userBio = userIsAdmin
+    ? 'Verified Store Admin & Catalog Dispatcher'
+    : (user?.bio || '3D Wall Art & Botanical Decal Collector');
+
   const drawerContent = (
     <div
       className={`mobile-nav-drawer-overlay ${isClosing ? 'drawer-overlay-out' : 'drawer-overlay-in'}`}
@@ -81,15 +89,8 @@ export default function MobileNavDrawer({
         onClick={(e) => e.stopPropagation()}
       >
         
-        {/* Drawer Header */}
-        <div className="drawer-header-bar">
-          <div className="drawer-brand-emblem">
-            <span style={{ fontSize: '1.4rem' }}>🌿</span>
-            <div className="drawer-brand-text">
-              <strong>AAAN CART</strong>
-              <span>3D Wall Art &amp; Decals</span>
-            </div>
-          </div>
+        {/* Top Header Close Button */}
+        <div className="drawer-top-close-bar">
           <button
             className="drawer-close-btn"
             onClick={() => handleAnimatedClose()}
@@ -99,130 +100,145 @@ export default function MobileNavDrawer({
           </button>
         </div>
 
-        {/* User Account / Sign In Card in Drawer */}
-        <div className="drawer-user-card">
-          {user ? (
-            <div className="drawer-user-logged">
-              <div className="drawer-avatar">
-                {user.photoUrl ? (
-                  <img src={user.photoUrl} alt="Avatar" />
-                ) : (
-                  <User size={20} color="#10B981" />
-                )}
-              </div>
-              <div className="drawer-user-info">
-                <strong>{user.name}</strong>
-                <span>{user.email}</span>
-              </div>
-              <button
-                className="drawer-logout-icon-btn"
-                onClick={() => {
-                  handleAnimatedClose(() => {
-                    logout();
-                  });
-                }}
-                title="Sign Out"
-              >
-                <LogOut size={16} />
-              </button>
+        {/* User Profile Card (Matches User Mockup Exactly) */}
+        <div className="drawer-profile-hero-card">
+          <div className="drawer-profile-avatar-box">
+            <img
+              src={userPhoto}
+              alt={userName}
+              className="drawer-profile-img"
+            />
+          </div>
+
+          <div className="drawer-profile-details">
+            <h2 className="drawer-user-name">{userName}</h2>
+            
+            <div className="drawer-meta-line">
+              <MapPin size={13} className="drawer-meta-icon" />
+              <span>{userCity}</span>
             </div>
+
+            <div className="drawer-meta-line">
+              <Mail size={13} className="drawer-meta-icon" />
+              <span>{userEmail}</span>
+            </div>
+
+            <p className="drawer-user-bio">{userBio}</p>
+          </div>
+        </div>
+
+        {/* Subtle Divider */}
+        <div className="drawer-section-divider" />
+
+        {/* Navigation Tabs List (Lilac / Purple Accent Pill Style) */}
+        <div className="drawer-tabs-list">
+          
+          <button
+            className={`drawer-tab-pill-btn ${isHome ? 'is-active' : ''}`}
+            onClick={() => handleNavClick('/')}
+          >
+            <Home size={18} className="tab-pill-icon" />
+            <span className="tab-pill-label">Home</span>
+          </button>
+
+          <button
+            className={`drawer-tab-pill-btn ${isDashboard ? 'is-active' : ''}`}
+            onClick={() => handleNavClick(userIsAdmin ? '/admin' : '/account')}
+          >
+            <LayoutDashboard size={18} className="tab-pill-icon" />
+            <span className="tab-pill-label">{userIsAdmin ? 'Admin Dashboard' : 'Dashboard'}</span>
+          </button>
+
+          <button
+            className={`drawer-tab-pill-btn ${isWishlist ? 'is-active' : ''}`}
+            onClick={() => handleNavClick('/account/wishlist')}
+          >
+            <Heart size={18} className="tab-pill-icon" />
+            <span className="tab-pill-label">Likes &amp; Wishlist</span>
+            {wishlistCount > 0 && (
+              <span className="tab-pill-counter-badge">{wishlistCount}</span>
+            )}
+          </button>
+
+          <button
+            className={`drawer-tab-pill-btn ${isSettings ? 'is-active' : ''}`}
+            onClick={() => handleNavClick('/account/settings')}
+          >
+            <User size={18} className="tab-pill-icon" />
+            <span className="tab-pill-label">Profile</span>
+          </button>
+
+          <button
+            className="drawer-tab-pill-btn"
+            onClick={() => handleNavClick(userIsAdmin ? '/admin' : '/account/settings')}
+          >
+            <Settings size={18} className="tab-pill-icon" />
+            <span className="tab-pill-label">Settings</span>
+          </button>
+
+          <button
+            className="drawer-tab-pill-btn"
+            onClick={handleSupportClick}
+          >
+            <MessageSquare size={18} className="tab-pill-icon" />
+            <span className="tab-pill-label">Messages &amp; Support</span>
+          </button>
+
+        </div>
+
+        {/* Auth Action (Sign In or Sign Out) */}
+        <div className="drawer-auth-row">
+          {user ? (
+            <button
+              className="drawer-logout-action-btn"
+              onClick={() => {
+                handleAnimatedClose(() => {
+                  logout();
+                });
+              }}
+            >
+              <LogOut size={16} />
+              <span>Sign Out Account</span>
+            </button>
           ) : (
-            <button className="drawer-signin-btn" onClick={handleAuthClick}>
-              <LogIn size={18} />
-              <div className="drawer-signin-text">
-                <strong>Sign In / Register</strong>
-                <span>Access your saved wishlist &amp; orders</span>
-              </div>
-              <ChevronRight size={16} />
+            <button className="drawer-login-action-btn" onClick={handleAuthClick}>
+              <LogIn size={16} />
+              <span>Sign In / Create Account</span>
             </button>
           )}
         </div>
 
-        {/* Navigation Links & Categories */}
-        <div className="drawer-nav-sections">
-          
-          <div className="drawer-nav-group">
-            <span className="drawer-group-title">EXPLORE STORE</span>
-            
-            <button className="drawer-nav-link" onClick={handleHomeClick}>
-              <div className="drawer-link-left">
-                <Home size={18} />
-                <span>Home</span>
-              </div>
-              <ChevronRight size={14} color="#94A3B8" />
-            </button>
-
-            <button className="drawer-nav-link highlight" onClick={() => handleCatalogClick('all')}>
-              <div className="drawer-link-left">
-                <Grid size={18} color="#10B981" />
-                <span>All 3D Stickers</span>
-              </div>
-              <span className="drawer-hot-badge">Popular</span>
-            </button>
-
-            <button className="drawer-nav-link" onClick={() => handleCatalogClick('wall-niches')}>
-              <div className="drawer-link-left">
-                <Sparkles size={18} />
-                <span>3D Wall Niches (Spotlight)</span>
-              </div>
-              <ChevronRight size={14} color="#94A3B8" />
-            </button>
-
-            <button className="drawer-nav-link" onClick={() => handleCatalogClick('butterflies')}>
-              <div className="drawer-link-left">
-                <span>🦋</span>
-                <span>3D Butterflies Sets</span>
-              </div>
-              <ChevronRight size={14} color="#94A3B8" />
-            </button>
-
-            <button className="drawer-nav-link" onClick={() => handleCatalogClick('plants')}>
-              <div className="drawer-link-left">
-                <span>🌿</span>
-                <span>Botanical Plant Decals</span>
-              </div>
-              <ChevronRight size={14} color="#94A3B8" />
-            </button>
-          </div>
-
-          <div className="drawer-nav-group">
-            <span className="drawer-group-title">INFORMATION</span>
-            
-            <button className="drawer-nav-link" onClick={handleAboutClick}>
-              <div className="drawer-link-left">
-                <Info size={18} />
-                <span>About AAAN Cart</span>
-              </div>
-              <ChevronRight size={14} color="#94A3B8" />
-            </button>
-          </div>
-
-        </div>
-
-        {/* Bottom Quick Actions: Wishlist & Cart */}
-        <div className="drawer-bottom-shortcuts">
-          <button
-            className="drawer-shortcut-card"
-            onClick={() => {
-              handleAnimatedClose(() => {
-                navigate('/account/wishlist');
-              });
-            }}
+        {/* Bottom Social Links Capsule Pill (Matches Mockup) */}
+        <div className="drawer-bottom-social-card">
+          <a
+            href="https://twitter.com"
+            target="_blank"
+            rel="noreferrer"
+            className="drawer-social-icon-btn"
+            aria-label="Twitter"
           >
-            <Heart size={18} color="#EF4444" />
-            <span>Wishlist ({wishlistCount})</span>
-          </button>
-          <button
-            className="drawer-shortcut-card"
-            onClick={() => {
-              handleAnimatedClose(() => {
-                navigate('/cart');
-              });
-            }}
+            <Twitter size={18} />
+          </a>
+          <a
+            href="https://facebook.com"
+            target="_blank"
+            rel="noreferrer"
+            className="drawer-social-icon-btn"
+            aria-label="Facebook"
           >
-            <ShoppingBag size={18} color="#10B981" />
-            <span>Cart ({cartCount})</span>
-          </button>
+            <Facebook size={18} />
+          </a>
+          <a
+            href="/"
+            onClick={(e) => {
+              e.preventDefault();
+              handleNavClick('/');
+            }}
+            className="drawer-social-icon-btn"
+            aria-label="Store Website"
+          >
+            <Globe size={18} />
+          </a>
         </div>
 
       </div>
