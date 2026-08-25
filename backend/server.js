@@ -403,9 +403,19 @@ function setupBannerPolling() {
   }, 10000);
 }
 
+// Global crash guards to prevent Hostinger 503 error on unexpected runtime issues
+process.on('uncaughtException', (err) => {
+  console.error('Caught uncaughtException:', err);
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+});
+
 // Start change stream listener after DB connects
 setTimeout(setupBannerChangeStream, 2000);
 
-server.listen(PORT, '0.0.0.0', () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+// Hostinger & Passenger compatible listener (works with both Unix sockets and numeric TCP ports)
+server.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
