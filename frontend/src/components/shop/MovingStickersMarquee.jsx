@@ -3,10 +3,21 @@ import { Star, Sparkles, ArrowUpRight } from 'lucide-react';
 import { STICKER_PRODUCTS } from '../../data/stickersCatalog';
 import './MovingStickersMarquee.css';
 
-export default function MovingStickersMarquee({ onOpenModal }) {
-  // Duplicate for seamless infinite loop
-  const row1 = [...STICKER_PRODUCTS, ...STICKER_PRODUCTS];
-  const row2 = [...STICKER_PRODUCTS.slice().reverse(), ...STICKER_PRODUCTS.slice().reverse()];
+export default function MovingStickersMarquee({ products = [], onOpenModal }) {
+  // Combine database products with catalog presets (database products first)
+  const list = (products && products.length > 0)
+    ? [...products, ...STICKER_PRODUCTS.filter(s => !products.some(p => p._id === s._id || p.slug === s.slug))]
+    : STICKER_PRODUCTS;
+
+  // Duplicate for seamless infinite marquee loop
+  const row1 = [...list, ...list];
+  const row2 = [...list.slice().reverse(), ...list.slice().reverse()];
+
+  const getImg = (item) => item.image || item.imageUrl || 'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?w=500&auto=format&fit=crop&q=80';
+  const getCat = (item) => typeof item.category === 'string' ? item.category : (item.category?.name || item.categorySlug || '3D Wall Art');
+  const getPrice = (item) => item.finalPrice || item.price || 499;
+  const getBadge = (item) => item.badge || (item.bestseller ? 'Bestseller' : 'New Drop');
+  const getRating = (item) => item.rating || 4.9;
 
   return (
     <section className="moving-marquee-section">
@@ -29,31 +40,31 @@ export default function MovingStickersMarquee({ onOpenModal }) {
         <div className="marquee-track track-left">
           {row1.map((item, idx) => (
             <div
-              key={`r1-${item._id}-${idx}`}
+              key={`r1-${item._id || item.id || item.slug}-${idx}`}
               className="marquee-sticker-card"
-              onClick={() => onOpenModal(item)}
+              onClick={() => onOpenModal && onOpenModal(item)}
             >
               <div className="marquee-card-img-box">
                 <img
-                  src={item.image}
+                  src={getImg(item)}
                   alt={item.name}
                   className="marquee-card-img"
                   loading="lazy"
                 />
-                <span className="marquee-card-badge">{item.badge}</span>
+                <span className="marquee-card-badge">{getBadge(item)}</span>
               </div>
 
               <div className="marquee-card-info">
                 <div className="marquee-card-meta">
-                  <span className="marquee-card-cat">{item.category}</span>
+                  <span className="marquee-card-cat">{getCat(item)}</span>
                   <div className="marquee-card-rating">
                     <Star size={12} fill="#F59E0B" color="#F59E0B" />
-                    <span>{item.rating}</span>
+                    <span>{getRating(item)}</span>
                   </div>
                 </div>
                 <h4 className="marquee-card-name">{item.name}</h4>
                 <div className="marquee-card-price-row">
-                  <span className="marquee-price">₹{item.finalPrice || item.price}</span>
+                  <span className="marquee-price">₹{getPrice(item)}</span>
                   <span className="marquee-explore-pill">
                     3D View <ArrowUpRight size={12} />
                   </span>
@@ -69,31 +80,31 @@ export default function MovingStickersMarquee({ onOpenModal }) {
         <div className="marquee-track track-right">
           {row2.map((item, idx) => (
             <div
-              key={`r2-${item._id}-${idx}`}
+              key={`r2-${item._id || item.id || item.slug}-${idx}`}
               className="marquee-sticker-card card-variant-alt"
-              onClick={() => onOpenModal(item)}
+              onClick={() => onOpenModal && onOpenModal(item)}
             >
               <div className="marquee-card-img-box">
                 <img
-                  src={item.image}
+                  src={getImg(item)}
                   alt={item.name}
                   className="marquee-card-img"
                   loading="lazy"
                 />
-                <span className="marquee-card-badge">{item.badge}</span>
+                <span className="marquee-card-badge">{getBadge(item)}</span>
               </div>
 
               <div className="marquee-card-info">
                 <div className="marquee-card-meta">
-                  <span className="marquee-card-cat">{item.category}</span>
+                  <span className="marquee-card-cat">{getCat(item)}</span>
                   <div className="marquee-card-rating">
                     <Star size={12} fill="#F59E0B" color="#F59E0B" />
-                    <span>{item.rating}</span>
+                    <span>{getRating(item)}</span>
                   </div>
                 </div>
                 <h4 className="marquee-card-name">{item.name}</h4>
                 <div className="marquee-card-price-row">
-                  <span className="marquee-price">₹{item.finalPrice || item.price}</span>
+                  <span className="marquee-price">₹{getPrice(item)}</span>
                   <span className="marquee-explore-pill">
                     3D View <ArrowUpRight size={12} />
                   </span>

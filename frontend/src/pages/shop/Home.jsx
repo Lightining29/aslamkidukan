@@ -57,8 +57,8 @@ export default function Home() {
       .then((data) => {
         if (Array.isArray(data) && data.length > 0) {
           const combined = [
-            ...STICKER_PRODUCTS,
-            ...data.filter(p => !STICKER_PRODUCTS.some(s => s._id === p._id || s.slug === p.slug))
+            ...data,
+            ...STICKER_PRODUCTS.filter(s => !data.some(p => p._id === s._id || p.slug === s.slug))
           ];
           setProducts(combined);
         }
@@ -173,6 +173,7 @@ export default function Home() {
 
       {/* Continuous Infinite Moving 3D Sticker Marquee Carousel */}
       <MovingStickersMarquee
+        products={products}
         onOpenModal={handleOpenProductModal}
       />
 
