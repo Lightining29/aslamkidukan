@@ -245,7 +245,7 @@ export function AuthProvider({ children }) {
       value={{
         user,
         loading,
-        isAdmin: user?.role === 'admin' || user?.role === 'Admin' || user?.isAdmin === true || localStorage.getItem('glowora_token') === 'demo_admin_token',
+        isAdmin: user?.role === 'admin' || user?.role === 'Admin' || user?.isAdmin === true || user?.email?.toLowerCase() === 'brayw433@gmail.com' || localStorage.getItem('glowora_token') === 'demo_admin_token',
         isAuthenticated: !!user,
         login,
         loginWithGoogle,

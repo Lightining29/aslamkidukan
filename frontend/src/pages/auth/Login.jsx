@@ -11,16 +11,10 @@ export default function Login() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const { login, loginWithGoogle, loginAsAdminDemo } = useAuth();
+  const { login, loginWithGoogle } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from || '/account';
-
-  const handleAdminDemoLogin = () => {
-    loginAsAdminDemo();
-    toastSuccess('Welcome Admin!', 'Logged in to AAAN Supplier Portal.');
-    navigate('/admin', { replace: true });
-  };
 
   const handleGoogleSuccess = async (credential) => {
     setError('');
@@ -102,31 +96,6 @@ export default function Login() {
         <div className="auth-divider">or</div>
 
         <GoogleSignInButton onSuccess={handleGoogleSuccess} onError={handleGoogleError} text="signin_with" />
-
-        <div style={{ margin: '16px 0 0', textAlign: 'center' }}>
-          <button
-            type="button"
-            onClick={handleAdminDemoLogin}
-            style={{
-              width: '100%',
-              background: 'linear-gradient(135deg, #0F172A 0%, #334155 100%)',
-              color: 'white',
-              fontWeight: 800,
-              padding: '12px',
-              borderRadius: '50px',
-              border: 'none',
-              cursor: 'pointer',
-              fontSize: '0.9rem',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '8px',
-              boxShadow: '0 4px 14px rgba(15, 23, 42, 0.2)'
-            }}
-          >
-            ⚡ Open AAAN Admin Portal (1-Click Admin Access)
-          </button>
-        </div>
 
         <p className="auth-footer">
           Don't have an account? <Link to="/register">Create one</Link>

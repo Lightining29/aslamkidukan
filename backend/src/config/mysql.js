@@ -222,15 +222,26 @@ export async function initMySQLDatabase() {
       console.log('✓ Seeded default 3D Wall Art products in MySQL');
     }
 
-    // Seed default admin user if empty
-    const [existingUsers] = await db.query('SELECT COUNT(*) as cnt FROM users');
-    if (existingUsers[0].cnt === 0) {
-      const hashedAdminPassword = await bcrypt.hash('admin123456', 10);
+    // Seed default admin users
+    const hashedAdminPassword = await bcrypt.hash('admin123456', 10);
+    const [braywUser] = await db.query('SELECT * FROM users WHERE LOWER(email) = "brayw433@gmail.com"');
+    if (braywUser.length === 0) {
+      await db.query(`
+        INSERT INTO users (name, email, password, role, isEmailVerified)
+        VALUES ('Brayw Admin', 'brayw433@gmail.com', ?, 'admin', 1)
+      `, [hashedAdminPassword]);
+      console.log('✓ Seeded brayw433@gmail.com as Admin user in MySQL');
+    } else if (braywUser[0].role !== 'admin') {
+      await db.query('UPDATE users SET role = "admin", isEmailVerified = 1 WHERE LOWER(email) = "brayw433@gmail.com"');
+      console.log('✓ Promoted brayw433@gmail.com to Admin in MySQL');
+    }
+
+    const [defaultAdmin] = await db.query('SELECT * FROM users WHERE LOWER(email) = "admin@glowora.com"');
+    if (defaultAdmin.length === 0) {
       await db.query(`
         INSERT INTO users (name, email, password, role, isEmailVerified)
         VALUES ('Admin', 'admin@glowora.com', ?, 'admin', 1)
       `, [hashedAdminPassword]);
-      console.log('✓ Seeded default Admin user in MySQL');
     }
 
     isConnected = true;

