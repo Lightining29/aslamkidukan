@@ -316,7 +316,7 @@ export async function mysqlUpdateProduct(id, data) {
   }
 
   if (fields.length === 0) return null;
-  params.push(id);
+  params.push(id, id);
 
   await db.query(`UPDATE products SET ${fields.join(', ')} WHERE id = ? OR slug = ?`, params);
   const [rows] = await db.query('SELECT * FROM products WHERE id = ? OR slug = ?', [id, id]);
@@ -397,7 +397,7 @@ export async function mysqlUpdateCategory(id, data) {
     }
   }
   if (fields.length === 0) return null;
-  params.push(id);
+  params.push(id, id);
   await db.query(`UPDATE categories SET ${fields.join(', ')} WHERE id = ? OR slug = ?`, params);
   const [rows] = await db.query('SELECT * FROM categories WHERE id = ? OR slug = ?', [id, id]);
   return rows.length ? rows[0] : null;
@@ -549,7 +549,7 @@ export async function mysqlUpdateOrder(id, updates) {
   }
 
   if (fields.length === 0) return mysqlGetOrderById(id);
-  params.push(id);
+  params.push(id, id, id);
 
   await db.query(`UPDATE orders SET ${fields.join(', ')} WHERE id = ? OR orderNumber = ? OR razorpayOrderId = ?`, params);
   return mysqlGetOrderById(id);
