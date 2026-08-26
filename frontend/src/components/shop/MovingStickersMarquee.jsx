@@ -1,23 +1,26 @@
 import React from 'react';
 import { Star, Sparkles, ArrowUpRight } from 'lucide-react';
-import { STICKER_PRODUCTS } from '../../data/stickersCatalog';
 import './MovingStickersMarquee.css';
 
 export default function MovingStickersMarquee({ products = [], onOpenModal }) {
-  // Combine database products with catalog presets (database products first)
-  const list = (products && products.length > 0)
-    ? [...products, ...STICKER_PRODUCTS.filter(s => !products.some(p => p._id === s._id || p.slug === s.slug))]
-    : STICKER_PRODUCTS;
+  if (!products || products.length === 0) {
+    return null; // Do not display fake items when database has 0 products
+  }
 
-  // Duplicate for seamless infinite marquee loop
+  // Duplicate for seamless infinite marquee loop (minimum 6 cards for smooth CSS animation)
+  let list = [...products];
+  while (list.length < 6) {
+    list = [...list, ...products];
+  }
+
   const row1 = [...list, ...list];
   const row2 = [...list.slice().reverse(), ...list.slice().reverse()];
 
-  const getImg = (item) => item.image || item.imageUrl || 'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?w=500&auto=format&fit=crop&q=80';
+  const getImg = (item) => item.image || item.imageUrl || '/aaan-logo.svg';
   const getCat = (item) => typeof item.category === 'string' ? item.category : (item.category?.name || item.categorySlug || '3D Wall Art');
-  const getPrice = (item) => item.finalPrice || item.price || 499;
+  const getPrice = (item) => item.finalPrice || item.price || 0;
   const getBadge = (item) => item.badge || (item.bestseller ? 'Bestseller' : 'New Drop');
-  const getRating = (item) => item.rating || 4.9;
+  const getRating = (item) => item.rating || 5.0;
 
   return (
     <section className="moving-marquee-section">

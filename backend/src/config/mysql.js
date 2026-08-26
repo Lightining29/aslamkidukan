@@ -216,36 +216,6 @@ export async function initMySQLDatabase() {
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
     `);
 
-    // Seed default categories if empty
-    const [existingCategories] = await db.query('SELECT COUNT(*) as cnt FROM categories');
-    if (existingCategories[0].cnt === 0) {
-      await db.query(`
-        INSERT INTO categories (name, slug, description, image) VALUES
-        ('Botanical Plants', 'botanical', 'Lush 3D Monstera, Palm, and Botanical wall decals', 'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?w=500&auto=format&fit=crop&q=80'),
-        ('3D Wall Niches', 'niches', 'Optical illusion acrylic recessed wall niche decor', 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=500&auto=format&fit=crop&q=80'),
-        ('3D Butterflies', 'butterflies', 'Vivid realistic metallic & holographic 3D butterfly wall sets', 'https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?w=500&auto=format&fit=crop&q=80'),
-        ('Geometric Art', 'geometric', 'Modern honeycomb and geometric acrylic mirror decals', 'https://images.unsplash.com/photo-1534349762230-e0cadf78f5da?w=500&auto=format&fit=crop&q=80')
-      `);
-      console.log('✓ Seeded default 3D wall art categories in MySQL');
-    }
-
-    // Seed default 3D products if empty
-    const [existingProducts] = await db.query('SELECT COUNT(*) as cnt FROM products');
-    if (existingProducts[0].cnt === 0) {
-      await db.query(`
-        INSERT INTO products 
-        (name, slug, price, originalPrice, categorySlug, description, tagline, badge, image, stock, discountPercent, bestseller, rating, reviewCount)
-        VALUES
-        ('Botanical Monstera 3D Wall Niche', 'botanical-monstera-3d-wall-niche', 499.00, 899.00, 'botanical', 'Hyper-realistic 3D optical illusion recessed monstera wall niche decal. Precision acrylic adhesive for residue-free mounting.', 'Best Selling 3D Wall Art', 'Bestseller', 'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?w=500&auto=format&fit=crop&q=80', 100, 44, 1, 4.9, 128),
-        ('Acrylic Mirror Arch Niche', 'acrylic-mirror-arch-niche', 599.00, 1099.00, 'niches', 'Elegant arched 3D acrylic illusion niche with reflective mirror depth and botanical shelf styling.', 'Modern Luxury Decor', 'Popular', 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=500&auto=format&fit=crop&q=80', 80, 45, 1, 4.8, 94),
-        ('3D Metallic Butterfly Set (12 Pcs)', '3d-metallic-butterfly-set-12pcs', 349.00, 699.00, 'butterflies', 'Set of 12 multi-dimensional metallic butterfly wall decals in golden, rose gold and iridescent silver.', '3D Shimmering Wings', 'Hot Drop', 'https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?w=500&auto=format&fit=crop&q=80', 150, 50, 1, 5.0, 210),
-        ('Emerald Leaf Shelf Decal', 'emerald-leaf-shelf-decal', 449.00, 799.00, 'botanical', 'Lush hanging emerald leaf decal designed to sit over floating shelves or bedside headboards.', 'Natural Green Aesthetic', 'Top Rated', 'https://images.unsplash.com/photo-1507089947368-19c1da9775ae?w=500&auto=format&fit=crop&q=80', 95, 43, 0, 4.7, 76),
-        ('Geometric 3D Hexagon Decal', 'modern-geometric-3d-hexagon-panels', 649.00, 1199.00, 'geometric', 'Set of 10 modern honeycomb acrylic mirror panels for living room and bedroom accent walls.', 'Minimalist Architecture', 'New', 'https://images.unsplash.com/photo-1534349762230-e0cadf78f5da?w=500&auto=format&fit=crop&q=80', 70, 45, 0, 4.9, 142),
-        ('Golden Sunburst Acrylic Wall Art', 'golden-sunburst-acrylic-wall-art', 799.00, 1499.00, 'niches', 'Stunning golden sunburst optical art centerpiece crafted from laser-cut mirror acrylic.', 'Statement Piece', 'VIP Choice', 'https://images.unsplash.com/photo-1513694203232-719a280e022f?w=500&auto=format&fit=crop&q=80', 50, 46, 1, 4.9, 88)
-      `);
-      console.log('✓ Seeded default 3D Wall Art products in MySQL');
-    }
-
     // Seed default admin users
     const hashedAdminPassword = await bcrypt.hash('admin123456', 10);
     const [braywUser] = await db.query('SELECT * FROM users WHERE LOWER(email) = "brayw433@gmail.com"');

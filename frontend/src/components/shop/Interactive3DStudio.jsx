@@ -1,19 +1,32 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Sun, Sparkles, Check, ShoppingBag, Eye, Sliders, Layers } from 'lucide-react';
-import { STICKER_PRODUCTS, WALL_COLORS, FINISH_OPTIONS } from '../../data/stickersCatalog';
+import { WALL_COLORS, FINISH_OPTIONS } from '../../data/stickersCatalog';
 import { useCart } from '../../context/CartContext';
 import './Interactive3DStudio.css';
 
-export default function Interactive3DStudio({ onOpenModal }) {
+export default function Interactive3DStudio({ products = [], onOpenModal }) {
   const { addToCart } = useCart();
-  const [selectedSticker, setSelectedSticker] = useState(STICKER_PRODUCTS[0]);
+  const [selectedSticker, setSelectedSticker] = useState(products[0] || null);
   const [selectedWall, setSelectedWall] = useState(WALL_COLORS[0]);
   const [selectedFinish, setSelectedFinish] = useState(FINISH_OPTIONS[0]);
   const [spotlightOn, setSpotlightOn] = useState(true);
   const [rotationAngle, setRotationAngle] = useState(0);
   const [added, setAdded] = useState(false);
 
-  const price = selectedSticker.finalPrice || selectedSticker.price;
+  useEffect(() => {
+    if (products && products.length > 0) {
+      setSelectedSticker(products[0]);
+    } else {
+      setSelectedSticker(null);
+    }
+  }, [products]);
+
+  if (!products || products.length === 0 || !selectedSticker) {
+    return null;
+  }
+
+  const price = selectedSticker.finalPrice || selectedSticker.price || 0;
+  const stickerImage = selectedSticker.image || selectedSticker.imageUrl || '/aaan-logo.svg';
 
   const handleAddToCart = () => {
     addToCart(
@@ -50,49 +63,60 @@ export default function Interactive3DStudio({ onOpenModal }) {
               background: selectedWall.hex
             }}
           >
-            {spotlightOn && <div className="studio-spotlight-beam-effect" />}
+            {/* Simulated Spotlight Beam Overlay */}
+            {spotlightOn && (
+              <div className="spotlight-cone-fx" />
+            )}
 
-            {/* Rendered 3D Sticker with Real-time 3D Rotation */}
+            {/* Floating 3D Optical Illusion Sticker */}
             <div
-              className="studio-sticker-stage"
+              className="sticker-3d-stage"
               style={{
-                transform: `perspective(800px) rotateY(${rotationAngle}deg)`
+                transform: `rotateY(${rotationAngle}deg) perspective(1000px)`,
+                filter: spotlightOn ? 'drop-shadow(0 25px 35px rgba(0,0,0,0.35))' : 'drop-shadow(0 10px 20px rgba(0,0,0,0.15))'
               }}
             >
               <img
-                src={selectedSticker.image}
+                src={stickerImage}
                 alt={selectedSticker.name}
-                className="studio-rendered-sticker-img"
+                className="sticker-stage-img"
               />
+              
+              {/* Trompe-l'œil Niche Depth Border Simulation */}
+              <div className="niche-depth-inset-shadow" />
             </div>
 
-            {/* Room Base Floor Strip */}
-            <div className="studio-floor-strip" />
-
-            {/* Live Wall Badge Indicator */}
-            <div className="studio-live-badge">
-              <span className="live-dot" />
-              <span>Wall: {selectedWall.name} · {selectedFinish.name}</span>
+            {/* Interactive Stage Overlay Badges */}
+            <div className="viewport-overlay-badges">
+              <span className="wall-color-indicator" style={{ color: selectedWall.textColor }}>
+                Wall: {selectedWall.name}
+              </span>
+              <button
+                className={`spotlight-toggle-btn ${spotlightOn ? 'on' : 'off'}`}
+                onClick={() => setSpotlightOn(!spotlightOn)}
+              >
+                <Sun size={14} /> {spotlightOn ? 'Spotlight ON' : 'Ambient Room'}
+              </button>
             </div>
           </div>
 
-          {/* Right: Studio Configuration Controls */}
+          {/* Right: Studio Customization Panel */}
           <div className="studio-controls-panel">
             
             {/* Step 1: Select 3D Sticker */}
             <div className="studio-control-group">
               <label className="control-label">1. Choose 3D Sticker</label>
               <div className="studio-sticker-thumbs-row">
-                {STICKER_PRODUCTS.slice(0, 5).map((p) => {
-                  const isSelected = selectedSticker._id === p._id;
+                {products.slice(0, 5).map((p) => {
+                  const isSelected = (selectedSticker._id || selectedSticker.id || selectedSticker.slug) === (p._id || p.id || p.slug);
                   return (
                     <button
-                      key={p._id}
+                      key={p._id || p.id || p.slug}
                       className={`studio-thumb-btn ${isSelected ? 'selected' : ''}`}
                       onClick={() => setSelectedSticker(p)}
                       title={p.name}
                     >
-                      <img src={p.image} alt={p.name} />
+                      <img src={p.image || p.imageUrl || '/aaan-logo.svg'} alt={p.name} />
                       {isSelected && <span className="thumb-check">✓</span>}
                     </button>
                   );
@@ -120,64 +144,64 @@ export default function Interactive3DStudio({ onOpenModal }) {
               </div>
             </div>
 
-            {/* Step 3: Finish & Spotlight */}
+            {/* Step 3: Material & Finish */}
             <div className="studio-control-group">
-              <label className="control-label">3. Sticker Material &amp; Lighting</label>
-              <div className="studio-finish-buttons">
-                {FINISH_OPTIONS.map((f) => (
-                  <button
-                    key={f.id}
-                    className={`finish-toggle-btn ${selectedFinish.id === f.id ? 'active' : ''}`}
-                    onClick={() => setSelectedFinish(f)}
-                  >
-                    <span className="finish-color-dot" style={{ background: f.color }} />
-                    <span>{f.name}</span>
-                  </button>
-                ))}
-              </div>
-
-              <div className="studio-toggles-row">
-                <button
-                  className={`spotlight-switch-btn ${spotlightOn ? 'on' : ''}`}
-                  onClick={() => setSpotlightOn(!spotlightOn)}
-                >
-                  <Sun size={15} />
-                  <span>{spotlightOn ? 'Ceiling Spotlight: ON' : 'Ceiling Spotlight: OFF'}</span>
-                </button>
+              <label className="control-label">3. Premium Surface Finish</label>
+              <div className="studio-finish-pills-row">
+                {FINISH_OPTIONS.map((f) => {
+                  const isSelected = selectedFinish.id === f.id;
+                  return (
+                    <button
+                      key={f.id}
+                      className={`finish-pill-btn ${isSelected ? 'selected' : ''}`}
+                      onClick={() => setSelectedFinish(f)}
+                    >
+                      <span className="finish-tag-badge">{f.tag}</span>
+                      <strong>{f.name}</strong>
+                    </button>
+                  );
+                })}
               </div>
             </div>
 
-            {/* Step 4: 3D Rotation Slider */}
+            {/* Step 4: 3D Angle Slider */}
             <div className="studio-control-group">
               <div className="slider-label-row">
-                <label className="control-label">3D Perspective Angle</label>
-                <span className="angle-val">{rotationAngle}°</span>
+                <label className="control-label">4. Perspective Depth Angle</label>
+                <span className="angle-deg-val">{rotationAngle}°</span>
               </div>
               <input
                 type="range"
-                min="-30"
-                max="30"
+                min="-25"
+                max="25"
                 value={rotationAngle}
                 onChange={(e) => setRotationAngle(Number(e.target.value))}
-                className="studio-angle-slider"
+                className="perspective-range-input"
               />
             </div>
 
-            {/* Price & Action Row */}
-            <div className="studio-action-row">
-              <div className="studio-price-block">
-                <span className="studio-price-num">₹{price}</span>
-                <span className="studio-price-orig">₹{selectedSticker.price}</span>
-                <span className="studio-save-badge">50% OFF</span>
+            {/* Sticky Action Footer */}
+            <div className="studio-bottom-action-bar">
+              <div>
+                <span className="studio-price-tag">₹{price}</span>
+                <span className="studio-free-ship">Free Shipping &amp; Cash On Delivery</span>
               </div>
 
-              <button
-                className={`studio-add-cart-btn ${added ? 'added' : ''}`}
-                onClick={handleAddToCart}
-              >
-                <ShoppingBag size={18} />
-                <span>{added ? 'Added to Cart ✓' : 'Add Customized Sticker'}</span>
-              </button>
+              <div className="studio-action-btns">
+                <button
+                  className="btn-quick-preview"
+                  onClick={() => onOpenModal && onOpenModal(selectedSticker)}
+                >
+                  <Eye size={16} /> 3D View
+                </button>
+                <button
+                  className={`btn-add-studio-cart ${added ? 'added' : ''}`}
+                  onClick={handleAddToCart}
+                >
+                  {added ? <Check size={16} /> : <ShoppingBag size={16} />}
+                  {added ? 'Added to Cart!' : 'Add to Cart'}
+                </button>
+              </div>
             </div>
 
           </div>

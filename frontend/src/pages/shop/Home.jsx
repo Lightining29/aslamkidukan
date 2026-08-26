@@ -41,7 +41,7 @@ export default function Home() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
-  const [products, setProducts] = useState(STICKER_PRODUCTS);
+  const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState(searchParams.get('q') || '');
   const [selectedCategory, setSelectedCategory] = useState('all');
@@ -55,15 +55,15 @@ export default function Home() {
   useEffect(() => {
     fetchProducts()
       .then((data) => {
-        if (Array.isArray(data) && data.length > 0) {
-          const combined = [
-            ...data,
-            ...STICKER_PRODUCTS.filter(s => !data.some(p => p._id === s._id || p.slug === s.slug))
-          ];
-          setProducts(combined);
+        if (Array.isArray(data)) {
+          setProducts(data);
+        } else {
+          setProducts([]);
         }
       })
-      .catch(() => {})
+      .catch(() => {
+        setProducts([]);
+      })
       .finally(() => setLoading(false));
   }, []);
 
@@ -155,11 +155,13 @@ export default function Home() {
       </div>
 
       {/* Desktop Full-Width Luxury Hero Showcase */}
-      <DesktopHeroShowcase
-        onExploreClick={handleExploreClick}
-        onOpenModal={handleOpenProductModal}
-        featuredSticker={STICKER_PRODUCTS[0]}
-      />
+      {products.length > 0 && (
+        <DesktopHeroShowcase
+          onExploreClick={handleExploreClick}
+          onOpenModal={handleOpenProductModal}
+          featuredSticker={products[0]}
+        />
+      )}
 
       {/* Mobile Hero Carousel Banner (Visible on Mobile only) */}
       <div className="mobile-hero-only-wrapper">
@@ -178,11 +180,14 @@ export default function Home() {
       />
 
       {/* Interactive 3D Wall Simulator Studio (Desktop Only) */}
-      <div className="desktop-only-studio-wrapper">
-        <Interactive3DStudio
-          onOpenModal={handleOpenProductModal}
-        />
-      </div>
+      {products.length > 0 && (
+        <div className="desktop-only-studio-wrapper">
+          <Interactive3DStudio
+            products={products}
+            onOpenModal={handleOpenProductModal}
+          />
+        </div>
+      )}
 
       {/* Main Products Catalog Section (Responsive 4-Col Desktop / 2-Col Mobile) */}
       <section className="catalog-main-section reveal-on-scroll" id="products-catalog-section">
