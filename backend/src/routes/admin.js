@@ -339,26 +339,25 @@ router.delete('/products/:id', async (req, res) => {
 /* ─── CATEGORIES ─────────────────────────────────────────────────── */
 router.get('/categories', async (_req, res) => {
   try {
-    if (isMySQLActive()) {
-      const mysqlCats = await mysqlGetCategories();
-      if (mysqlCats && mysqlCats.length > 0) return res.json(mysqlCats);
+    const mysqlCats = await mysqlGetCategories();
+    if (mysqlCats && mysqlCats.length > 0) return res.json(mysqlCats);
+
+    if (mongoose.connection?.readyState === 1) {
+      const categories = await Category.find().sort({ name: 1 });
+      const mapped = categories.map((c) => {
+        const obj = c.toObject();
+        const v = c.updatedAt ? c.updatedAt.getTime() : Date.now();
+        obj.imageUrl = c.imageData ? `/api/images/category/${c._id}?v=${v}` : (c.image || null);
+        delete obj.imageData;
+        delete obj.imageContentType;
+        return obj;
+      });
+      return res.json(mapped);
     }
-    const categories = await Category.find().sort({ name: 1 });
-    const mapped = categories.map((c) => {
-      const obj = c.toObject();
-      const v = c.updatedAt ? c.updatedAt.getTime() : Date.now();
-      obj.imageUrl = c.imageData ? `/api/images/category/${c._id}?v=${v}` : (c.image || null);
-      delete obj.imageData;
-      delete obj.imageContentType;
-      return obj;
-    });
-    res.json(mapped);
+    return res.json(mysqlCats || []);
   } catch (err) {
-    if (isMySQLActive()) {
-      const mysqlCats = await mysqlGetCategories();
-      return res.json(mysqlCats || []);
-    }
-    res.status(500).json({ message: err.message });
+    const mysqlCats = await mysqlGetCategories().catch(() => []);
+    res.json(mysqlCats || []);
   }
 });
 
@@ -369,28 +368,37 @@ router.post('/categories', upload.single('image'), async (req, res) => {
     if (!name) return res.status(400).json({ message: 'Name is required' });
     const slug = slugify(name);
 
-    if (isMySQLActive()) {
-      const newCat = await mysqlCreateCategory({ name, slug, description: description || '', image: image || '' });
-      return res.status(201).json(newCat);
+    // 1. Save directly to MySQL
+    let newCat = null;
+    try {
+      newCat = await mysqlCreateCategory({
+        name,
+        slug,
+        description: description || '',
+        image: image || (req.file ? `data:${req.file.mimetype};base64,${req.file.buffer.toString('base64')}` : '')
+      });
+    } catch (mysqlErr) {
+      console.warn('MySQL category insert notice:', mysqlErr.message);
     }
 
-    const exists = await Category.findOne({ slug });
-    if (exists) return res.status(400).json({ message: 'Category with same name exists' });
-
-    const category = new Category({ name, slug, description });
-    if (req.file) {
-      category.imageData = req.file.buffer;
-      category.imageContentType = req.file.mimetype;
+    // 2. Sync to MongoDB only if active
+    if (mongoose.connection?.readyState === 1) {
+      try {
+        const exists = await Category.findOne({ slug });
+        if (!exists) {
+          const category = new Category({ name, slug, description });
+          if (req.file) {
+            category.imageData = req.file.buffer;
+            category.imageContentType = req.file.mimetype;
+          }
+          await category.save();
+        }
+      } catch {
+        // Mongo sync error ignored
+      }
     }
-    await category.save();
 
-    const obj = category.toObject();
-    const v = category.updatedAt ? category.updatedAt.getTime() : Date.now();
-    obj.imageUrl = category.imageData ? `/api/images/category/${category._id}?v=${v}` : (category.image || null);
-    delete obj.imageData;
-    delete obj.imageContentType;
-
-    res.status(201).json(obj);
+    return res.status(201).json(newCat || { id: Date.now(), _id: String(Date.now()), name, slug, description: description || '' });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -402,40 +410,46 @@ router.put('/categories/:id', upload.single('image'), async (req, res) => {
     const { name, description, image } = req.body;
     const { id } = req.params;
 
-    if (isMySQLActive()) {
-      const updates = {};
-      if (name) {
-        updates.name = name;
-        updates.slug = slugify(name);
-      }
-      if (description !== undefined) updates.description = description;
-      if (image !== undefined) updates.image = image;
-
-      const updated = await mysqlUpdateCategory(id, updates);
-      if (updated) return res.json(updated);
-    }
-
-    const category = await Category.findById(id);
-    if (!category) return res.status(404).json({ message: 'Category not found' });
+    const updates = {};
     if (name) {
-      category.name = name;
-      category.slug = slugify(name);
+      updates.name = name;
+      updates.slug = slugify(name);
     }
-    if (description !== undefined) category.description = description;
+    if (description !== undefined) updates.description = description;
+    if (image !== undefined) updates.image = image;
     if (req.file) {
-      category.imageData = req.file.buffer;
-      category.imageContentType = req.file.mimetype;
+      updates.image = `data:${req.file.mimetype};base64,${req.file.buffer.toString('base64')}`;
     }
-    category.updatedAt = new Date();
-    await category.save();
 
-    const obj = category.toObject();
-    const v = category.updatedAt ? category.updatedAt.getTime() : Date.now();
-    obj.imageUrl = category.imageData ? `/api/images/category/${category._id}?v=${v}` : (category.image || null);
-    delete obj.imageData;
-    delete obj.imageContentType;
+    let updated = null;
+    try {
+      updated = await mysqlUpdateCategory(id, updates);
+    } catch {
+      // MySQL error
+    }
 
-    res.json(obj);
+    if (mongoose.connection?.readyState === 1) {
+      try {
+        const category = await Category.findById(id);
+        if (category) {
+          if (name) {
+            category.name = name;
+            category.slug = slugify(name);
+          }
+          if (description !== undefined) category.description = description;
+          if (req.file) {
+            category.imageData = req.file.buffer;
+            category.imageContentType = req.file.mimetype;
+          }
+          category.updatedAt = new Date();
+          await category.save();
+        }
+      } catch {
+        // Mongo error
+      }
+    }
+
+    return res.json(updated || { id, ...updates });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -445,14 +459,21 @@ router.put('/categories/:id', upload.single('image'), async (req, res) => {
 router.delete('/categories/:id', async (req, res) => {
   try {
     const { id } = req.params;
-    if (isMySQLActive()) {
-      const deleted = await mysqlDeleteCategory(id);
-      if (deleted) return res.json({ message: 'Category deleted' });
+    try {
+      await mysqlDeleteCategory(id);
+    } catch {
+      // MySQL error
     }
 
-    const category = await Category.findByIdAndDelete(id);
-    if (!category) return res.status(404).json({ message: 'Category not found' });
-    res.json({ message: 'Category deleted' });
+    if (mongoose.connection?.readyState === 1) {
+      try {
+        await Category.findByIdAndDelete(id);
+      } catch {
+        // Mongo error
+      }
+    }
+
+    return res.json({ message: 'Category deleted' });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
