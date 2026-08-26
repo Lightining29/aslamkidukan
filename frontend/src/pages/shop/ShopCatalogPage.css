@@ -1,257 +1,391 @@
 /* =========================================================
-   AAAN CART — SHOP ALL 3D PRODUCTS CATALOG PAGE
-   Category Pills · Search Header · Responsive Product Grid
+   AAAN CART — MODERN MOBILE APP SHOP CATALOG PAGE
+   Matches "Kicksy" Store UI Mockup (2-Column Cards, Floating Icons)
    ========================================================= */
 
-.shop-catalog-page-wrapper {
+.kicksy-shop-page-root {
   min-height: 100vh;
-  background: #F8FAFC;
-  padding-bottom: 80px;
+  background: radial-gradient(circle at 10% 5%, rgba(254, 243, 199, 0.3) 0%, transparent 40%),
+              radial-gradient(circle at 90% 15%, rgba(236, 253, 245, 0.35) 0%, transparent 40%),
+              #F8FAFC;
+  padding: 10px 18px 90px;
+  box-sizing: border-box;
   font-family: -apple-system, BlinkMacSystemFont, 'Plus Jakarta Sans', 'Segoe UI', Roboto, sans-serif;
   color: #0F172A;
+  max-width: 500px;
+  margin: 0 auto;
 }
 
-/* Hero Banner */
-.shop-catalog-hero {
-  background: linear-gradient(135deg, #0F172A 0%, #1E293B 60%, #0F172A 100%);
-  color: #FFFFFF;
-  padding: 44px 20px 36px;
-  text-align: center;
+@media (min-width: 769px) {
+  .kicksy-shop-page-root {
+    max-width: 1080px;
+    padding: 24px 32px 60px;
+  }
 }
 
-.hero-inner-box {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.shop-hero-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background: rgba(255, 255, 255, 0.12);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: #FFE600;
-  font-size: 0.72rem;
-  font-weight: 800;
-  padding: 5px 14px;
-  border-radius: 50px;
-  margin-bottom: 12px;
-  letter-spacing: 0.5px;
-}
-
-.shop-hero-title {
-  margin: 0 0 8px 0;
-  font-size: 2.1rem;
-  font-weight: 900;
-  letter-spacing: -0.5px;
-}
-
-.shop-hero-subtitle {
-  margin: 0 0 20px 0;
-  font-size: 0.92rem;
-  color: #94A3B8;
-  max-width: 540px;
-  line-height: 1.45;
-}
-
-/* Search Bar */
-.shop-search-bar-wrap {
-  width: 100%;
-  max-width: 480px;
-  position: relative;
-  display: flex;
-  align-items: center;
-}
-
-.shop-search-icon {
-  position: absolute;
-  left: 16px;
-  color: #94A3B8;
-  pointer-events: none;
-}
-
-.shop-search-bar-wrap input {
-  width: 100%;
-  padding: 12px 42px 12px 44px;
-  border-radius: 50px;
-  border: 1.5px solid rgba(255, 255, 255, 0.2);
-  background: rgba(255, 255, 255, 0.12);
-  color: #FFFFFF;
-  font-size: 0.9rem;
-  outline: none;
-  backdrop-filter: blur(10px);
-  box-sizing: border-box;
-  transition: all 0.2s ease;
-}
-
-.shop-search-bar-wrap input::placeholder {
-  color: rgba(255, 255, 255, 0.65);
-}
-
-.shop-search-bar-wrap input:focus {
-  background: #FFFFFF;
-  color: #0F172A;
-  border-color: #0066FF;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-}
-
-.clear-search-btn {
-  position: absolute;
-  right: 14px;
-  background: none;
-  border: none;
-  color: #94A3B8;
-  cursor: pointer;
-  font-size: 0.85rem;
-}
-
-/* Category Pills Bar */
-.shop-category-pills-bar {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  overflow-x: auto;
-  padding: 16px 4px 6px;
-  margin-top: -16px;
-  -webkit-overflow-scrolling: touch;
-}
-
-.shop-category-pills-bar::-webkit-scrollbar {
-  display: none;
-}
-
-.cat-pill-btn {
-  background: #FFFFFF;
-  border: 1.5px solid #E2E8F0;
-  color: #475569;
-  padding: 8px 16px;
-  border-radius: 50px;
-  font-size: 0.82rem;
-  font-weight: 700;
-  white-space: nowrap;
-  cursor: pointer;
-  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.03);
-  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
-  flex-shrink: 0;
-}
-
-.cat-pill-btn:hover {
-  border-color: #CBD5E1;
-  transform: translateY(-1px);
-}
-
-.cat-pill-btn.active {
-  background: #0F172A;
-  color: #FFFFFF;
-  border-color: #0F172A;
-  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.25);
-}
-
-/* Controls Bar */
-.shop-controls-bar {
+/* =========================================================
+   1. Top App Bar (☰  AAAN Cart  👤)
+   ========================================================= */
+.kicksy-top-app-bar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 14px 4px;
-  border-bottom: 1px solid #E2E8F0;
-  margin-bottom: 20px;
+  padding: 8px 0 16px;
 }
 
-.results-count-text {
-  font-size: 0.84rem;
-  color: #64748B;
+.kicksy-bar-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: #FFFFFF;
+  border: 1.5px solid #E2E8F0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+  transition: all 0.2s ease;
 }
 
-.results-count-text strong {
+.kicksy-bar-btn:active {
+  transform: scale(0.92);
+}
+
+.kicksy-bar-brand {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
+}
+
+.brand-emblem-leaf {
+  font-size: 1.3rem;
+}
+
+.brand-title-text {
+  font-size: 1.25rem;
+  font-weight: 900;
   color: #0F172A;
+  letter-spacing: -0.5px;
 }
 
-.shop-right-filters {
+/* =========================================================
+   2. "Store" Header & Search Row
+   ========================================================= */
+.kicksy-store-header-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.kicksy-store-heading {
+  margin: 0;
+  font-size: 1.75rem;
+  font-weight: 900;
+  color: #0F172A;
+  letter-spacing: -0.5px;
+}
+
+.kicksy-search-cart-row {
   display: flex;
   align-items: center;
   gap: 12px;
 }
 
-.sort-select-wrapper {
+.kicksy-search-pill-box {
+  flex: 1;
+  position: relative;
   display: flex;
   align-items: center;
-  gap: 6px;
+}
+
+.search-pill-icon {
+  position: absolute;
+  left: 14px;
+  color: #94A3B8;
+  pointer-events: none;
+}
+
+.kicksy-search-pill-box input {
+  width: 100%;
+  padding: 12px 36px 12px 42px;
+  border-radius: 50px;
+  border: 1.5px solid #E2E8F0;
+  background: #FFFFFF;
+  font-size: 0.88rem;
+  outline: none;
+  box-sizing: border-box;
+  color: #0F172A;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.03);
+  transition: all 0.2s ease;
+}
+
+.kicksy-search-pill-box input:focus {
+  border-color: #0066FF;
+  box-shadow: 0 4px 14px rgba(0, 102, 255, 0.12);
+}
+
+.search-clear-btn {
+  position: absolute;
+  right: 12px;
+  background: none;
+  border: none;
+  color: #94A3B8;
+  cursor: pointer;
+}
+
+.kicksy-cart-bubble-btn {
+  position: relative;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
   background: #FFFFFF;
   border: 1.5px solid #E2E8F0;
-  border-radius: 50px;
-  padding: 6px 14px;
-  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.03);
-}
-
-.sort-select-wrapper select {
-  border: none;
-  background: none;
-  font-size: 0.8rem;
-  font-weight: 700;
-  color: #0F172A;
-  outline: none;
-  cursor: pointer;
-}
-
-/* Products Grid */
-.shop-products-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 20px;
-}
-
-@media (max-width: 1024px) {
-  .shop-products-grid {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
-  }
-}
-
-@media (max-width: 768px) {
-  .shop-products-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
-  }
-}
-
-/* Empty & Loading States */
-.shop-loading-state,
-.shop-empty-state {
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 60px 20px;
-  text-align: center;
-  background: #FFFFFF;
-  border-radius: 24px;
-  border: 1px solid #E2E8F0;
-  margin-top: 10px;
-}
-
-.loading-spinner {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  border: 3.5px solid #E2E8F0;
-  border-top-color: #0066FF;
-  animation: spin 0.8s linear infinite;
-  margin-bottom: 12px;
-}
-
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
-
-.btn-reset-filters {
-  background: #0066FF;
-  color: #FFFFFF;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 50px;
-  font-weight: 800;
-  font-size: 0.85rem;
   cursor: pointer;
-  margin-top: 12px;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+
+.kicksy-cart-bubble-btn:active {
+  transform: scale(0.92);
+}
+
+.kicksy-cart-badge {
+  position: absolute;
+  top: -3px;
+  right: -3px;
+  background: #F97316; /* Orange count badge */
+  color: #FFFFFF;
+  font-size: 0.65rem;
+  font-weight: 900;
+  min-width: 18px;
+  height: 18px;
+  border-radius: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #FFFFFF;
+}
+
+/* =========================================================
+   3. Category Chips Row
+   ========================================================= */
+.kicksy-category-chips-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 6px;
+  margin-bottom: 18px;
+  -webkit-overflow-scrolling: touch;
+}
+
+.kicksy-category-chips-row::-webkit-scrollbar {
+  display: none;
+}
+
+.kicksy-chip {
+  background: #FFFFFF;
+  border: 1.5px solid #E2E8F0;
+  color: #475569;
+  padding: 7px 14px;
+  border-radius: 50px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.02);
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  flex-shrink: 0;
+}
+
+.kicksy-chip:hover {
+  border-color: #CBD5E1;
+}
+
+.kicksy-chip.active {
+  background: #0F172A;
+  color: #FFFFFF;
+  border-color: #0F172A;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.2);
+}
+
+/* =========================================================
+   4. Section Title Bar ("New Arrivals" & "View All")
+   ========================================================= */
+.kicksy-section-title-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.section-main-title {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 900;
+  color: #0F172A;
+}
+
+.view-all-link-btn {
+  background: none;
+  border: none;
+  color: #D97706;
+  font-size: 0.82rem;
+  font-weight: 800;
+  cursor: pointer;
+  padding: 0;
+}
+
+.view-all-link-btn:hover {
+  text-decoration: underline;
+}
+
+/* =========================================================
+   5. 2-Column Product Cards Grid (Matching Mockup 1:1)
+   ========================================================= */
+.kicksy-products-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+}
+
+@media (min-width: 769px) {
+  .kicksy-products-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .kicksy-products-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+  }
+}
+
+.kicksy-product-card {
+  background: #FFFFFF;
+  border-radius: 22px;
+  border: 1.5px solid #E2E8F0;
+  padding: 12px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.03);
+  transition: all 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.kicksy-product-card:hover {
+  transform: translateY(-3px);
+  border-color: #CBD5E1;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
+}
+
+.kicksy-product-card:active {
+  transform: scale(0.97);
+}
+
+/* Top-Left Floating Cart Icon Button */
+.card-top-cart-btn {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  background: #F8FAFC;
+  border: 1.5px solid #E2E8F0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 2;
+  transition: all 0.2s ease;
+}
+
+.card-top-cart-btn:hover {
+  background: #0066FF;
+  border-color: #0066FF;
+}
+
+.card-top-cart-btn:hover svg {
+  color: #FFFFFF;
+}
+
+/* Centered Product Image */
+.card-image-container {
+  width: 100%;
+  height: 135px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 12px 0 10px;
+  overflow: hidden;
+  border-radius: 14px;
+}
+
+.card-product-img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  transition: transform 0.3s ease;
+}
+
+.kicksy-product-card:hover .card-product-img {
+  transform: scale(1.06);
+}
+
+/* Product Title */
+.card-product-title {
+  margin: 0 0 8px 0;
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: #0F172A;
+  line-height: 1.25;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Bottom Row: Price & Heart Wishlist */
+.card-bottom-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: auto;
+  padding-top: 4px;
+}
+
+.card-price-text {
+  font-size: 0.95rem;
+  font-weight: 900;
+  color: #0F172A;
+  letter-spacing: -0.3px;
+}
+
+.card-heart-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease;
+}
+
+.card-heart-btn:hover {
+  transform: scale(1.15);
+}
+
+.card-heart-btn:active {
+  transform: scale(0.9);
 }
