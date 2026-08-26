@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   ArrowLeft,
-  Search,
   ChevronRight,
   Sparkles,
   Settings as SettingsIcon,
@@ -21,7 +20,18 @@ import {
   Star,
   Bell,
   Truck,
-  Plus
+  Plus,
+  Phone,
+  Mail,
+  MapPin,
+  Camera,
+  KeyRound,
+  ShieldCheck,
+  CheckCircle2,
+  Trash2,
+  Smartphone,
+  ExternalLink,
+  ChevronDown
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { changePassword } from '../../api';
@@ -32,811 +42,1123 @@ export default function ModernUserProfileView({ onOpenSupport }) {
   const { user, updateProfile, logout, isAdmin } = useAuth();
   const navigate = useNavigate();
 
-  // Active Modals
-  const [activeModal, setActiveModal] = useState(null); // 'edit_profile', 'pro', 'badges', 'cards', 'preferences', 'privacy', 'feedback', 'language', 'password'
+  // Active Sub-Page View: 'main' | 'settings' | 'subscription' | 'badges' | 'cards' | 'preferences' | 'privacy' | 'help' | 'feedback' | 'language'
+  const [currentView, setCurrentView] = useState('main');
 
   // Biometric toggle switch state
   const [biometricEnabled, setBiometricEnabled] = useState(true);
 
-  // Edit Profile Form State
+  // Settings State
   const [name, setName] = useState(user?.name || 'Manish Kumar');
   const [phone, setPhone] = useState(user?.phone || '+91 80737 86650');
   const [city, setCity] = useState(user?.city || 'Chennai');
+  const [stateName, setStateName] = useState('Tamil Nadu');
+  const [pincode, setPincode] = useState('600003');
   const [address, setAddress] = useState(user?.address || '75 Raja Muthiah Road, Periamet');
   const [profileSaving, setProfileSaving] = useState(false);
 
-  // Password Form State
+  // Password State
+  const [showPasswordSection, setShowPasswordSection] = useState(false);
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [pwdSaving, setPwdSaving] = useState(false);
 
-  // Feedback State
-  const [rating, setRating] = useState(5);
-  const [feedbackText, setFeedbackText] = useState('');
-
   // Preferences State
-  const [smsAlerts, setSmsAlerts] = useState(true);
   const [whatsappAlerts, setWhatsappAlerts] = useState(true);
+  const [smsAlerts, setSmsAlerts] = useState(true);
   const [promoEmails, setPromoEmails] = useState(false);
+  const [darkMode, setDarkMode] = useState(false);
+  const [currency, setCurrency] = useState('INR');
+
+  // Feedback State
+  const [feedbackRating, setFeedbackRating] = useState(5);
+  const [feedbackCategory, setFeedbackCategory] = useState('App Experience');
+  const [feedbackText, setFeedbackText] = useState('');
+  const [feedbackSubmitted, setFeedbackSubmitted] = useState(false);
 
   // Language State
-  const [selectedLang, setSelectedLang] = useState('English');
+  const [selectedLanguage, setSelectedLanguage] = useState('English');
+
+  // Badges & Coins State
+  const [coinsBalance, setCoinsBalance] = useState(850);
+  const [redeemedCoins, setRedeemedCoins] = useState(false);
+
+  // Cards & UPI State
+  const [savedCards, setSavedCards] = useState([
+    { id: 'c1', type: 'upi', label: 'Primary Google Pay / PhonePe', value: 'manish@okaxis', isDefault: true },
+    { id: 'c2', type: 'card', label: 'HDFC Platinum Debit Card', value: '•••• •••• •••• 4242', exp: '08/28', isDefault: false }
+  ]);
+  const [showAddCardModal, setShowAddCardModal] = useState(false);
+  const [newUpiId, setNewUpiId] = useState('');
+
+  // Support FAQ Accordion
+  const [openFaqIndex, setOpenFaqIndex] = useState(null);
 
   const userEmail = user?.email || 'customer@aaancart.com';
-  const userName = user?.name || 'Manish Kumar';
+  const userName = name || user?.name || 'Manish Kumar';
 
-  const handleProfileSave = async (e) => {
+  // Profile Save
+  const handleSaveProfile = async (e) => {
     e.preventDefault();
     setProfileSaving(true);
     try {
       if (updateProfile) {
         await updateProfile({ name, phone, city, address });
       }
-      toastSuccess('Profile updated! ✨', 'Your account details have been saved.');
-      setActiveModal(null);
+      toastSuccess('Profile Saved! ✨', 'Your address and profile info have been updated.');
+      setCurrentView('main');
     } catch (err) {
-      toastError('Update failed', err.message || 'Could not update profile');
+      toastError('Update Failed', err.message || 'Could not save profile.');
     } finally {
       setProfileSaving(false);
     }
   };
 
-  const handlePasswordSubmit = async (e) => {
+  // Password Update
+  const handleSavePassword = async (e) => {
     e.preventDefault();
     if (newPassword !== confirmPassword) {
-      return toastError('Passwords do not match', 'Please verify your password.');
+      return toastError('Mismatch', 'Passwords do not match.');
+    }
+    if (newPassword.length < 6) {
+      return toastError('Too Short', 'Password must be at least 6 characters.');
     }
     setPwdSaving(true);
     try {
       await changePassword(currentPassword, newPassword);
-      toastSuccess('Password updated!', 'Your password has been changed.');
-      setActiveModal(null);
+      toastSuccess('Password Changed! 🔐', 'Your security credentials are updated.');
+      setShowPasswordSection(false);
       setCurrentPassword('');
       setNewPassword('');
       setConfirmPassword('');
     } catch (err) {
-      toastError('Password error', err.message);
+      toastError('Password Error', err.message || 'Incorrect current password.');
     } finally {
       setPwdSaving(false);
     }
   };
 
+  // Feedback Submit
   const handleFeedbackSubmit = (e) => {
     e.preventDefault();
-    toastSuccess('Feedback Submitted! 🌟', 'Thank you for helping us improve AAAN Cart.');
-    setActiveModal(null);
-    setFeedbackText('');
+    setFeedbackSubmitted(true);
+    toastSuccess('Feedback Received! 🌟', 'Thank you for helping us improve AAAN Cart.');
+    setTimeout(() => {
+      setCurrentView('main');
+      setFeedbackSubmitted(false);
+      setFeedbackText('');
+    }, 1200);
   };
 
-  return (
-    <div className="modern-ios-profile-page">
-      {/* Top iOS Navigation Bar */}
-      <div className="ios-profile-navbar">
-        <button
-          className="ios-nav-circle-btn"
-          onClick={() => navigate('/')}
-          aria-label="Back"
-        >
-          <ArrowLeft size={19} />
-        </button>
+  // Redeem Coins
+  const handleRedeemCoins = () => {
+    if (redeemedCoins) {
+      setCoinsBalance(850);
+      setRedeemedCoins(false);
+      toastSuccess('Coins Restored', 'Coins removed from checkout discount.');
+    } else {
+      setCoinsBalance(0);
+      setRedeemedCoins(true);
+      toastSuccess('₹850 Discount Applied! 🪙', 'Coupon code COINS850 applied to your next order.');
+    }
+  };
 
-        <h1 className="ios-navbar-title">Profile</h1>
+  // Add UPI / Card
+  const handleAddUpi = (e) => {
+    e.preventDefault();
+    if (!newUpiId.trim() || !newUpiId.includes('@')) {
+      return toastError('Invalid UPI', 'Please enter a valid UPI ID (e.g. name@okhdfcbank).');
+    }
+    setSavedCards((prev) => [
+      ...prev,
+      { id: `c-${Date.now()}`, type: 'upi', label: 'Linked UPI ID', value: newUpiId.trim(), isDefault: false }
+    ]);
+    setNewUpiId('');
+    setShowAddCardModal(false);
+    toastSuccess('UPI Linked! 💳', 'New payment method added successfully.');
+  };
 
-        <button
-          className="ios-nav-circle-btn"
-          onClick={() => navigate('/shop')}
-          aria-label="Search"
-        >
-          <Search size={18} />
-        </button>
-      </div>
+  const handleDeleteCard = (id) => {
+    setSavedCards((prev) => prev.filter((c) => c.id !== id));
+    toastSuccess('Payment Method Removed', 'Account unlinked.');
+  };
 
-      <div className="ios-profile-content-container">
-        
-        {/* User Card Row (Matches Mockup 1 Top) */}
-        <div
-          className="ios-user-hero-card"
-          onClick={() => setActiveModal('edit_profile')}
-          role="button"
-          tabIndex={0}
-        >
-          <div className="user-hero-left">
-            <div className="ios-avatar-badge">
-              {user?.photoUrl ? (
-                <img src={user.photoUrl} alt={userName} className="ios-avatar-img" />
-              ) : (
-                <div className="ios-avatar-art">
-                  <span style={{ fontSize: '1.4rem' }}>👨‍🎨</span>
-                </div>
-              )}
-            </div>
-            
-            <div className="user-hero-info">
-              <h2 className="user-hero-name">{userName}</h2>
-              <p className="user-hero-email">{userEmail}</p>
-            </div>
-          </div>
-
-          <ChevronRight size={18} className="ios-chevron-arrow" />
-        </div>
-
-        {/* Upgrade to Pro Dark Obsidian Banner (Matches Mockup 1) */}
-        <div className="ios-pro-upgrade-card">
-          <div className="pro-card-left">
-            <div className="pro-sparkle-badge">
-              <Sparkles size={22} className="pro-star-icon" />
-            </div>
-            <div className="pro-card-text">
-              <h3 className="pro-title">Upgrade to Pro</h3>
-              <p className="pro-description">
-                Unlock shared budgets, AI insights, receipt scanning, and advanced analytics.
-              </p>
-            </div>
-          </div>
-
-          <button
-            className="pro-upgrade-btn"
-            onClick={() => setActiveModal('pro')}
-          >
-            Upgrade &rsaquo;
+  /* =========================================================
+     SUB-PAGE: 1. SETTINGS & EDIT PROFILE
+     ========================================================= */
+  if (currentView === 'settings') {
+    return (
+      <div className="subpage-view-wrapper">
+        <div className="subpage-top-nav-bar">
+          <button className="subpage-back-btn" onClick={() => setCurrentView('main')}>
+            <ArrowLeft size={20} />
           </button>
+          <h2 className="subpage-title">Personal Settings</h2>
+          <div className="subpage-spacer" />
         </div>
 
-        {/* Group 1: Settings, Subscription, Badges, Linked Cards, Face ID */}
-        <div className="ios-card-stack-group">
-          
-          <div
-            className="ios-stack-row"
-            onClick={() => setActiveModal('edit_profile')}
-            role="button"
-            tabIndex={0}
-          >
-            <div className="stack-row-left">
-              <SettingsIcon size={18} className="stack-row-icon" />
-              <span>Settings</span>
-            </div>
-            <ChevronRight size={17} className="ios-chevron-arrow" />
-          </div>
-
-          <div
-            className="ios-stack-row"
-            onClick={() => setActiveModal('pro')}
-            role="button"
-            tabIndex={0}
-          >
-            <div className="stack-row-left">
-              <CreditCard size={18} className="stack-row-icon" />
-              <span>Plan &amp; Subscription</span>
-            </div>
-            <ChevronRight size={17} className="ios-chevron-arrow" />
-          </div>
-
-          <div
-            className="ios-stack-row"
-            onClick={() => setActiveModal('badges')}
-            role="button"
-            tabIndex={0}
-          >
-            <div className="stack-row-left">
-              <Award size={18} className="stack-row-icon" />
-              <span>Badges</span>
-            </div>
-            <ChevronRight size={17} className="ios-chevron-arrow" />
-          </div>
-
-          <div
-            className="ios-stack-row"
-            onClick={() => setActiveModal('cards')}
-            role="button"
-            tabIndex={0}
-          >
-            <div className="stack-row-left">
-              <Landmark size={18} className="stack-row-icon" />
-              <span>My Debit Cards &amp; Linked Banks</span>
-            </div>
-            <ChevronRight size={17} className="ios-chevron-arrow" />
-          </div>
-
-          {/* Interactive iOS Toggle Switch */}
-          <div className="ios-stack-row toggle-row">
-            <div className="stack-row-left">
-              <Lock size={18} className="stack-row-icon" />
-              <span>Enable finger Print/Face ID</span>
-            </div>
-            <label className="ios-switch-wrapper">
-              <input
-                type="checkbox"
-                checked={biometricEnabled}
-                onChange={(e) => {
-                  setBiometricEnabled(e.target.checked);
-                  if (e.target.checked) {
-                    toastSuccess('Biometrics Enabled 🔒', 'Face ID / Fingerprint enabled for fast login.');
-                  }
-                }}
+        <div className="subpage-content-scroll">
+          {/* Avatar Edit Header */}
+          <div className="settings-avatar-hero">
+            <div className="settings-avatar-ring">
+              <img
+                src={user?.photo || `https://ui-avatars.com/api/?name=${encodeURIComponent(userName)}&background=0F172A&color=fff&size=150`}
+                alt={userName}
+                className="settings-avatar-img"
               />
-              <span className="ios-switch-slider" />
-            </label>
-          </div>
-
-        </div>
-
-        {/* Group 2: Preferences, Privacy Policy, Help & Support */}
-        <div className="ios-card-stack-group">
-          
-          <div
-            className="ios-stack-row"
-            onClick={() => setActiveModal('preferences')}
-            role="button"
-            tabIndex={0}
-          >
-            <div className="stack-row-left">
-              <Sliders size={18} className="stack-row-icon" />
-              <span>Preferences</span>
-            </div>
-            <ChevronRight size={17} className="ios-chevron-arrow" />
-          </div>
-
-          <div
-            className="ios-stack-row"
-            onClick={() => setActiveModal('privacy')}
-            role="button"
-            tabIndex={0}
-          >
-            <div className="stack-row-left">
-              <Shield size={18} className="stack-row-icon" />
-              <span>Privacy Policy</span>
-            </div>
-            <ChevronRight size={17} className="ios-chevron-arrow" />
-          </div>
-
-          <div
-            className="ios-stack-row"
-            onClick={() => {
-              if (onOpenSupport) onOpenSupport();
-              else toastSuccess('AI Support Active 🤖', 'Ask questions in the 3D Support Bot anytime.');
-            }}
-            role="button"
-            tabIndex={0}
-          >
-            <div className="stack-row-left">
-              <HelpCircle size={18} className="stack-row-icon" />
-              <span>Help &amp; Support</span>
-            </div>
-            <ChevronRight size={17} className="ios-chevron-arrow" />
-          </div>
-
-        </div>
-
-        {/* Group 3: Feedback, Language, Admin, Sign Out */}
-        <div className="ios-card-stack-group">
-          
-          <div
-            className="ios-stack-row"
-            onClick={() => setActiveModal('feedback')}
-            role="button"
-            tabIndex={0}
-          >
-            <div className="stack-row-left">
-              <MessageSquare size={18} className="stack-row-icon" />
-              <span>Feedback</span>
-            </div>
-            <ChevronRight size={17} className="ios-chevron-arrow" />
-          </div>
-
-          <div
-            className="ios-stack-row"
-            onClick={() => setActiveModal('language')}
-            role="button"
-            tabIndex={0}
-          >
-            <div className="stack-row-left">
-              <Globe size={18} className="stack-row-icon" />
-              <span>Language</span>
-            </div>
-            <div className="stack-row-right-text">
-              <span>{selectedLang}</span>
-              <ChevronRight size={17} className="ios-chevron-arrow" />
-            </div>
-          </div>
-
-          {isAdmin && (
-            <div
-              className="ios-stack-row"
-              onClick={() => navigate('/admin')}
-              role="button"
-              tabIndex={0}
-            >
-              <div className="stack-row-left">
-                <span>👑</span>
-                <strong style={{ color: '#D97706' }}>Admin Control Center</strong>
-              </div>
-              <ChevronRight size={17} className="ios-chevron-arrow" />
-            </div>
-          )}
-
-          {user && (
-            <div
-              className="ios-stack-row logout-row"
-              onClick={() => {
-                logout();
-                navigate('/');
-              }}
-              role="button"
-              tabIndex={0}
-            >
-              <div className="stack-row-left">
-                <LogOut size={18} color="#EF4444" />
-                <span style={{ color: '#EF4444', fontWeight: 800 }}>Sign Out Account</span>
-              </div>
-              <ChevronRight size={17} className="ios-chevron-arrow" />
-            </div>
-          )}
-
-        </div>
-
-      </div>
-
-      {/* =========================================================
-          MODALS & SHEETS (CENTERED & 100% VISIBLE ABOVE BOTTOM NAV)
-          ========================================================= */}
-
-      {/* 1. Edit Profile Modal */}
-      {activeModal === 'edit_profile' && (
-        <div className="ios-modal-overlay" onClick={() => setActiveModal(null)}>
-          <div className="ios-modal-sheet" onClick={(e) => e.stopPropagation()}>
-            <div className="sheet-header">
-              <h3>Edit Profile</h3>
-              <button onClick={() => setActiveModal(null)} className="sheet-close-btn" aria-label="Close">
-                <X size={18} />
+              <button className="avatar-camera-btn" onClick={() => toastSuccess('Avatar Ready', 'Photo synced from account')}>
+                <Camera size={14} color="#FFFFFF" />
               </button>
             </div>
-            
-            <form onSubmit={handleProfileSave} className="sheet-form">
-              <div className="sheet-field">
-                <label>Full Name</label>
-                <input
-                  type="text"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  placeholder="Your Full Name"
-                  required
-                />
-              </div>
+            <h3 className="settings-user-name">{userName}</h3>
+            <p className="settings-user-email">{userEmail}</p>
+          </div>
 
-              <div className="sheet-field">
-                <label>Phone Number</label>
-                <input
-                  type="tel"
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                  placeholder="e.g. +91 98765 43210"
-                />
-              </div>
+          <form onSubmit={handleSaveProfile} className="subpage-form-card">
+            <h4 className="form-group-heading">Personal Details</h4>
 
-              <div className="sheet-field">
-                <label>Delivery City</label>
+            <div className="input-field-group">
+              <label>Full Name</label>
+              <input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="Enter full name"
+                required
+              />
+            </div>
+
+            <div className="input-field-group">
+              <label>Phone Number (WhatsApp Delivery Alerts)</label>
+              <input
+                type="tel"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                placeholder="+91 Phone number"
+                required
+              />
+            </div>
+
+            <h4 className="form-group-heading" style={{ marginTop: '20px' }}>Delivery Address</h4>
+
+            <div className="input-field-group">
+              <label>Street Address / Door No / Landmark</label>
+              <textarea
+                rows={3}
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
+                placeholder="Door No, Street Name, Landmark"
+                required
+              />
+            </div>
+
+            <div className="input-two-cols">
+              <div className="input-field-group">
+                <label>City</label>
                 <input
                   type="text"
                   value={city}
                   onChange={(e) => setCity(e.target.value)}
                   placeholder="City"
-                />
-              </div>
-
-              <div className="sheet-field">
-                <label>Street Address</label>
-                <input
-                  type="text"
-                  value={address}
-                  onChange={(e) => setAddress(e.target.value)}
-                  placeholder="Flat/House No, Street, Locality"
-                />
-              </div>
-
-              <div className="sheet-actions">
-                <button
-                  type="button"
-                  className="btn-sheet-secondary"
-                  onClick={() => setActiveModal('password')}
-                >
-                  Change Password
-                </button>
-                <button
-                  type="submit"
-                  className="btn-sheet-primary"
-                  disabled={profileSaving}
-                >
-                  {profileSaving ? 'Saving…' : 'Save Changes'}
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-
-      {/* 2. Upgrade to Pro Modal */}
-      {activeModal === 'pro' && (
-        <div className="ios-modal-overlay" onClick={() => setActiveModal(null)}>
-          <div className="ios-modal-sheet pro-sheet" onClick={(e) => e.stopPropagation()}>
-            <div className="sheet-header">
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <Sparkles size={22} color="#0066FF" />
-                <h3 style={{ margin: 0 }}>AAAN Pro Membership</h3>
-              </div>
-              <button onClick={() => setActiveModal(null)} className="sheet-close-btn" aria-label="Close">
-                <X size={18} />
-              </button>
-            </div>
-            <div className="pro-benefits-list">
-              <div className="benefit-item">
-                <Check size={16} color="#10B981" />
-                <span>Unlimited FREE Express Delivery on all 3D Decals</span>
-              </div>
-              <div className="benefit-item">
-                <Check size={16} color="#10B981" />
-                <span>AI Interior Room Visualizer &amp; Wall Placement</span>
-              </div>
-              <div className="benefit-item">
-                <Check size={16} color="#10B981" />
-                <span>Priority Order Dispatch &amp; VIP Support Hotline</span>
-              </div>
-              <div className="benefit-item">
-                <Check size={16} color="#10B981" />
-                <span>Exclusive 20% Member-Only Catalog Discounts</span>
-              </div>
-            </div>
-            <button
-              className="btn-sheet-primary"
-              onClick={() => {
-                toastSuccess('Welcome to Pro! 🌟', 'You have activated AAAN Pro VIP benefits.');
-                setActiveModal(null);
-              }}
-            >
-              Activate Pro Membership (₹499/yr)
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* 3. Badges & Rewards Modal */}
-      {activeModal === 'badges' && (
-        <div className="ios-modal-overlay" onClick={() => setActiveModal(null)}>
-          <div className="ios-modal-sheet" onClick={(e) => e.stopPropagation()}>
-            <div className="sheet-header">
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <Award size={22} color="#F59E0B" />
-                <h3 style={{ margin: 0 }}>My Badges &amp; Coins</h3>
-              </div>
-              <button onClick={() => setActiveModal(null)} className="sheet-close-btn">
-                <X size={18} />
-              </button>
-            </div>
-            
-            <div className="pro-benefits-list">
-              <div className="benefit-item">
-                <span style={{ fontSize: '1.4rem' }}>🥇</span>
-                <div>
-                  <strong>Gold VIP Shopper</strong>
-                  <p style={{ margin: 0, fontSize: '0.74rem', color: '#64748B' }}>Unlocked after 3 completed purchases</p>
-                </div>
-              </div>
-              <div className="benefit-item">
-                <span style={{ fontSize: '1.4rem' }}>🌿</span>
-                <div>
-                  <strong>Eco-Friendly Wall Decorator</strong>
-                  <p style={{ margin: 0, fontSize: '0.74rem', color: '#64748B' }}>Botanical stickers collector</p>
-                </div>
-              </div>
-              <div className="benefit-item">
-                <span style={{ fontSize: '1.4rem' }}>🪙</span>
-                <div>
-                  <strong>850 AAAN Coins Balance</strong>
-                  <p style={{ margin: 0, fontSize: '0.74rem', color: '#64748B' }}>Worth ₹850 discount on your next checkout</p>
-                </div>
-              </div>
-            </div>
-
-            <button className="btn-sheet-primary" onClick={() => setActiveModal(null)}>
-              Done
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* 4. Saved Payment Cards & UPI Modal */}
-      {activeModal === 'cards' && (
-        <div className="ios-modal-overlay" onClick={() => setActiveModal(null)}>
-          <div className="ios-modal-sheet" onClick={(e) => e.stopPropagation()}>
-            <div className="sheet-header">
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <Landmark size={20} color="#0066FF" />
-                <h3 style={{ margin: 0 }}>Saved Payment Methods</h3>
-              </div>
-              <button onClick={() => setActiveModal(null)} className="sheet-close-btn">
-                <X size={18} />
-              </button>
-            </div>
-            
-            <div className="pro-benefits-list">
-              <div className="benefit-item">
-                <span style={{ fontSize: '1.4rem' }}>💳</span>
-                <div style={{ flex: 1 }}>
-                  <strong>UPI ID: {userEmail?.split('@')[0]}@okaxis</strong>
-                  <p style={{ margin: 0, fontSize: '0.74rem', color: '#10B981', fontWeight: 700 }}>Verified for Instant 1-Tap Checkout</p>
-                </div>
-              </div>
-              <div className="benefit-item">
-                <span style={{ fontSize: '1.4rem' }}>🏛️</span>
-                <div style={{ flex: 1 }}>
-                  <strong>HDFC / ICICI Net Banking Linked</strong>
-                  <p style={{ margin: 0, fontSize: '0.74rem', color: '#64748B' }}>Razorpay 256-bit Encrypted</p>
-                </div>
-              </div>
-            </div>
-
-            <button
-              className="btn-sheet-secondary"
-              style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}
-              onClick={() => toastSuccess('Add New Card', 'Enter card details at checkout to save securely.')}
-            >
-              <Plus size={16} /> Add New UPI / Card
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* 5. Preferences Modal */}
-      {activeModal === 'preferences' && (
-        <div className="ios-modal-overlay" onClick={() => setActiveModal(null)}>
-          <div className="ios-modal-sheet" onClick={(e) => e.stopPropagation()}>
-            <div className="sheet-header">
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <Sliders size={20} color="#0066FF" />
-                <h3 style={{ margin: 0 }}>Notification Preferences</h3>
-              </div>
-              <button onClick={() => setActiveModal(null)} className="sheet-close-btn">
-                <X size={18} />
-              </button>
-            </div>
-
-            <div className="pro-benefits-list">
-              <div className="benefit-item" style={{ justifyContent: 'space-between' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                  <Truck size={18} color="#64748B" />
-                  <span>WhatsApp Order Tracking</span>
-                </div>
-                <label className="ios-switch-wrapper">
-                  <input
-                    type="checkbox"
-                    checked={whatsappAlerts}
-                    onChange={(e) => setWhatsappAlerts(e.target.checked)}
-                  />
-                  <span className="ios-switch-slider" />
-                </label>
-              </div>
-
-              <div className="benefit-item" style={{ justifyContent: 'space-between' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                  <Bell size={18} color="#64748B" />
-                  <span>SMS Dispatch Alerts</span>
-                </div>
-                <label className="ios-switch-wrapper">
-                  <input
-                    type="checkbox"
-                    checked={smsAlerts}
-                    onChange={(e) => setSmsAlerts(e.target.checked)}
-                  />
-                  <span className="ios-switch-slider" />
-                </label>
-              </div>
-
-              <div className="benefit-item" style={{ justifyContent: 'space-between' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                  <Sparkles size={18} color="#64748B" />
-                  <span>Exclusive Deals &amp; Drops</span>
-                </div>
-                <label className="ios-switch-wrapper">
-                  <input
-                    type="checkbox"
-                    checked={promoEmails}
-                    onChange={(e) => setPromoEmails(e.target.checked)}
-                  />
-                  <span className="ios-switch-slider" />
-                </label>
-              </div>
-            </div>
-
-            <button
-              className="btn-sheet-primary"
-              onClick={() => {
-                toastSuccess('Preferences Saved! ✅', 'Notification settings updated.');
-                setActiveModal(null);
-              }}
-            >
-              Save Preferences
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* 6. Privacy Policy Modal */}
-      {activeModal === 'privacy' && (
-        <div className="ios-modal-overlay" onClick={() => setActiveModal(null)}>
-          <div className="ios-modal-sheet" onClick={(e) => e.stopPropagation()}>
-            <div className="sheet-header">
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <Shield size={20} color="#10B981" />
-                <h3 style={{ margin: 0 }}>Privacy &amp; Security</h3>
-              </div>
-              <button onClick={() => setActiveModal(null)} className="sheet-close-btn">
-                <X size={18} />
-              </button>
-            </div>
-
-            <div style={{ fontSize: '0.82rem', color: '#475569', lineHeight: 1.5, display: 'flex', flexDirection: 'column', gap: '10px' }}>
-              <p><strong>🔒 256-Bit SSL Encryption:</strong> All transactions and account credentials are encrypted with bank-grade security protocols.</p>
-              <p><strong>🛡️ 30-Day Guarantee:</strong> Easy doorstep returns and instant refunds on all 3D Wall Decor orders.</p>
-              <p><strong>🍪 Zero Data Sharing:</strong> We never sell or share your personal address or payment details with third parties.</p>
-            </div>
-
-            <button className="btn-sheet-primary" style={{ marginTop: '16px' }} onClick={() => setActiveModal(null)}>
-              I Understand
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* 7. Feedback Modal */}
-      {activeModal === 'feedback' && (
-        <div className="ios-modal-overlay" onClick={() => setActiveModal(null)}>
-          <div className="ios-modal-sheet" onClick={(e) => e.stopPropagation()}>
-            <div className="sheet-header">
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <MessageSquare size={20} color="#0066FF" />
-                <h3 style={{ margin: 0 }}>Rate &amp; Feedback</h3>
-              </div>
-              <button onClick={() => setActiveModal(null)} className="sheet-close-btn">
-                <X size={18} />
-              </button>
-            </div>
-
-            <form onSubmit={handleFeedbackSubmit} className="sheet-form">
-              <div style={{ display: 'flex', justifyContent: 'center', gap: '8px', margin: '8px 0 14px' }}>
-                {[1, 2, 3, 4, 5].map((num) => (
-                  <button
-                    key={num}
-                    type="button"
-                    style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
-                    onClick={() => setRating(num)}
-                  >
-                    <Star
-                      size={28}
-                      color={num <= rating ? '#F59E0B' : '#CBD5E1'}
-                      fill={num <= rating ? '#F59E0B' : 'none'}
-                    />
-                  </button>
-                ))}
-              </div>
-
-              <div className="sheet-field">
-                <label>Your Feedback / Suggestions</label>
-                <textarea
-                  rows={3}
-                  placeholder="How can we make your shopping experience better?"
-                  value={feedbackText}
-                  onChange={(e) => setFeedbackText(e.target.value)}
-                  style={{ padding: '10px 14px', borderRadius: '14px', border: '1.5px solid #E2E8F0', outline: 'none', fontSize: '0.85rem' }}
                   required
                 />
               </div>
-
-              <button type="submit" className="btn-sheet-primary">
-                Submit Feedback
-              </button>
-            </form>
-          </div>
-        </div>
-      )}
-
-      {/* 8. Language Modal */}
-      {activeModal === 'language' && (
-        <div className="ios-modal-overlay" onClick={() => setActiveModal(null)}>
-          <div className="ios-modal-sheet" onClick={(e) => e.stopPropagation()}>
-            <div className="sheet-header">
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <Globe size={20} color="#0066FF" />
-                <h3 style={{ margin: 0 }}>Select Language</h3>
+              <div className="input-field-group">
+                <label>Pincode</label>
+                <input
+                  type="text"
+                  value={pincode}
+                  onChange={(e) => setPincode(e.target.value)}
+                  placeholder="600001"
+                  required
+                />
               </div>
-              <button onClick={() => setActiveModal(null)} className="sheet-close-btn">
-                <X size={18} />
-              </button>
             </div>
 
-            <div className="pro-benefits-list">
-              {[
-                { name: 'English', native: 'English' },
-                { name: 'Hindi', native: 'हिन्दी' },
-                { name: 'Tamil', native: 'தமிழ்' },
-                { name: 'Telugu', native: 'తెలుగు' }
-              ].map((lang) => (
-                <div
-                  key={lang.name}
-                  className="benefit-item"
-                  style={{
-                    cursor: 'pointer',
-                    justifyContent: 'space-between',
-                    padding: '8px 12px',
-                    borderRadius: '12px',
-                    background: selectedLang === lang.name ? '#EFF6FF' : 'transparent'
-                  }}
-                  onClick={() => {
-                    setSelectedLang(lang.name);
-                    toastSuccess('Language Updated', `Switched to ${lang.name}`);
-                    setActiveModal(null);
-                  }}
-                >
-                  <div>
-                    <strong>{lang.name}</strong>
-                    <span style={{ marginLeft: '6px', color: '#64748B', fontSize: '0.8rem' }}>({lang.native})</span>
+            <div className="input-field-group">
+              <label>State</label>
+              <input
+                type="text"
+                value={stateName}
+                onChange={(e) => setStateName(e.target.value)}
+                placeholder="State"
+                required
+              />
+            </div>
+
+            <button type="submit" className="subpage-primary-action-btn" disabled={profileSaving}>
+              {profileSaving ? 'Saving Changes...' : 'Save Profile Details'}
+            </button>
+          </form>
+
+          {/* Change Password Card */}
+          <div className="subpage-form-card" style={{ marginTop: '16px' }}>
+            <div
+              className="password-toggle-header"
+              onClick={() => setShowPasswordSection(!showPasswordSection)}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <KeyRound size={18} color="#0066FF" />
+                <h4 className="form-group-heading" style={{ margin: 0 }}>Change Security Password</h4>
+              </div>
+              <ChevronDown size={18} style={{ transform: showPasswordSection ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s' }} />
+            </div>
+
+            {showPasswordSection && (
+              <form onSubmit={handleSavePassword} style={{ marginTop: '14px' }}>
+                <div className="input-field-group">
+                  <label>Current Password</label>
+                  <input
+                    type="password"
+                    value={currentPassword}
+                    onChange={(e) => setCurrentPassword(e.target.value)}
+                    placeholder="••••••••"
+                    required
+                  />
+                </div>
+
+                <div className="input-field-group">
+                  <label>New Password</label>
+                  <input
+                    type="password"
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                    placeholder="Min 6 characters"
+                    required
+                  />
+                </div>
+
+                <div className="input-field-group">
+                  <label>Confirm New Password</label>
+                  <input
+                    type="password"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    placeholder="Re-type new password"
+                    required
+                  />
+                </div>
+
+                <button type="submit" className="subpage-secondary-action-btn" disabled={pwdSaving}>
+                  {pwdSaving ? 'Updating...' : 'Update Password'}
+                </button>
+              </form>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  /* =========================================================
+     SUB-PAGE: 2. PLAN & SUBSCRIPTION
+     ========================================================= */
+  if (currentView === 'subscription') {
+    return (
+      <div className="subpage-view-wrapper">
+        <div className="subpage-top-nav-bar">
+          <button className="subpage-back-btn" onClick={() => setCurrentView('main')}>
+            <ArrowLeft size={20} />
+          </button>
+          <h2 className="subpage-title">Plan &amp; Subscription</h2>
+          <div className="subpage-spacer" />
+        </div>
+
+        <div className="subpage-content-scroll">
+          {/* Active VIP Tier Card */}
+          <div className="pro-subscription-hero-card">
+            <div className="pro-badge-pill">
+              <Sparkles size={14} color="#FFE600" />
+              <span>ACTIVE VIP PRO</span>
+            </div>
+            <h3 className="pro-plan-name">AAAN Gold Club</h3>
+            <p className="pro-plan-expiry">Valid until August 26, 2027 • Auto-renews yearly</p>
+
+            <div className="pro-perks-checklist">
+              <div className="pro-perk-item">
+                <CheckCircle2 size={16} color="#10B981" />
+                <span>20% Extra Member Discount on entire 3D Wall Art Catalog</span>
+              </div>
+              <div className="pro-perk-item">
+                <CheckCircle2 size={16} color="#10B981" />
+                <span>Free 24h Express Air Dispatch on every order</span>
+              </div>
+              <div className="pro-perk-item">
+                <CheckCircle2 size={16} color="#10B981" />
+                <span>Free Doorstep Replacement &amp; 30-Day Hassle-Free Returns</span>
+              </div>
+              <div className="pro-perk-item">
+                <CheckCircle2 size={16} color="#10B981" />
+                <span>Priority 24/7 Dedicated Support &amp; AI Room Visualizer</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Billing & Invoices */}
+          <div className="subpage-form-card" style={{ marginTop: '16px' }}>
+            <h4 className="form-group-heading">Recent VIP Invoices</h4>
+            <div className="invoice-row-item">
+              <div>
+                <strong>Annual Gold VIP Membership</strong>
+                <p className="invoice-subtext">Aug 26, 2026 • UPI #TXN9928174</p>
+              </div>
+              <span className="invoice-price">₹499.00 <span className="invoice-paid-tag">Paid</span></span>
+            </div>
+          </div>
+
+          <button
+            className="subpage-primary-action-btn"
+            style={{ marginTop: '20px' }}
+            onClick={() => toastSuccess('Membership Active', 'Your Gold VIP Plan is fully active!')}
+          >
+            Manage Membership
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  /* =========================================================
+     SUB-PAGE: 3. BADGES & REWARDS
+     ========================================================= */
+  if (currentView === 'badges') {
+    return (
+      <div className="subpage-view-wrapper">
+        <div className="subpage-top-nav-bar">
+          <button className="subpage-back-btn" onClick={() => setCurrentView('main')}>
+            <ArrowLeft size={20} />
+          </button>
+          <h2 className="subpage-title">Badges &amp; Rewards</h2>
+          <div className="subpage-spacer" />
+        </div>
+
+        <div className="subpage-content-scroll">
+          {/* Coins Balance Hero */}
+          <div className="coins-balance-hero-card">
+            <div className="coins-title-row">
+              <Award size={28} color="#FFE600" />
+              <div>
+                <span className="coins-label">Total Reward Balance</span>
+                <h3 className="coins-amount">{coinsBalance} AAAN Coins</h3>
+              </div>
+            </div>
+            <p className="coins-conversion-text">1 Coin = ₹1.00 Discount on next purchase</p>
+            <button className="redeem-coins-action-btn" onClick={handleRedeemCoins}>
+              {redeemedCoins ? '✓ ₹850 Applied (Click to remove)' : 'Redeem 850 Coins for ₹850 Off'}
+            </button>
+          </div>
+
+          {/* Unlocked Badges */}
+          <div className="subpage-form-card" style={{ marginTop: '16px' }}>
+            <h4 className="form-group-heading">Unlocked Achievement Badges</h4>
+
+            <div className="badge-list-container">
+              <div className="badge-card-item is-unlocked">
+                <div className="badge-icon-circle gold-circle">🥇</div>
+                <div className="badge-info">
+                  <strong>Gold VIP Shopper</strong>
+                  <p>Awarded for 3+ successful home decor orders</p>
+                </div>
+                <span className="badge-status-tag">Unlocked</span>
+              </div>
+
+              <div className="badge-card-item is-unlocked">
+                <div className="badge-icon-circle green-circle">🌿</div>
+                <div className="badge-info">
+                  <strong>Botanical Art Collector</strong>
+                  <p>Decorated home with 3D Botanical Wall Stickers</p>
+                </div>
+                <span className="badge-status-tag">Unlocked</span>
+              </div>
+
+              <div className="badge-card-item is-unlocked">
+                <div className="badge-icon-circle blue-circle">💎</div>
+                <div className="badge-info">
+                  <strong>Verified Reviewer</strong>
+                  <p>Shared helpful reviews with photo evidence</p>
+                </div>
+                <span className="badge-status-tag">Unlocked</span>
+              </div>
+
+              <div className="badge-card-item is-locked">
+                <div className="badge-icon-circle gray-circle">👑</div>
+                <div className="badge-info">
+                  <strong>Decor Ambassador</strong>
+                  <p>Refer 5 friends to unlock ₹2,000 shopping coupon</p>
+                </div>
+                <span className="badge-status-tag locked-tag">2/5 Done</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  /* =========================================================
+     SUB-PAGE: 4. MY DEBIT CARDS & LINKED BANKS
+     ========================================================= */
+  if (currentView === 'cards') {
+    return (
+      <div className="subpage-view-wrapper">
+        <div className="subpage-top-nav-bar">
+          <button className="subpage-back-btn" onClick={() => setCurrentView('main')}>
+            <ArrowLeft size={20} />
+          </button>
+          <h2 className="subpage-title">Payment Methods</h2>
+          <div className="subpage-spacer" />
+        </div>
+
+        <div className="subpage-content-scroll">
+          <div className="subpage-form-card">
+            <h4 className="form-group-heading">Saved 1-Tap Payment Methods</h4>
+
+            <div className="payment-methods-list">
+              {savedCards.map((c) => (
+                <div key={c.id} className="payment-method-card">
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                    <div className="pay-method-icon">
+                      {c.type === 'upi' ? <Smartphone size={20} color="#0066FF" /> : <CreditCard size={20} color="#10B981" />}
+                    </div>
+                    <div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                        <strong>{c.label}</strong>
+                        {c.isDefault && <span className="default-pill">Default</span>}
+                      </div>
+                      <p className="pay-subtext">{c.value} {c.exp ? `• Exp ${c.exp}` : ''}</p>
+                    </div>
                   </div>
-                  {selectedLang === lang.name && <Check size={18} color="#0066FF" />}
+                  <button className="delete-pay-btn" onClick={() => handleDeleteCard(c.id)} aria-label="Delete">
+                    <Trash2 size={16} />
+                  </button>
                 </div>
               ))}
             </div>
+
+            <button
+              className="add-payment-outline-btn"
+              onClick={() => setShowAddCardModal(true)}
+            >
+              <Plus size={16} />
+              <span>Link New UPI ID or Card</span>
+            </button>
+          </div>
+
+          {/* Add Card Modal */}
+          {showAddCardModal && (
+            <div className="subpage-form-card" style={{ marginTop: '16px', borderColor: '#0066FF' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+                <h4 className="form-group-heading" style={{ margin: 0 }}>Add UPI ID</h4>
+                <button onClick={() => setShowAddCardModal(false)} style={{ background: 'none', border: 'none' }}>
+                  <X size={18} />
+                </button>
+              </div>
+
+              <form onSubmit={handleAddUpi}>
+                <div className="input-field-group">
+                  <label>UPI ID (Google Pay / PhonePe / Paytm)</label>
+                  <input
+                    type="text"
+                    value={newUpiId}
+                    onChange={(e) => setNewUpiId(e.target.value)}
+                    placeholder="yourname@okaxis"
+                    required
+                  />
+                </div>
+                <button type="submit" className="subpage-primary-action-btn">
+                  Verify &amp; Link UPI
+                </button>
+              </form>
+            </div>
+          )}
+
+          {/* Security Guarantee Note */}
+          <div className="security-notice-pill">
+            <ShieldCheck size={16} color="#10B981" />
+            <span>256-bit encrypted. We never store CVV or bank passwords.</span>
           </div>
         </div>
-      )}
+      </div>
+    );
+  }
 
-      {/* 9. Password Modal */}
-      {activeModal === 'password' && (
-        <div className="ios-modal-overlay" onClick={() => setActiveModal(null)}>
-          <div className="ios-modal-sheet" onClick={(e) => e.stopPropagation()}>
-            <div className="sheet-header">
-              <h3>Change Password</h3>
-              <button onClick={() => setActiveModal(null)} className="sheet-close-btn">
-                <X size={18} />
+  /* =========================================================
+     SUB-PAGE: 5. PREFERENCES
+     ========================================================= */
+  if (currentView === 'preferences') {
+    return (
+      <div className="subpage-view-wrapper">
+        <div className="subpage-top-nav-bar">
+          <button className="subpage-back-btn" onClick={() => setCurrentView('main')}>
+            <ArrowLeft size={20} />
+          </button>
+          <h2 className="subpage-title">Preferences</h2>
+          <div className="subpage-spacer" />
+        </div>
+
+        <div className="subpage-content-scroll">
+          <div className="subpage-form-card">
+            <h4 className="form-group-heading">Notifications &amp; Alerts</h4>
+
+            <div className="preference-toggle-row">
+              <div>
+                <strong>WhatsApp Order Tracking</strong>
+                <p className="pref-subtext">Receive real-time tracking links &amp; out-for-delivery alerts</p>
+              </div>
+              <label className="ios-toggle-switch">
+                <input
+                  type="checkbox"
+                  checked={whatsappAlerts}
+                  onChange={(e) => {
+                    setWhatsappAlerts(e.target.checked);
+                    toastSuccess('Saved', 'WhatsApp preferences updated.');
+                  }}
+                />
+                <span className="ios-toggle-slider" />
+              </label>
+            </div>
+
+            <div className="preference-toggle-row">
+              <div>
+                <strong>SMS Dispatch Notifications</strong>
+                <p className="pref-subtext">SMS alerts when order leaves fulfillment center</p>
+              </div>
+              <label className="ios-toggle-switch">
+                <input
+                  type="checkbox"
+                  checked={smsAlerts}
+                  onChange={(e) => {
+                    setSmsAlerts(e.target.checked);
+                    toastSuccess('Saved', 'SMS preferences updated.');
+                  }}
+                />
+                <span className="ios-toggle-slider" />
+              </label>
+            </div>
+
+            <div className="preference-toggle-row">
+              <div>
+                <strong>Promotional Newsletters &amp; Offers</strong>
+                <p className="pref-subtext">Weekly drops, flash sales, and clearance discounts</p>
+              </div>
+              <label className="ios-toggle-switch">
+                <input
+                  type="checkbox"
+                  checked={promoEmails}
+                  onChange={(e) => {
+                    setPromoEmails(e.target.checked);
+                    toastSuccess('Saved', 'Email preferences updated.');
+                  }}
+                />
+                <span className="ios-toggle-slider" />
+              </label>
+            </div>
+          </div>
+
+          <div className="subpage-form-card" style={{ marginTop: '16px' }}>
+            <h4 className="form-group-heading">Currency Display</h4>
+            <div className="currency-selector-row">
+              <button
+                className={`currency-chip ${currency === 'INR' ? 'active' : ''}`}
+                onClick={() => {
+                  setCurrency('INR');
+                  toastSuccess('Currency set to Indian Rupee (₹)');
+                }}
+              >
+                ₹ INR (India)
+              </button>
+              <button
+                className={`currency-chip ${currency === 'USD' ? 'active' : ''}`}
+                onClick={() => {
+                  setCurrency('USD');
+                  toastSuccess('Currency set to USD ($)');
+                }}
+              >
+                $ USD (Global)
               </button>
             </div>
-            <form onSubmit={handlePasswordSubmit} className="sheet-form">
-              <div className="sheet-field">
-                <label>Current Password</label>
-                <input
-                  type="password"
-                  value={currentPassword}
-                  onChange={(e) => setCurrentPassword(e.target.value)}
-                  placeholder="••••••••"
-                  required
-                />
-              </div>
-              <div className="sheet-field">
-                <label>New Password</label>
-                <input
-                  type="password"
-                  value={newPassword}
-                  onChange={(e) => setNewPassword(e.target.value)}
-                  placeholder="••••••••"
-                  required
-                />
-              </div>
-              <div className="sheet-field">
-                <label>Confirm New Password</label>
-                <input
-                  type="password"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  placeholder="••••••••"
-                  required
-                />
-              </div>
-              <button type="submit" className="btn-sheet-primary" disabled={pwdSaving}>
-                {pwdSaving ? 'Updating…' : 'Update Password'}
-              </button>
-            </form>
           </div>
         </div>
-      )}
+      </div>
+    );
+  }
 
+  /* =========================================================
+     SUB-PAGE: 6. PRIVACY POLICY & SECURITY
+     ========================================================= */
+  if (currentView === 'privacy') {
+    return (
+      <div className="subpage-view-wrapper">
+        <div className="subpage-top-nav-bar">
+          <button className="subpage-back-btn" onClick={() => setCurrentView('main')}>
+            <ArrowLeft size={20} />
+          </button>
+          <h2 className="subpage-title">Privacy Policy</h2>
+          <div className="subpage-spacer" />
+        </div>
+
+        <div className="subpage-content-scroll">
+          <div className="subpage-form-card">
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
+              <ShieldCheck size={24} color="#10B981" />
+              <h3 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 900 }}>Your Privacy is 100% Protected</h3>
+            </div>
+
+            <p className="privacy-body-p">
+              At <strong>AAAN Cart</strong>, we prioritize the protection of your personal information. We never sell, rent, or trade your contact or delivery details to third parties.
+            </p>
+
+            <h4 className="privacy-subheading">1. Data Encryption &amp; Storage</h4>
+            <p className="privacy-body-p">
+              All transactions and profile data are protected via industry-standard 256-Bit SSL TLS encryption. Payment processing is tokenized directly via Razorpay/Stripe compliant gateways.
+            </p>
+
+            <h4 className="privacy-subheading">2. Delivery Coordination</h4>
+            <p className="privacy-body-p">
+              Your name, delivery address, and phone number are only shared with our verified courier partners (Delhivery, BlueDart, Xpressbees) to ensure timely doorstep delivery.
+            </p>
+
+            <h4 className="privacy-subheading">3. 30-Day Money-Back Guarantee</h4>
+            <p className="privacy-body-p">
+              If your 3D Wall Stickers or Decals arrive damaged or don't match your expectations, we offer free doorstep replacement or 100% instant refund within 30 days.
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  /* =========================================================
+     SUB-PAGE: 7. HELP & SUPPORT
+     ========================================================= */
+  if (currentView === 'help') {
+    return (
+      <div className="subpage-view-wrapper">
+        <div className="subpage-top-nav-bar">
+          <button className="subpage-back-btn" onClick={() => setCurrentView('main')}>
+            <ArrowLeft size={20} />
+          </button>
+          <h2 className="subpage-title">Help &amp; Support</h2>
+          <div className="subpage-spacer" />
+        </div>
+
+        <div className="subpage-content-scroll">
+          {/* Support Actions Grid */}
+          <div className="support-actions-grid">
+            <div
+              className="support-action-card"
+              onClick={() => {
+                window.dispatchEvent(new CustomEvent('open-ai-chatbot'));
+                if (onOpenSupport) onOpenSupport();
+              }}
+            >
+              <div className="support-icon-pod" style={{ background: '#EEF2FF' }}>
+                <Sparkles size={20} color="#0066FF" />
+              </div>
+              <strong>3D AI Support Bot</strong>
+              <p>Instant answers on tracking &amp; returns</p>
+            </div>
+
+            <a
+              href="https://wa.me/918073786650?text=Hi%20AAAN%20Cart,%20I%20need%20help%20with%20my%20order"
+              target="_blank"
+              rel="noreferrer"
+              className="support-action-card"
+            >
+              <div className="support-icon-pod" style={{ background: '#ECFDF5' }}>
+                <MessageSquare size={20} color="#10B981" />
+              </div>
+              <strong>WhatsApp Support</strong>
+              <p>Chat live with verified support</p>
+            </a>
+
+            <a href="tel:+918073786650" className="support-action-card">
+              <div className="support-icon-pod" style={{ background: '#FEF3C7' }}>
+                <Phone size={20} color="#D97706" />
+              </div>
+              <strong>Call Hotline</strong>
+              <p>+91 80737 86650</p>
+            </a>
+
+            <div
+              className="support-action-card"
+              onClick={() => navigate('/contact')}
+            >
+              <div className="support-icon-pod" style={{ background: '#F3E8FF' }}>
+                <Mail size={20} color="#7C3AED" />
+              </div>
+              <strong>Submit Ticket</strong>
+              <p>Priority email resolution</p>
+            </div>
+          </div>
+
+          {/* Quick FAQ Accordion */}
+          <div className="subpage-form-card" style={{ marginTop: '16px' }}>
+            <h4 className="form-group-heading">Frequently Asked Questions</h4>
+
+            {[
+              { q: 'How long does delivery take across India?', a: 'Standard orders dispatch in 24 hours and arrive in 3-5 business days. Gold VIP members receive Express 48h delivery.' },
+              { q: 'Are the 3D wall stickers removable and reusable?', a: 'Yes! Our premium acrylic & vinyl adhesive leaves zero residue on painted walls, tiles, glass, or wooden surfaces.' },
+              { q: 'How do I request a return or replacement?', a: 'Tap the 3D AI Support Bot or message us on WhatsApp with your Order ID for instant doorstep replacement.' }
+            ].map((faq, idx) => (
+              <div
+                key={idx}
+                className="faq-accordion-item"
+                onClick={() => setOpenFaqIndex(openFaqIndex === idx ? null : idx)}
+              >
+                <div className="faq-q-line">
+                  <strong>{faq.q}</strong>
+                  <ChevronDown size={16} style={{ transform: openFaqIndex === idx ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s' }} />
+                </div>
+                {openFaqIndex === idx && <p className="faq-a-text">{faq.a}</p>}
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  /* =========================================================
+     SUB-PAGE: 8. FEEDBACK & SUGGESTIONS
+     ========================================================= */
+  if (currentView === 'feedback') {
+    return (
+      <div className="subpage-view-wrapper">
+        <div className="subpage-top-nav-bar">
+          <button className="subpage-back-btn" onClick={() => setCurrentView('main')}>
+            <ArrowLeft size={20} />
+          </button>
+          <h2 className="subpage-title">Share Feedback</h2>
+          <div className="subpage-spacer" />
+        </div>
+
+        <div className="subpage-content-scroll">
+          <form onSubmit={handleFeedbackSubmit} className="subpage-form-card">
+            <div style={{ textAlign: 'center', marginBottom: '16px' }}>
+              <h3 style={{ margin: '0 0 6px 0', fontSize: '1.2rem', fontWeight: 900 }}>How was your experience?</h3>
+              <p style={{ margin: 0, fontSize: '0.85rem', color: '#64748B' }}>Your review helps us craft better 3D wall decor</p>
+            </div>
+
+            {/* 5-Star Interactive Selector */}
+            <div className="star-rating-row">
+              {[1, 2, 3, 4, 5].map((s) => (
+                <button
+                  key={s}
+                  type="button"
+                  className="star-rating-btn"
+                  onClick={() => setFeedbackRating(s)}
+                >
+                  <Star
+                    size={32}
+                    color="#FFD700"
+                    fill={s <= feedbackRating ? '#FFD700' : 'none'}
+                  />
+                </button>
+              ))}
+            </div>
+
+            {/* Category Chips */}
+            <label style={{ fontSize: '0.82rem', fontWeight: 700, color: '#475569', marginBottom: '8px', display: 'block' }}>
+              Feedback Category
+            </label>
+            <div className="feedback-chips-row">
+              {['App Experience', 'Product Quality', 'Delivery Speed', 'Customer Support'].map((cat) => (
+                <button
+                  key={cat}
+                  type="button"
+                  className={`feedback-chip ${feedbackCategory === cat ? 'active' : ''}`}
+                  onClick={() => setFeedbackCategory(cat)}
+                >
+                  {cat}
+                </button>
+              ))}
+            </div>
+
+            <div className="input-field-group" style={{ marginTop: '16px' }}>
+              <label>Your Comments &amp; Suggestions</label>
+              <textarea
+                rows={4}
+                value={feedbackText}
+                onChange={(e) => setFeedbackText(e.target.value)}
+                placeholder="Tell us what you loved or how we can improve..."
+                required
+              />
+            </div>
+
+            <button type="submit" className="subpage-primary-action-btn">
+              {feedbackSubmitted ? 'Thank You!' : 'Submit Review'}
+            </button>
+          </form>
+        </div>
+      </div>
+    );
+  }
+
+  /* =========================================================
+     SUB-PAGE: 9. LANGUAGE SELECTION
+     ========================================================= */
+  if (currentView === 'language') {
+    return (
+      <div className="subpage-view-wrapper">
+        <div className="subpage-top-nav-bar">
+          <button className="subpage-back-btn" onClick={() => setCurrentView('main')}>
+            <ArrowLeft size={20} />
+          </button>
+          <h2 className="subpage-title">Language</h2>
+          <div className="subpage-spacer" />
+        </div>
+
+        <div className="subpage-content-scroll">
+          <div className="subpage-form-card">
+            <h4 className="form-group-heading">Select App Language</h4>
+
+            {[
+              { label: 'English', sub: 'Default' },
+              { label: 'हिन्दी (Hindi)', sub: 'भारत' },
+              { label: 'தமிழ் (Tamil)', sub: 'தமிழ்நாடு' },
+              { label: 'తెలుగు (Telugu)', sub: 'ఆంధ్రప్రదేశ్ & తెలంగాణ' },
+              { label: 'മലയാളം (Malayalam)', sub: 'കേരളം' }
+            ].map((lang) => (
+              <div
+                key={lang.label}
+                className={`language-option-row ${selectedLanguage === lang.label ? 'is-selected' : ''}`}
+                onClick={() => {
+                  setSelectedLanguage(lang.label);
+                  toastSuccess('Language Updated', `App language set to ${lang.label}`);
+                  setTimeout(() => setCurrentView('main'), 300);
+                }}
+              >
+                <div>
+                  <strong>{lang.label}</strong>
+                  <p className="lang-subtext">{lang.sub}</p>
+                </div>
+                {selectedLanguage === lang.label && <Check size={18} color="#0066FF" />}
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  /* =========================================================
+     MAIN VIEW (Exact Match to User's Uploaded Image 2)
+     ========================================================= */
+  return (
+    <div className="modern-user-profile-page">
+      <div className="modern-user-profile-container">
+
+        {/* Top Header Bar with Back Button */}
+        <div className="profile-app-top-bar">
+          <button
+            className="profile-top-back-btn"
+            onClick={() => navigate('/')}
+            aria-label="Back to Home"
+          >
+            <ArrowLeft size={20} />
+          </button>
+          <h1 className="profile-app-title">Profile</h1>
+          <div className="profile-top-spacer" />
+        </div>
+
+        {/* User Card */}
+        <div className="user-profile-identity-card">
+          <div className="profile-avatar-circle">
+            <img
+              src={user?.photo || `https://ui-avatars.com/api/?name=${encodeURIComponent(userName)}&background=0F172A&color=fff&size=150`}
+              alt={userName}
+              className="profile-real-img"
+            />
+          </div>
+          <div className="profile-identity-details">
+            <h2 className="profile-real-name">{userName}</h2>
+            <p className="profile-real-meta">{phone || '+91 80737 86650'}</p>
+            <p className="profile-real-meta email-meta">{userEmail}</p>
+          </div>
+        </div>
+
+        {/* SECTION 1: SETTINGS, PLAN, BADGES, CARDS, BIOMETRIC */}
+        <div className="profile-menu-section-card">
+          
+          {/* Row 1: Settings */}
+          <div
+            className="profile-menu-row"
+            onClick={() => setCurrentView('settings')}
+            role="button"
+            tabIndex={0}
+          >
+            <div className="menu-row-left">
+              <SettingsIcon size={18} className="menu-row-icon" />
+              <span className="menu-row-label">Settings</span>
+            </div>
+            <ChevronRight size={18} className="menu-row-chevron" />
+          </div>
+
+          {/* Row 2: Plan & Subscription */}
+          <div
+            className="profile-menu-row"
+            onClick={() => setCurrentView('subscription')}
+            role="button"
+            tabIndex={0}
+          >
+            <div className="menu-row-left">
+              <CreditCard size={18} className="menu-row-icon" />
+              <span className="menu-row-label">Plan &amp; Subscription</span>
+            </div>
+            <ChevronRight size={18} className="menu-row-chevron" />
+          </div>
+
+          {/* Row 3: Badges */}
+          <div
+            className="profile-menu-row"
+            onClick={() => setCurrentView('badges')}
+            role="button"
+            tabIndex={0}
+          >
+            <div className="menu-row-left">
+              <Award size={18} className="menu-row-icon" />
+              <span className="menu-row-label">Badges</span>
+            </div>
+            <ChevronRight size={18} className="menu-row-chevron" />
+          </div>
+
+          {/* Row 4: My Debit Cards & Linked Banks */}
+          <div
+            className="profile-menu-row"
+            onClick={() => setCurrentView('cards')}
+            role="button"
+            tabIndex={0}
+          >
+            <div className="menu-row-left">
+              <Landmark size={18} className="menu-row-icon" />
+              <span className="menu-row-label">My Debit Cards &amp; Linked Banks</span>
+            </div>
+            <ChevronRight size={18} className="menu-row-chevron" />
+          </div>
+
+          {/* Row 5: Enable finger Print/Face ID */}
+          <div className="profile-menu-row no-border">
+            <div className="menu-row-left">
+              <Lock size={18} className="menu-row-icon" />
+              <span className="menu-row-label">Enable finger Print/Face ID</span>
+            </div>
+            <label className="ios-toggle-switch">
+              <input
+                type="checkbox"
+                checked={biometricEnabled}
+                onChange={(e) => {
+                  setBiometricEnabled(e.target.checked);
+                  toastSuccess(
+                    e.target.checked ? 'Biometrics Enabled 🔒' : 'Biometrics Disabled',
+                    e.target.checked ? 'Fingerprint & FaceID active for 1-tap login.' : 'Standard password required.'
+                  );
+                }}
+              />
+              <span className="ios-toggle-slider" />
+            </label>
+          </div>
+
+        </div>
+
+        {/* SECTION 2: PREFERENCES, PRIVACY POLICY, HELP & SUPPORT */}
+        <div className="profile-menu-section-card">
+          
+          {/* Row 6: Preferences */}
+          <div
+            className="profile-menu-row"
+            onClick={() => setCurrentView('preferences')}
+            role="button"
+            tabIndex={0}
+          >
+            <div className="menu-row-left">
+              <Sliders size={18} className="menu-row-icon" />
+              <span className="menu-row-label">Preferences</span>
+            </div>
+            <ChevronRight size={18} className="menu-row-chevron" />
+          </div>
+
+          {/* Row 7: Privacy Policy */}
+          <div
+            className="profile-menu-row"
+            onClick={() => setCurrentView('privacy')}
+            role="button"
+            tabIndex={0}
+          >
+            <div className="menu-row-left">
+              <Shield size={18} className="menu-row-icon" />
+              <span className="menu-row-label">Privacy Policy</span>
+            </div>
+            <ChevronRight size={18} className="menu-row-chevron" />
+          </div>
+
+          {/* Row 8: Help & Support */}
+          <div
+            className="profile-menu-row no-border"
+            onClick={() => setCurrentView('help')}
+            role="button"
+            tabIndex={0}
+          >
+            <div className="menu-row-left">
+              <HelpCircle size={18} className="menu-row-icon" />
+              <span className="menu-row-label">Help &amp; Support</span>
+            </div>
+            <ChevronRight size={18} className="menu-row-chevron" />
+          </div>
+
+        </div>
+
+        {/* SECTION 3: FEEDBACK, LANGUAGE */}
+        <div className="profile-menu-section-card">
+          
+          {/* Row 9: Feedback */}
+          <div
+            className="profile-menu-row"
+            onClick={() => setCurrentView('feedback')}
+            role="button"
+            tabIndex={0}
+          >
+            <div className="menu-row-left">
+              <MessageSquare size={18} className="menu-row-icon" />
+              <span className="menu-row-label">Feedback</span>
+            </div>
+            <ChevronRight size={18} className="menu-row-chevron" />
+          </div>
+
+          {/* Row 10: Language */}
+          <div
+            className="profile-menu-row no-border"
+            onClick={() => setCurrentView('language')}
+            role="button"
+            tabIndex={0}
+          >
+            <div className="menu-row-left">
+              <Globe size={18} className="menu-row-icon" />
+              <span className="menu-row-label">Language</span>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <span style={{ fontSize: '0.85rem', color: '#64748B', fontWeight: 600 }}>{selectedLanguage}</span>
+              <ChevronRight size={18} className="menu-row-chevron" />
+            </div>
+          </div>
+
+        </div>
+
+        {/* Sign Out Button */}
+        <button
+          className="profile-logout-button"
+          onClick={() => {
+            if (logout) logout();
+            navigate('/');
+            toastSuccess('Signed Out', 'You have been logged out.');
+          }}
+        >
+          <LogOut size={16} />
+          <span>Log Out</span>
+        </button>
+
+      </div>
     </div>
   );
 }

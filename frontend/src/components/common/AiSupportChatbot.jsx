@@ -263,7 +263,6 @@ export default function AiSupportChatbot() {
                 <div className="msg-sender-label">
                   {m.sender === 'bot' ? (
                     <div className="bot-label-pill">
-                      <Animated3DRobotMascot size="sm" />
                       <span>Support Bot</span>
                     </div>
                   ) : (
@@ -282,7 +281,6 @@ export default function AiSupportChatbot() {
               <div className="msg-wrapper bot-wrapper">
                 <div className="msg-sender-label">
                   <div className="bot-label-pill">
-                    <Animated3DRobotMascot size="sm" />
                     <span>Support Bot</span>
                   </div>
                 </div>
