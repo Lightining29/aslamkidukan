@@ -380,6 +380,30 @@ export async function mysqlCreateCategory(data) {
   return { id: res.insertId, _id: String(res.insertId), ...data };
 }
 
+export async function mysqlUpdateCategory(id, data) {
+  const db = getMySQLPool();
+  const fields = [];
+  const params = [];
+
+  for (const [k, v] of Object.entries(data)) {
+    if (k !== 'id' && k !== '_id') {
+      fields.push(`\`${k}\` = ?`);
+      params.push(v);
+    }
+  }
+  if (fields.length === 0) return null;
+  params.push(id);
+  await db.query(`UPDATE categories SET ${fields.join(', ')} WHERE id = ? OR slug = ?`, params);
+  const [rows] = await db.query('SELECT * FROM categories WHERE id = ? OR slug = ?', [id, id]);
+  return rows.length ? rows[0] : null;
+}
+
+export async function mysqlDeleteCategory(id) {
+  const db = getMySQLPool();
+  const [res] = await db.query('DELETE FROM categories WHERE id = ? OR slug = ?', [id, id]);
+  return res.affectedRows > 0;
+}
+
 // -----------------------------------------------------------------------------
 // 3. USERS & AUTH QUERIES
 // -----------------------------------------------------------------------------

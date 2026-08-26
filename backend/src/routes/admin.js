@@ -16,6 +16,10 @@ import {
   mysqlCreateProduct,
   mysqlUpdateProduct,
   mysqlDeleteProduct,
+  mysqlGetCategories,
+  mysqlCreateCategory,
+  mysqlUpdateCategory,
+  mysqlDeleteCategory,
 } from '../config/mysql.js';
 
 const router = express.Router();
@@ -335,8 +339,11 @@ router.delete('/products/:id', async (req, res) => {
 /* ─── CATEGORIES ─────────────────────────────────────────────────── */
 router.get('/categories', async (_req, res) => {
   try {
+    if (isMySQLActive()) {
+      const mysqlCats = await mysqlGetCategories();
+      if (mysqlCats && mysqlCats.length > 0) return res.json(mysqlCats);
+    }
     const categories = await Category.find().sort({ name: 1 });
-    // map to include versioned image URL when binary exists
     const mapped = categories.map((c) => {
       const obj = c.toObject();
       const v = c.updatedAt ? c.updatedAt.getTime() : Date.now();
@@ -347,6 +354,10 @@ router.get('/categories', async (_req, res) => {
     });
     res.json(mapped);
   } catch (err) {
+    if (isMySQLActive()) {
+      const mysqlCats = await mysqlGetCategories();
+      return res.json(mysqlCats || []);
+    }
     res.status(500).json({ message: err.message });
   }
 });
@@ -354,13 +365,19 @@ router.get('/categories', async (_req, res) => {
 // Create category (accepts optional image upload)
 router.post('/categories', upload.single('image'), async (req, res) => {
   try {
-    const { name } = req.body;
+    const { name, description, image } = req.body;
     if (!name) return res.status(400).json({ message: 'Name is required' });
     const slug = slugify(name);
+
+    if (isMySQLActive()) {
+      const newCat = await mysqlCreateCategory({ name, slug, description: description || '', image: image || '' });
+      return res.status(201).json(newCat);
+    }
+
     const exists = await Category.findOne({ slug });
     if (exists) return res.status(400).json({ message: 'Category with same name exists' });
 
-    const category = new Category({ name, slug });
+    const category = new Category({ name, slug, description });
     if (req.file) {
       category.imageData = req.file.buffer;
       category.imageContentType = req.file.mimetype;
@@ -382,13 +399,29 @@ router.post('/categories', upload.single('image'), async (req, res) => {
 // Update category
 router.put('/categories/:id', upload.single('image'), async (req, res) => {
   try {
-    const { name } = req.body;
-    const category = await Category.findById(req.params.id);
+    const { name, description, image } = req.body;
+    const { id } = req.params;
+
+    if (isMySQLActive()) {
+      const updates = {};
+      if (name) {
+        updates.name = name;
+        updates.slug = slugify(name);
+      }
+      if (description !== undefined) updates.description = description;
+      if (image !== undefined) updates.image = image;
+
+      const updated = await mysqlUpdateCategory(id, updates);
+      if (updated) return res.json(updated);
+    }
+
+    const category = await Category.findById(id);
     if (!category) return res.status(404).json({ message: 'Category not found' });
     if (name) {
       category.name = name;
       category.slug = slugify(name);
     }
+    if (description !== undefined) category.description = description;
     if (req.file) {
       category.imageData = req.file.buffer;
       category.imageContentType = req.file.mimetype;
@@ -411,7 +444,13 @@ router.put('/categories/:id', upload.single('image'), async (req, res) => {
 // Delete category
 router.delete('/categories/:id', async (req, res) => {
   try {
-    const category = await Category.findByIdAndDelete(req.params.id);
+    const { id } = req.params;
+    if (isMySQLActive()) {
+      const deleted = await mysqlDeleteCategory(id);
+      if (deleted) return res.json({ message: 'Category deleted' });
+    }
+
+    const category = await Category.findByIdAndDelete(id);
     if (!category) return res.status(404).json({ message: 'Category not found' });
     res.json({ message: 'Category deleted' });
   } catch (err) {
