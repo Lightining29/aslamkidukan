@@ -139,7 +139,7 @@ router.post('/login', async (req, res) => {
 
 router.post('/verify-otp', async (req, res) => {
   try {
-    const { email, code } = req.body;
+    const { email, code, password, newPassword } = req.body;
     if (!email || !code) {
       return res.status(400).json({ message: 'Email and verification code are required' });
     }
@@ -163,6 +163,9 @@ router.post('/verify-otp', async (req, res) => {
     }
 
     user.isVerified = true;
+    if (password || newPassword) {
+      user.password = password || newPassword;
+    }
     user.otpHash = undefined;
     user.otpExpires = undefined;
     user.otpCooldownUntil = undefined;
