@@ -15,7 +15,7 @@ export default function RazorpayCheckoutTest() {
   const [upiId, setUpiId] = useState('test@razorpay');
 
   const API_BASE = import.meta.env.VITE_API_URL || (import.meta.env.DEV ? 'http://localhost:5000/api' : '/api');
-  const RAZORPAY_KEY_ID = import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_test_T8bbitd35ayycY';
+  const RAZORPAY_KEY_ID = import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_test_TUT0EPQqGMykqp';
 
   const handlePayment = async (e) => {
     e.preventDefault();

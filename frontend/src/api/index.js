@@ -127,6 +127,18 @@ export async function verifyPayment(orderId, { razorpayPaymentId, razorpaySignat
     body: JSON.stringify({ razorpayPaymentId, razorpaySignature }),
   });
 }
+export async function createRazorpayOrder({ amount, currency = 'INR', receipt }) {
+  return apiFetch('/create-order', {
+    method: 'POST',
+    body: JSON.stringify({ amount, currency, receipt }),
+  });
+}
+export async function verifyRazorpayPayment({ razorpay_order_id, razorpay_payment_id, razorpay_signature }) {
+  return apiFetch('/verify-payment', {
+    method: 'POST',
+    body: JSON.stringify({ razorpay_order_id, razorpay_payment_id, razorpay_signature }),
+  });
+}
 export async function fetchMyOrders() { return apiFetch('/orders/my'); }
 export async function fetchOrder(id) { return apiFetch(`/orders/${id}`); }
 

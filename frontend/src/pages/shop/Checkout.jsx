@@ -82,7 +82,7 @@ export default function CheckoutPage() {
     }
 
     const rzp = new window.Razorpay({
-      key: result.key,
+      key: result.key || import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_test_TUT0EPQqGMykqp',
       amount: result.amount,
       currency: result.currency || 'INR',
       name: 'AAAN Cart',
