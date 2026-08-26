@@ -1,30 +1,33 @@
 import { useState, useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { Home, Flame, ShoppingBag, Heart, User } from 'lucide-react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { Home, Flame, Heart, Headphones, User } from 'lucide-react';
 import { useCart } from '../../context/CartContext';
 import { useAuth } from '../../context/AuthContext';
 import './MobileBottomNav.css';
 
-export default function MobileBottomNav({ onOpenCart, onOpenWishlist, onOpenProfile }) {
-  const { cartCount, wishlist = [] } = useCart();
-  const { isAuthenticated, setShowLoginModal } = useAuth();
-  const location = useLocation();
+export default function MobileBottomNav({
+  onOpenWishlist,
+  onOpenProfile
+}) {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { wishlist } = useCart();
+  const wishlistCount = wishlist?.length || 0;
+  const { isAuthenticated, setShowLoginModal } = useAuth();
 
   const [activeTabId, setActiveTabId] = useState('home');
-  const wishlistCount = Array.isArray(wishlist) ? wishlist.length : 0;
 
-  // Sync active tab with route location
+  // Sync active tab with current URL
   useEffect(() => {
     const path = location.pathname;
     if (path === '/' || path === '') {
       setActiveTabId('home');
-    } else if (path.startsWith('/shop') || path.startsWith('/categories')) {
+    } else if (path.startsWith('/shop') || path.startsWith('/categories') || path.startsWith('/products')) {
       setActiveTabId('trending');
     } else if (path === '/account/wishlist') {
       setActiveTabId('wishlist');
-    } else if (path === '/cart') {
-      setActiveTabId('cart');
+    } else if (path === '/contact') {
+      setActiveTabId('contact');
     } else if (path.startsWith('/account') || path.startsWith('/admin')) {
       setActiveTabId('account');
     }
@@ -37,7 +40,11 @@ export default function MobileBottomNav({ onOpenCart, onOpenWishlist, onOpenProf
       icon: Home,
       handleClick: () => {
         setActiveTabId('home');
-        navigate('/');
+        if (location.pathname === '/') {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        } else {
+          navigate('/');
+        }
       }
     },
     {
@@ -62,15 +69,12 @@ export default function MobileBottomNav({ onOpenCart, onOpenWishlist, onOpenProf
       }
     },
     {
-      id: 'cart',
-      label: 'Cart',
-      icon: ShoppingBag,
-      badge: cartCount > 0,
-      badgeText: cartCount,
+      id: 'contact',
+      label: 'Contact',
+      icon: Headphones,
       handleClick: () => {
-        setActiveTabId('cart');
-        if (onOpenCart) onOpenCart();
-        else navigate('/cart');
+        setActiveTabId('contact');
+        navigate('/contact');
       }
     },
     {
@@ -110,27 +114,31 @@ export default function MobileBottomNav({ onOpenCart, onOpenWishlist, onOpenProf
         {/* Navigation Tabs List */}
         <div className="white-nav-tabs-grid">
           {navItems.map((item) => {
-            const Icon = item.icon;
+            const IconComponent = item.icon;
             const isActive = activeTabId === item.id;
 
             return (
               <button
                 key={item.id}
                 type="button"
-                className={`white-nav-tab-btn ${isActive ? 'is-active-tab' : ''}`}
+                className={`white-nav-tab-btn ${isActive ? 'is-active' : ''}`}
                 onClick={item.handleClick}
                 aria-label={item.label}
+                aria-pressed={isActive}
               >
-                <div className="tab-btn-content">
-                  <Icon size={19} className="nav-tab-glyph" />
-                  <span className="nav-tab-label">{item.label}</span>
+                <div className="white-icon-badge-wrap">
+                  <IconComponent size={21} className="white-nav-icon" />
 
-                  {item.badge && !isActive && (
-                    <span className={`tab-counter-badge ${item.badgeDot ? 'dot' : ''}`}>
-                      {item.badgeText || ''}
-                    </span>
+                  {/* Red/Green Badges */}
+                  {item.badge && item.badgeText !== undefined && (
+                    <span className="white-nav-num-badge">{item.badgeText}</span>
+                  )}
+                  {item.badge && item.badgeDot && (
+                    <span className="white-nav-dot-badge" />
                   )}
                 </div>
+
+                <span className="white-nav-label-text">{item.label}</span>
               </button>
             );
           })}

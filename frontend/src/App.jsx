@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { HomeLayout } from './pages/shop/Home';
+import ShopCatalogPage from './pages/shop/ShopCatalogPage';
 import Cart from './pages/shop/Cart';
 import ProductDetail from './pages/shop/ProductDetail';
 import CategoryProducts from './pages/shop/CategoryProducts';
@@ -102,6 +103,18 @@ function App() {
               <Footer />
             </>
           }
+        />
+        <Route
+          path="/shop"
+          element={<RevealShell><ShopCatalogPage /></RevealShell>}
+        />
+        <Route
+          path="/products"
+          element={<RevealShell><ShopCatalogPage /></RevealShell>}
+        />
+        <Route
+          path="/categories"
+          element={<RevealShell><ShopCatalogPage /></RevealShell>}
         />
         <Route
           path="/product/:slug"
