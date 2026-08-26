@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Home, Flame, Heart, Headphones, User } from 'lucide-react';
 import { useCart } from '../../context/CartContext';
@@ -101,7 +102,7 @@ export default function MobileBottomNav({
   const activeIndex = navItems.findIndex((item) => item.id === activeTabId);
   const safeActiveIndex = activeIndex >= 0 ? activeIndex : 0;
 
-  return (
+  const navContent = (
     <nav className="white-mobile-bottom-nav" aria-label="Mobile Bottom Navigation">
       <div className="white-nav-island-bar">
         
@@ -145,4 +146,8 @@ export default function MobileBottomNav({
       </div>
     </nav>
   );
+
+  return typeof document !== 'undefined'
+    ? createPortal(navContent, document.body)
+    : navContent;
 }

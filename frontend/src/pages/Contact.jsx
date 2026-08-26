@@ -78,42 +78,6 @@ export default function Contact() {
       <Navbar />
       <div className="contact-webapp-page">
         
-        {/* Web App Hero Header */}
-        <div className="contact-hero-banner">
-          <div className="contact-hero-badge">
-            <Sparkles size={16} color="#FFE600" />
-            <span>24/7 CUSTOMER CARE &amp; SUPPORT</span>
-          </div>
-
-          <h1 className="contact-hero-title">How can we help you today?</h1>
-          <p className="contact-hero-subtitle">
-            Reach our verified support team for questions regarding your orders, custom 3D wall dimensions, or doorstep replacement.
-          </p>
-
-          {/* Quick Action Floating Pills */}
-          <div className="contact-quick-pills-row">
-            <a href="tel:+918073786650" className="quick-pill-btn">
-              <Phone size={15} color="#10B981" />
-              <span>+91 80737 86650</span>
-            </a>
-            
-            <a
-              href="https://wa.me/918073786650?text=Hi%20AAAN%20Cart,%20I%20have%20an%20inquiry"
-              target="_blank"
-              rel="noreferrer"
-              className="quick-pill-btn whatsapp-pill"
-            >
-              <MessageSquare size={15} color="#25D366" />
-              <span>WhatsApp Live Chat</span>
-            </a>
-
-            <a href="mailto:reazafsha0@gmail.com" className="quick-pill-btn">
-              <Mail size={15} color="#0066FF" />
-              <span>reazafsha0@gmail.com</span>
-            </a>
-          </div>
-        </div>
-
         <div className="contact-main-grid-container">
           
           {/* Left: Modern Web App Contact Form */}
