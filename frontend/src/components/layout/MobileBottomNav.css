@@ -1,6 +1,6 @@
 /* =========================================================
-   AAAN ENTERPRISES — WHITE MOBILE BOTTOM NAVIGATION BAR
-   White Bar · Sliding Black Capsule · Glowing Green Active Icon
+   AAAN ENTERPRISES — WHITE MOBILE BOTTOM NAVIGATION BAR (ICONS ONLY)
+   White Island Bar · Sliding Black Capsule · Glowing Green Active Icon
    ========================================================= */
 
 /* Hide on Desktop & Tablets (>= 769px) */
@@ -17,8 +17,8 @@
     bottom: 12px;
     left: 50%;
     transform: translateX(-50%);
-    width: calc(100% - 24px);
-    max-width: 380px;
+    width: calc(100% - 32px);
+    max-width: 360px;
     z-index: 9990;
     pointer-events: auto;
     display: block;
@@ -31,7 +31,7 @@
 @keyframes whiteNavSlideUp {
   0% {
     opacity: 0;
-    transform: translate3d(-50%, 24px, 0) scale(0.95);
+    transform: translate3d(-50%, 20px, 0) scale(0.95);
   }
   100% {
     opacity: 1;
@@ -43,11 +43,11 @@
 .white-nav-island-bar {
   position: relative;
   background: #FFFFFF;
-  height: 60px;
-  border-radius: 28px;
+  height: 54px;
+  border-radius: 30px;
   border: 1.5px solid #E2E8F0;
   box-shadow: 0 10px 30px rgba(15, 23, 42, 0.12), 0 2px 8px rgba(15, 23, 42, 0.04);
-  padding: 5px;
+  padding: 4px;
   box-sizing: border-box;
   display: flex;
   align-items: center;
@@ -56,12 +56,12 @@
 /* Sliding Black Active Capsule */
 .sliding-black-capsule {
   position: absolute;
-  top: 5px;
-  left: 5px;
-  width: calc((100% - 10px) / 5);
-  height: calc(100% - 10px);
+  top: 4px;
+  left: 4px;
+  width: calc((100% - 8px) / 5);
+  height: calc(100% - 8px);
   background: #0F172A;
-  border-radius: 22px;
+  border-radius: 24px;
   box-shadow: 0 4px 14px rgba(15, 23, 42, 0.28);
   pointer-events: none;
   transition: transform 0.36s cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -90,54 +90,52 @@
   cursor: pointer;
   outline: none;
   position: relative;
-  transition: transform 0.2s ease;
+  transition: transform 0.18s ease;
 }
 
 .white-nav-tab-btn:active {
-  transform: scale(0.92);
+  transform: scale(0.88);
 }
 
-.tab-btn-content {
+/* Icon Badge Wrapper */
+.white-icon-badge-wrap {
+  position: relative;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 2px;
-  position: relative;
   width: 100%;
+  height: 100%;
 }
 
-/* Inactive State: Subtle Slate Grey */
-.nav-tab-glyph {
+/* Inactive Icon: Slate Grey */
+.white-nav-icon {
   color: #64748B;
   transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-.nav-tab-label {
-  font-size: 0.68rem;
-  font-weight: 700;
-  color: #64748B;
-  transition: all 0.25s ease;
-  line-height: 1;
+/* Active State: Vibrant Glowing Green */
+.white-nav-tab-btn.is-active .white-nav-icon {
+  color: #10B981; /* Glowing Vibrant Emerald Green */
+  filter: drop-shadow(0 0 7px rgba(16, 185, 129, 0.65));
+  transform: scale(1.08);
 }
 
-/* Active State: Vibrant Emerald Green Icon & White Text over Black Capsule */
-.white-nav-tab-btn.is-active-tab .nav-tab-glyph {
-  color: #10B981; /* Glowing Vibrant Green */
-  filter: drop-shadow(0 0 6px rgba(16, 185, 129, 0.6));
-  transform: translateY(-1px) scale(1.1);
-}
-
-.white-nav-tab-btn.is-active-tab .nav-tab-label {
-  color: #FFFFFF; /* Crisp White Text */
-  font-weight: 800;
-}
-
-/* Notification Badges */
-.tab-counter-badge {
+/* Red / Green Dot Notification Badge */
+.white-nav-dot-badge {
   position: absolute;
-  top: -4px;
-  right: 18%;
+  top: 10px;
+  right: calc(50% - 14px);
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #EF4444;
+  border: 1.5px solid #FFFFFF;
+}
+
+.white-nav-num-badge {
+  position: absolute;
+  top: 6px;
+  right: calc(50% - 16px);
   background: #10B981;
   color: #FFFFFF;
   font-size: 0.58rem;
@@ -145,19 +143,9 @@
   min-width: 15px;
   height: 15px;
   padding: 0 3px;
-  border-radius: 9999px;
+  border-radius: 50px;
   display: flex;
   align-items: center;
   justify-content: center;
   border: 1.5px solid #FFFFFF;
-}
-
-.tab-counter-badge.dot {
-  min-width: 7px;
-  width: 7px;
-  height: 7px;
-  padding: 0;
-  background: #EF4444;
-  top: -1px;
-  right: 24%;
 }

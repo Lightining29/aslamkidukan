@@ -111,7 +111,7 @@ export default function MobileBottomNav({
           style={{ transform: `translateX(calc(${safeActiveIndex} * 100%))` }}
         />
 
-        {/* Navigation Tabs List */}
+        {/* Navigation Tabs List (Icons Only) */}
         <div className="white-nav-tabs-grid">
           {navItems.map((item) => {
             const IconComponent = item.icon;
@@ -127,18 +127,16 @@ export default function MobileBottomNav({
                 aria-pressed={isActive}
               >
                 <div className="white-icon-badge-wrap">
-                  <IconComponent size={21} className="white-nav-icon" />
+                  <IconComponent size={23} className="white-nav-icon" />
 
-                  {/* Red/Green Badges */}
-                  {item.badge && item.badgeText !== undefined && (
-                    <span className="white-nav-num-badge">{item.badgeText}</span>
-                  )}
+                  {/* Red/Green Notification Dots */}
                   {item.badge && item.badgeDot && (
                     <span className="white-nav-dot-badge" />
                   )}
+                  {item.badge && item.badgeText !== undefined && (
+                    <span className="white-nav-num-badge">{item.badgeText}</span>
+                  )}
                 </div>
-
-                <span className="white-nav-label-text">{item.label}</span>
               </button>
             );
           })}
