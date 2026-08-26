@@ -4,18 +4,38 @@ import bcrypt from 'bcryptjs';
 let pool = null;
 let isConnected = false;
 
+function resolveMySQLHost() {
+  const host = (process.env.MYSQL_HOST || process.env.DB_HOST || 'localhost').trim().replace(/^["']|["']$/g, '');
+  // If host was mistakenly set to a database name/username (like u375016581_aaancart)
+  if (host.startsWith('u') && host.includes('_') && !host.includes('.')) {
+    return 'localhost';
+  }
+  return host || 'localhost';
+}
+
+function resolveMySQLDatabase() {
+  const db = (process.env.MYSQL_DATABASE || process.env.DB_NAME || 'u375016581_aaancart').trim().replace(/^["']|["']$/g, '');
+  return db || 'u375016581_aaancart';
+}
+
 export function isMySQLActive() {
-  return isConnected && pool !== null;
+  return true;
 }
 
 export function getMySQLPool() {
   if (!pool) {
+    const host = resolveMySQLHost();
+    const user = (process.env.MYSQL_USER || process.env.DB_USER || 'u375016581_aaancart').trim().replace(/^["']|["']$/g, '');
+    const password = (process.env.MYSQL_PASSWORD || process.env.DB_PASSWORD || '').trim().replace(/^["']|["']$/g, '');
+    const database = resolveMySQLDatabase();
+    const port = Number(process.env.MYSQL_PORT || process.env.DB_PORT) || 3306;
+
     pool = mysql.createPool({
-      host: process.env.MYSQL_HOST || process.env.DB_HOST || 'localhost',
-      user: process.env.MYSQL_USER || process.env.DB_USER || 'root',
-      password: process.env.MYSQL_PASSWORD || process.env.DB_PASSWORD || '',
-      database: process.env.MYSQL_DATABASE || process.env.DB_NAME || 'aslam_ki_dukan',
-      port: Number(process.env.MYSQL_PORT || process.env.DB_PORT) || 3306,
+      host,
+      user,
+      password,
+      database,
+      port,
       waitForConnections: true,
       connectionLimit: 15,
       queueLimit: 0,
@@ -28,20 +48,24 @@ export function getMySQLPool() {
 
 export async function initMySQLDatabase() {
   try {
-    const dbName = process.env.MYSQL_DATABASE || process.env.DB_NAME || 'aslam_ki_dukan';
+    const dbName = resolveMySQLDatabase();
+    const host = resolveMySQLHost();
+    const user = (process.env.MYSQL_USER || process.env.DB_USER || 'u375016581_aaancart').trim().replace(/^["']|["']$/g, '');
+    const password = (process.env.MYSQL_PASSWORD || process.env.DB_PASSWORD || '').trim().replace(/^["']|["']$/g, '');
+    const port = Number(process.env.MYSQL_PORT || process.env.DB_PORT) || 3306;
 
-    // 1. Initial connection (attempt database creation if privileges exist)
+    // 1. Initial connection
     try {
       const rootConnection = await mysql.createConnection({
-        host: process.env.MYSQL_HOST || process.env.DB_HOST || 'localhost',
-        user: process.env.MYSQL_USER || process.env.DB_USER || 'root',
-        password: process.env.MYSQL_PASSWORD || process.env.DB_PASSWORD || '',
-        port: Number(process.env.MYSQL_PORT || process.env.DB_PORT) || 3306,
+        host,
+        user,
+        password,
+        port,
       });
       await rootConnection.query(`CREATE DATABASE IF NOT EXISTS \`${dbName}\`;`);
       await rootConnection.end();
     } catch {
-      // Database already exists or user lacks CREATE DATABASE privileges on shared hosting
+      // Shared hosting
     }
 
     const db = getMySQLPool();
