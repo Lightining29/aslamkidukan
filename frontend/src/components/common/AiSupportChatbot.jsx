@@ -63,6 +63,15 @@ export default function AiSupportChatbot() {
     }
   }, [userIsAdmin]);
 
+  // Global window event listener to open chatbot from sidebar, profile, or any button
+  useEffect(() => {
+    const handleOpenChatbot = () => {
+      setIsOpen(true);
+    };
+    window.addEventListener('open-ai-chatbot', handleOpenChatbot);
+    return () => window.removeEventListener('open-ai-chatbot', handleOpenChatbot);
+  }, []);
+
   useEffect(() => {
     if (isOpen) {
       messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });

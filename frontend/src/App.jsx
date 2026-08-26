@@ -142,13 +142,7 @@ function App() {
         />
         <Route
           path="/contact"
-          element={
-            <>
-              <Navbar />
-              <RevealShell><Contact /></RevealShell>
-              <Footer />
-            </>
-          }
+          element={<RevealShell><Contact /></RevealShell>}
         />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />

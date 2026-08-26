@@ -15,7 +15,6 @@ import {
 } from 'lucide-react';
 import { submitContact } from '../api';
 import Navbar from '../components/layout/Navbar';
-import Footer from '../components/layout/Footer';
 import { toastSuccess, toastError } from '../utils/toast.js';
 import './Contact.css';
 
@@ -294,7 +293,6 @@ export default function Contact() {
         </div>
 
       </div>
-      <Footer />
     </>
   );
 }

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { X, Home, LayoutDashboard, Heart, User, Settings, MessageSquare, MapPin, Mail, Globe, Twitter, Facebook, LogIn, LogOut, ShoppingBag, Sparkles, Info } from 'lucide-react';
+import { X, Home, LayoutDashboard, Heart, User, Settings, MessageSquare, MapPin, Mail, Globe, Twitter, Facebook, LogIn, LogOut, ShoppingBag, Sparkles, Info, Phone } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useCart } from '../../context/CartContext';
 import './MobileNavDrawer.css';
@@ -63,6 +63,7 @@ export default function MobileNavDrawer({
 
   const handleSupportClick = () => {
     handleAnimatedClose(() => {
+      window.dispatchEvent(new CustomEvent('open-ai-chatbot'));
       if (onOpenSupport) onOpenSupport();
     });
   };
@@ -220,7 +221,16 @@ export default function MobileNavDrawer({
             onClick={handleSupportClick}
           >
             <MessageSquare size={18} className="tab-pill-icon" />
-            <span className="tab-pill-label">Messages &amp; Support</span>
+            <span className="tab-pill-label">Messages &amp; 3D AI Support</span>
+          </button>
+
+          {/* 7. Contact Store */}
+          <button
+            className="drawer-tab-pill-btn"
+            onClick={() => handleNavClick('/contact')}
+          >
+            <Phone size={18} className="tab-pill-icon" />
+            <span className="tab-pill-label">Contact Store &amp; WhatsApp</span>
           </button>
 
         </div>
