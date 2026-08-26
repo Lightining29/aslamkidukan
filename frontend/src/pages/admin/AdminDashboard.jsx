@@ -4,39 +4,36 @@ import { DollarSign, ShoppingBag, Users, AlertCircle, Package, TrendingUp, Star,
 import { fetchAdminAnalytics, formatPrice, getStatusLabel, getStatusColor } from '../../api';
 import '../../styles/Panel.css';
 
-const demoAnalytics = {
-  totalRevenue: 248950,
-  totalOrders: 142,
-  totalUsers: 86,
-  pendingApproval: 4,
-  recentOrders: [
-    { _id: 'ord-101', orderNumber: 'ORD-AAAN-84920', user: { name: 'Alina Putri' }, total: 4290, status: 'approved' },
-    { _id: 'ord-102', orderNumber: 'ORD-AAAN-84921', user: { name: 'Manish Kumar' }, total: 18990, status: 'shipped' },
-    { _id: 'ord-103', orderNumber: 'ORD-AAAN-84922', user: { name: 'Reaz Afsha' }, total: 2499, status: 'paid' },
-    { _id: 'ord-104', orderNumber: 'ORD-AAAN-84923', user: { name: 'Priya Sharma' }, total: 1299, status: 'pending_payment' }
-  ],
-  topProducts: [
-    { _id: 'p-101', name: 'Ultra Smart Watch Series 9', sold: 48, revenue: 911520 },
-    { _id: 'p-102', name: 'Electric Body Massager Deep Tissue', sold: 62, revenue: 154938 },
-    { _id: 'p-103', name: 'Air Max Pro Sport Edition', sold: 34, revenue: 441966 }
-  ],
-  lowStock: [
-    { _id: 'p-104', name: 'Botanical Facial Serum Glow Oil', stockQuantity: 3 }
-  ]
+const initialAnalytics = {
+  totalRevenue: 0,
+  totalOrders: 0,
+  totalUsers: 0,
+  pendingApproval: 0,
+  recentOrders: [],
+  topProducts: [],
+  lowStock: []
 };
 
 export default function AdminDashboard() {
-  const [data, setData] = useState(demoAnalytics);
+  const [data, setData] = useState(initialAnalytics);
 
   useEffect(() => {
     fetchAdminAnalytics()
       .then((res) => {
-        if (res && (typeof res.totalRevenue === 'number' || Array.isArray(res.recentOrders))) {
-          setData(res);
+        if (res) {
+          setData({
+            totalRevenue: Number(res.totalRevenue) || 0,
+            totalOrders: Number(res.totalOrders) || 0,
+            totalUsers: Number(res.totalUsers) || 0,
+            pendingApproval: Number(res.pendingApproval) || 0,
+            recentOrders: Array.isArray(res.recentOrders) ? res.recentOrders : [],
+            topProducts: Array.isArray(res.topProducts) ? res.topProducts : [],
+            lowStock: Array.isArray(res.lowStock) ? res.lowStock : []
+          });
         }
       })
       .catch(() => {
-        /* Keep rich demo analytics data if backend is offline */
+        setData(initialAnalytics);
       });
   }, []);
 

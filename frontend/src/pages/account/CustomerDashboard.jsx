@@ -30,16 +30,7 @@ export default function CustomerDashboard({ defaultTab }) {
       .finally(() => setLoading(false));
   }, []);
 
-  const activeOrder = orders.find(o => o.status !== 'delivered' && o.status !== 'cancelled') || orders[0] || {
-    _id: 'demo-active-1',
-    orderNumber: 'ORD-AAAN-98412',
-    createdAt: new Date().toISOString(),
-    status: 'out_for_delivery',
-    total: 3499,
-    items: [
-      { name: 'AAAN Executive Ergonomic Chair', quantity: 1, price: 3499, image: 'https://images.unsplash.com/photo-1580481072645-022f9a6d8310?w=400' }
-    ]
-  };
+  const activeOrder = orders.find(o => o.status !== 'delivered' && o.status !== 'cancelled') || (orders.length > 0 ? orders[0] : null);
 
   const handleReturnInitiate = (orderId) => {
     toastSuccess('Return Request Initiated 📦', 'Doorstep pickup scheduled for tomorrow.');
@@ -116,36 +107,49 @@ export default function CustomerDashboard({ defaultTab }) {
       {/* Tab 1: Live Real-Time Order Tracker */}
       {activeTab === 'live_tracking' && (
         <div className="dash-card live-tracker-card">
-          <div className="card-head-row">
-            <div>
-              <span className="live-pulse-badge">🔴 REAL-TIME LIVE TRACKING</span>
-              <h3 className="card-title">Order #{activeOrder.orderNumber}</h3>
-              <p className="card-sub">Expected Delivery: <strong>Today by 2:30 PM</strong> via BlueDart Air</p>
-            </div>
-
-            <a href="tel:+918073786650" className="btn-call-agent">
-              <Phone size={16} /> Call Delivery Agent
-            </a>
-          </div>
-
-          {/* 6-Stage Timeline Component */}
-          <OrderTimeline order={activeOrder} />
-
-          {/* Active Items Row */}
-          <div className="active-order-items">
-            <h4>Items in this Delivery ({activeOrder.items?.length || 1})</h4>
-            <div className="items-row flex">
-              {(activeOrder.items || []).map((it, i) => (
-                <div key={i} className="active-item-chip">
-                  <img src={it.image || 'https://images.unsplash.com/photo-1580481072645-022f9a6d8310?w=200'} alt={it.name} />
-                  <div>
-                    <strong>{it.name}</strong>
-                    <span>Qty: {it.quantity} · {formatPrice(it.price * it.quantity)}</span>
-                  </div>
+          {activeOrder ? (
+            <>
+              <div className="card-head-row">
+                <div>
+                  <span className="live-pulse-badge">🔴 REAL-TIME LIVE TRACKING</span>
+                  <h3 className="card-title">Order #{activeOrder.orderNumber}</h3>
+                  <p className="card-sub">Status: <strong>{getStatusLabel(activeOrder.status || activeOrder.orderStatus)}</strong></p>
                 </div>
-              ))}
+
+                <a href="tel:+918073786650" className="btn-call-agent">
+                  <Phone size={16} /> Support Helpline
+                </a>
+              </div>
+
+              {/* 6-Stage Timeline Component */}
+              <OrderTimeline order={activeOrder} />
+
+              {/* Active Items Row */}
+              <div className="active-order-items">
+                <h4>Items in this Delivery ({activeOrder.items?.length || 0})</h4>
+                <div className="items-row flex">
+                  {(activeOrder.items || []).map((it, i) => (
+                    <div key={i} className="active-item-chip">
+                      <img src={it.image || '/aaan-logo.svg'} alt={it.name} />
+                      <div>
+                        <strong>{it.name}</strong>
+                        <span>Qty: {it.quantity} · {formatPrice((it.price || 0) * (it.quantity || 1))}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </>
+          ) : (
+            <div style={{ textAlign: 'center', padding: '40px 0' }}>
+              <Package size={48} color="#94A3B8" />
+              <h4 style={{ marginTop: '12px' }}>No Active Orders in Transit</h4>
+              <p style={{ color: '#64748B' }}>When you place an order, live shipping updates and tracking will appear right here.</p>
+              <Link to="/" className="btn-mktg-primary" style={{ display: 'inline-block', marginTop: '14px' }}>
+                Browse 3D Wall Art Collection →
+              </Link>
             </div>
-          </div>
+          )}
         </div>
       )}
 

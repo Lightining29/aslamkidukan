@@ -16,31 +16,8 @@ function getCustomerPhone(order) {
   return order.shippingAddress?.phone || order.user?.phone || '';
 }
 
-const demoOrders = [
-  {
-    _id: 'ord-101',
-    orderNumber: 'ORD-AAAN-84920',
-    createdAt: new Date().toISOString(),
-    status: 'paid',
-    total: 4290,
-    user: { name: 'Alina Putri', email: 'alina@gmail.com' },
-    shippingAddress: { fullName: 'Alina Putri', address: '75 Mount Road', city: 'Chennai', state: 'TN', postalCode: '600002', phone: '+91 98765 43210' },
-    items: [{ name: 'AAAN Silk Saree', quantity: 1, price: 4290, selectedSize: 'L' }]
-  },
-  {
-    _id: 'ord-102',
-    orderNumber: 'ORD-AAAN-84921',
-    createdAt: new Date().toISOString(),
-    status: 'shipped',
-    total: 18990,
-    user: { name: 'Manish Kumar', email: 'manish@gmail.com' },
-    shippingAddress: { fullName: 'Manish Kumar', address: '12 Beach Road', city: 'Chennai', state: 'TN', postalCode: '600003', phone: '+91 98765 11223' },
-    items: [{ name: 'AAAN Executive Desk Chair', quantity: 1, price: 18990, selectedSize: '120 × 80 cm' }]
-  }
-];
-
 export default function AdminOrders() {
-  const [orders, setOrders] = useState(demoOrders);
+  const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
@@ -49,9 +26,12 @@ export default function AdminOrders() {
   const load = () => {
     fetchAdminOrders()
       .then((res) => {
-        if (Array.isArray(res) && res.length > 0) setOrders(res);
+        if (Array.isArray(res)) setOrders(res);
+        else setOrders([]);
       })
-      .catch(() => {})
+      .catch(() => {
+        setOrders([]);
+      })
       .finally(() => setLoading(false));
   };
 
