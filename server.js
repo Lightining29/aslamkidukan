@@ -162,13 +162,13 @@ app.post('/api/verify-payment', async (req, res) => {
 // Robots.txt
 app.get('/robots.txt', (_req, res) => {
   res.header('Content-Type', 'text/plain');
-  res.send(`User-agent: *\nAllow: /\n\nSitemap: https://www.afshaenterprises.com/sitemap.xml`);
+  res.send(`User-agent: *\nAllow: /\n\nSitemap: https://aaancart.com/sitemap.xml`);
 });
 
 // Sitemap.xml
 app.get('/sitemap.xml', async (_req, res) => {
   try {
-    const domain = 'https://www.afshaenterprises.com';
+    const domain = 'https://aaancart.com';
     let xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`;
     xml += `  <url><loc>${domain}/</loc><changefreq>daily</changefreq><priority>1.0</priority></url>\n`;
     xml += `  <url><loc>${domain}/contact</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>\n`;

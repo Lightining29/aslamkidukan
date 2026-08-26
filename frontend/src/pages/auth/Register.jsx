@@ -63,7 +63,7 @@ export default function Register() {
         toastInfo('Check your email', 'We sent a 6-digit verification code to your inbox.');
         navigate('/verify-otp', { state: { email } });
       } else {
-        toastSuccess('Account created!', 'Welcome to Afsha Enterprises.');
+        toastSuccess('Account created!', 'Welcome to AAAN Cart.');
         navigate('/account');
       }
     } catch (err) {
@@ -78,7 +78,7 @@ export default function Register() {
     <div className="auth-page">
       <div className="auth-card">
         <div className="auth-logo">
-          <Droplets size={28} /> Afsha enterprises
+          <Droplets size={28} /> AAAN Cart
         </div>
         <p className="auth-subtitle">Create your  account</p>
 

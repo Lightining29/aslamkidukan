@@ -9,7 +9,7 @@ export default function NotFound() {
   return (
     <>
       <Helmet>
-        <title>Page Not Found | Afsha Enterprises</title>
+        <title>Page Not Found | AAAN Cart</title>
         <meta name="robots" content="noindex, follow" />
       </Helmet>
       <Navbar />

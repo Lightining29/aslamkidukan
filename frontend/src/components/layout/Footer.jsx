@@ -130,7 +130,7 @@ export default function Footer() {
       <div className="light-footer-bottom-bar">
         <div className="container light-bottom-inner">
           <p className="light-copyright">
-            © 2026 <strong>AAAN Cart Enterprises</strong>. Crafted with <span style={{ color: '#10B981' }}>💚</span> in India.
+            © 2026 <strong>AAAN Cart</strong>. Crafted with <span style={{ color: '#10B981' }}>💚</span> in India.
           </p>
 
           <div className="light-pay-pills-row">

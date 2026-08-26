@@ -11,13 +11,13 @@ import './LocalSEO.css';
 const CITY_DATA = {
   delhi: {
     name: 'Delhi',
-    keywords: 'Best body massager in Delhi, electric massager machine Delhi, buy massager Delhi NCR',
-    title: 'Best Body Massager in Delhi | Buy Electric Massager - Afsha Enterprises',
-    description: 'Looking for the best body massager in Delhi? Buy premium electric and handheld massagers from Afsha Enterprises. Enjoy free 24-hour delivery in Delhi NCR and 1-year warranty.',
-    heading: 'Premium Body Massagers in Delhi',
-    intro: 'Afsha Enterprises is Delhi\'s leading supplier of high-end wellness and massager machines. Whether you live in South Delhi, Dwarka, Connaught Place, or Rohini, we provide doorstep delivery within 24 hours. Our selection of neck, back, and full body massagers are perfect for relieving the stress of daily commuting and long office hours.',
+    keywords: 'Best 3D wall stickers in Delhi, botanical wall decals Delhi, buy wall art Delhi NCR',
+    title: 'Best 3D Wall Stickers in Delhi | Buy Wall Decals - AAAN Cart',
+    description: 'Looking for the best 3D wall stickers in Delhi? Buy premium acrylic wall decals and botanical stickers from AAAN Cart. Enjoy free 24-hour delivery in Delhi NCR.',
+    heading: 'Premium 3D Wall Stickers in Delhi',
+    intro: 'AAAN Cart is Delhi\'s leading supplier of hyper-realistic 3D wall stickers and botanical decals. Whether you live in South Delhi, Dwarka, Connaught Place, or Rohini, we provide doorstep delivery within 24 hours. Our selection of acrylic wall niches and 3D butterflies are perfect for transforming your home.',
     deliveryInfo: 'Express 24-hour delivery across Delhi, Noida, Gurgaon, and Ghaziabad. Cash on delivery available.',
-    testimonial: '“I ordered the deep tissue massager from Afsha Enterprises. It was delivered to my house in Dwarka within 18 hours. Excellent service and great relief for my back pain!” – Rajesh Kumar, Delhi',
+    testimonial: '“I ordered the 3D butterfly wall set from AAAN Cart. It was delivered to my house in Dwarka within 18 hours. Excellent quality and transformed my living room!” – Rajesh Kumar, Delhi',
     faqs: [
       { q: 'Do you offer same-day delivery in Delhi?', a: 'Yes, we offer same-day delivery in select areas of Delhi NCR if the order is placed before 11:00 AM.' },
       { q: 'Can I pay on delivery in Delhi?', a: 'Yes, Cash on Delivery (COD) is fully supported across all locations in Delhi.' }
@@ -25,30 +25,30 @@ const CITY_DATA = {
   },
   mumbai: {
     name: 'Mumbai',
-    keywords: 'Electric massager machine Mumbai, buy body massager Mumbai, handheld massager online Mumbai',
-    title: 'Electric Body Massager Machine in Mumbai | Afsha Enterprises',
-    description: 'Buy electric body massager machines in Mumbai. Choose from premium handheld, percussion and deep tissue massagers by Afsha Enterprises. Fast shipping across Mumbai.',
-    heading: 'Best Electric Massagers in Mumbai',
-    intro: 'From Colaba to Borivali and Thane, Mumbai residents trust Afsha Enterprises for premium percussion massagers and stress relief equipment. The fast-paced life in Mumbai can take a toll on your neck and back. Our portable and handheld massagers offer a spa-like massage experience in the comfort of your home.',
+    keywords: '3D wall stickers Mumbai, buy botanical wall decals Mumbai, wall art online Mumbai',
+    title: '3D Wall Stickers & Decals in Mumbai | AAAN Cart',
+    description: 'Buy 3D wall stickers and decals in Mumbai. Choose from premium botanical, acrylic niches and butterfly wall art by AAAN Cart. Fast shipping across Mumbai.',
+    heading: 'Best 3D Wall Stickers in Mumbai',
+    intro: 'From Colaba to Borivali and Thane, Mumbai residents trust AAAN Cart for premium 3D optical illusion wall art and acrylic decals. Our residue-free stickers offer a luxury aesthetic in the comfort of your home.',
     deliveryInfo: 'Fast 2-day delivery across Mumbai, Thane, and Navi Mumbai. Secure online payments & COD.',
-    testimonial: '“Living in Mumbai means long hours in locals and cars. This handheld massager from Afsha Enterprises is a lifesaver. Highly recommend the wellness category!” – Priya Sharma, Mumbai',
+    testimonial: '“Living in Mumbai means compact apartments. These 3D wall niche stickers from AAAN Cart give an incredible illusion of depth!” – Priya Sharma, Mumbai',
     faqs: [
-      { q: 'Where is your service center in Mumbai?', a: 'We handle all warranty claims directly with free pickup and replacement services in Mumbai.' },
+      { q: 'Where is your service center in Mumbai?', a: 'We handle all claims directly with free replacement services in Mumbai.' },
       { q: 'Is delivery free in Mumbai?', a: 'Yes, we provide free shipping on all orders above ₹499 in Mumbai.' }
     ]
   },
   bangalore: {
     name: 'Bangalore',
-    keywords: 'Handheld massager online Bangalore, neck pain relief Bangalore, foot massager machine Bangalore',
-    title: 'Handheld Massager Online in Bangalore | Afsha Enterprises',
-    description: 'Purchase professional handheld body massagers online in Bangalore. Deep tissue, neck & shoulder, and foot massagers with quick local shipping in Bangalore.',
-    heading: 'Professional Handheld Massagers in Bangalore',
-    intro: 'Afsha Enterprises offers state-of-the-art handheld and deep tissue body massagers in Bangalore. Ideal for tech professionals in Whitefield, Electronic City, and Indiranagar experiencing posture-related neck and back stiffness. Our massagers come with adjustable speeds and heated therapy.',
+    keywords: '3D wall art online Bangalore, botanical plant decals Bangalore, acrylic wall niches Bangalore',
+    title: '3D Wall Stickers Online in Bangalore | AAAN Cart',
+    description: 'Purchase 3D botanical wall stickers and acrylic decals online in Bangalore. Quick local shipping across Bangalore.',
+    heading: 'Premium 3D Wall Decor in Bangalore',
+    intro: 'AAAN Cart offers state-of-the-art 3D wall stickers and botanical decals in Bangalore. Ideal for modern apartments in Whitefield, Electronic City, and Indiranagar.',
     deliveryInfo: 'Super-fast shipping to Bangalore (2-3 days). Professional local customer support available.',
-    testimonial: '“Sitting at a laptop in Whitefield all day left my neck completely stiff. The neck and shoulder massager has helped me immensely. Best purchase this year!” – Amit Patel, Bangalore',
+    testimonial: '“The acrylic wall niche stickers from AAAN Cart look unbelievable on my living room wall. Best decor purchase this year!” – Amit Patel, Bangalore',
     faqs: [
       { q: 'How long does shipping take to Bangalore?', a: 'Standard delivery takes 48 to 72 hours. Tracking link will be sent via SMS/Email.' },
-      { q: 'Does the massager come with warranty?', a: 'Yes, all our electric massagers come with a 1-year replacement warranty.' }
+      { q: 'Do the decals leave any residue?', a: 'No, all our 3D wall decals use paint-safe residue-free adhesive.' }
     ]
   }
 };
@@ -64,7 +64,6 @@ export default function LocalSEO() {
   useEffect(() => {
     let mounted = true;
     setLoading(true);
-    // Fetch products belonging to Wellness & Massage (or any products) to recommend
     fetchProducts({ limit: '4' })
       .then((res) => {
         if (mounted && Array.isArray(res)) {
@@ -79,15 +78,15 @@ export default function LocalSEO() {
     return () => { mounted = false; };
   }, [cityKey]);
 
-  const pageUrl = `https://www.afshaenterprises.com/locations/${cityKey}`;
+  const pageUrl = `https://aaancart.com/locations/${cityKey}`;
 
   // Structured Data
   const localBusinessSchema = {
     '@context': 'https://schema.org',
     '@type': 'LocalBusiness',
-    'name': `Afsha Enterprises - Body Massagers in ${data.name}`,
-    'image': 'https://www.afshaenterprises.com/logo.png',
-    'telephone': '+91-9999999999',
+    'name': `AAAN Cart - 3D Wall Stickers in ${data.name}`,
+    'image': 'https://aaancart.com/favicon.svg',
+    'telephone': '+91 80737 86650',
     'url': pageUrl,
     'priceRange': '₹₹',
     'address': {
@@ -98,7 +97,7 @@ export default function LocalSEO() {
     'description': data.description,
     'brand': {
       '@type': 'Brand',
-      'name': 'Afsha Enterprises'
+      'name': 'AAAN Cart'
     }
   };
 
@@ -110,12 +109,12 @@ export default function LocalSEO() {
         '@type': 'ListItem',
         'position': 1,
         'name': 'Home',
-        'item': 'https://www.afshaenterprises.com/'
+        'item': 'https://aaancart.com/'
       },
       {
         '@type': 'ListItem',
         'position': 2,
-        'name': `Body Massager in ${data.name}`,
+        'name': `3D Wall Stickers in ${data.name}`,
         'item': pageUrl
       }
     ]

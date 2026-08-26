@@ -29,20 +29,20 @@ export default function BlogList() {
   return (
     <>
       <Helmet>
-        <title>Health & Wellness Blog | Afsha Enterprises</title>
-        <meta name="description" content="Read expert tips and insights on health, body massage benefits, pain relief tips at home, and buying guides for electric and handheld massagers." />
-        <meta name="keywords" content="body massager benefits, electric vs manual massager, neck pain relief, back pain relief, handheld massagers" />
-        <link rel="canonical" href="https://www.afshaenterprises.com/blogs" />
+        <title>Home Decor &amp; 3D Wall Art Blog | AAAN Cart</title>
+        <meta name="description" content="Read expert tips and insights on 3D wall decoration, acrylic wall stickers, home styling, and botanical plant decal guides." />
+        <meta name="keywords" content="3D wall stickers, botanical wall decals, acrylic wall niches, butterfly stickers, home decor tips" />
+        <link rel="canonical" href="https://aaancart.com/blogs" />
         {/* Open Graph */}
-        <meta property="og:title" content="Health & Wellness Blog | Afsha Enterprises" />
-        <meta property="og:description" content="Read expert tips and insights on health, body massage benefits, pain relief tips at home, and buying guides for electric and handheld massagers." />
+        <meta property="og:title" content="Home Decor &amp; 3D Wall Art Blog | AAAN Cart" />
+        <meta property="og:description" content="Read expert tips and insights on 3D wall decoration, acrylic wall stickers, home styling, and botanical plant decal guides." />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://www.afshaenterprises.com/blogs" />
-        <meta property="og:image" content="https://www.afshaenterprises.com/logo.png" />
+        <meta property="og:url" content="https://aaancart.com/blogs" />
+        <meta property="og:image" content="https://aaancart.com/favicon.svg" />
         {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Health & Wellness Blog | Afsha Enterprises" />
-        <meta name="twitter:description" content="Read expert tips and insights on health, body massage benefits, pain relief tips at home, and buying guides for electric and handheld massagers." />
+        <meta name="twitter:title" content="Home Decor &amp; 3D Wall Art Blog | AAAN Cart" />
+        <meta name="twitter:description" content="Read expert tips and insights on 3D wall decoration, acrylic wall stickers, home styling, and botanical plant decal guides." />
       </Helmet>
       <Navbar />
       <div className="blog-list-page">

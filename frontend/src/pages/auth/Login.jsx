@@ -66,7 +66,7 @@ export default function Login() {
     <div className="auth-page">
       <div className="auth-card">
         <div className="auth-logo">
-          <Droplets size={28} /> Afsha enterprises
+          <Droplets size={28} /> AAAN Cart
         </div>
         <p className="auth-subtitle">Welcome back — sign in to your account</p>
 

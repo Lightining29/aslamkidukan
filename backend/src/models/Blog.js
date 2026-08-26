@@ -6,7 +6,7 @@ const blogSchema = new mongoose.Schema(
     slug: { type: String, required: true, unique: true },
     metaDescription: { type: String, required: true },
     content: { type: String, required: true },
-    author: { type: String, default: 'Afsha Enterprises' },
+    author: { type: String, default: 'AAAN Cart' },
     image: { type: String }, // Optional banner image url
     tags: [{ type: String }],
     publishedAt: { type: Date, default: Date.now },

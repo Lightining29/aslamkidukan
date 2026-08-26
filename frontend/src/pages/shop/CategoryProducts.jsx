@@ -53,7 +53,7 @@ export default function CategoryProducts() {
     return () => { mounted = false; };
   }, [categorySlug]);
 
-  const canonicalUrl = `https://www.afshaenterprises.com/category/${categoryObj?.slug || categorySlug}`;
+  const canonicalUrl = `https://aaancart.com/category/${categoryObj?.slug || categorySlug}`;
 
   const breadcrumbSchema = {
     '@context': 'https://schema.org',
@@ -63,7 +63,7 @@ export default function CategoryProducts() {
         '@type': 'ListItem',
         'position': 1,
         'name': 'Home',
-        'item': 'https://www.afshaenterprises.com/'
+        'item': 'https://aaancart.com/'
       },
       {
         '@type': 'ListItem',
@@ -77,11 +77,11 @@ export default function CategoryProducts() {
   return (
     <>
       <Helmet>
-        <title>{categoryName ? `${categoryName} | Afsha Enterprises` : 'Shop Category | Afsha Enterprises'}</title>
-        <meta name="description" content={`Explore our premium range of ${categoryName || 'wellness'} products. High-quality body massagers, skincare, and wellness devices with quick delivery in India.`} />
+        <title>{categoryName ? `${categoryName} | AAAN Cart` : 'Shop Category | AAAN Cart'}</title>
+        <meta name="description" content={`Explore our premium range of ${categoryName || '3D Wall Art'} products. High-quality 3D wall stickers, acrylic decals, and wall decor with quick delivery in India.`} />
         <link rel="canonical" href={canonicalUrl} />
-        <meta property="og:title" content={categoryName ? `${categoryName} | Afsha Enterprises` : 'Shop Category'} />
-        <meta property="og:description" content={`Explore our premium range of ${categoryName || 'wellness'} products.`} />
+        <meta property="og:title" content={categoryName ? `${categoryName} | AAAN Cart` : 'Shop Category'} />
+        <meta property="og:description" content={`Explore our premium range of ${categoryName || '3D Wall Art'} products.`} />
         <meta property="og:type" content="website" />
         <meta property="og:url" content={canonicalUrl} />
         <script type="application/ld+json">{JSON.stringify(breadcrumbSchema)}</script>

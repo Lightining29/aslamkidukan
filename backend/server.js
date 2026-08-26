@@ -213,7 +213,7 @@ app.post('/api/test-simulate-payment', async (req, res) => {
 // Robots.txt Route
 app.get('/robots.txt', (_req, res) => {
   res.header('Content-Type', 'text/plain');
-  res.send(`User-agent: *\nAllow: /\n\nSitemap: https://www.afshaenterprises.com/sitemap.xml`);
+  res.send(`User-agent: *\nAllow: /\n\nSitemap: https://aaancart.com/sitemap.xml`);
 });
 
 // Sitemap.xml Route
@@ -223,7 +223,7 @@ app.get('/sitemap.xml', async (req, res) => {
     const products = await Product.find().select('slug updatedAt');
     const blogs = await Blog.find().select('slug updatedAt');
 
-    const domain = 'https://www.afshaenterprises.com';
+    const domain = 'https://aaancart.com';
 
     // Static pages
     const staticUrls = [

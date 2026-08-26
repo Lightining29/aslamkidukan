@@ -185,7 +185,7 @@ export default function BlogDetail() {
   }
 
   // Schema generation
-  const articleUrl = `https://www.afshaenterprises.com/blog/${blog.slug}`;
+  const articleUrl = `https://aaancart.com/blog/${blog.slug}`;
   const publishDate = new Date(blog.publishedAt).toISOString();
   const modifiedDate = new Date(blog.updatedAt || blog.publishedAt).toISOString();
 
@@ -195,21 +195,21 @@ export default function BlogDetail() {
     'headline': blog.title,
     'description': blog.metaDescription,
     'image': [
-      blog.image ? `https://www.afshaenterprises.com${blog.image}` : 'https://www.afshaenterprises.com/masage.jpg'
+      blog.image ? `https://aaancart.com${blog.image}` : 'https://aaancart.com/favicon.svg'
     ],
     'datePublished': publishDate,
     'dateModified': modifiedDate,
     'author': {
       '@type': 'Organization',
-      'name': 'Afsha Enterprises',
-      'url': 'https://www.afshaenterprises.com/'
+      'name': 'AAAN Cart',
+      'url': 'https://aaancart.com/'
     },
     'publisher': {
       '@type': 'Organization',
-      'name': 'Afsha Enterprises',
+      'name': 'AAAN Cart',
       'logo': {
         '@type': 'ImageObject',
-        'url': 'https://www.afshaenterprises.com/logo.png'
+        'url': 'https://aaancart.com/favicon.svg'
       }
     }
   };
@@ -222,13 +222,13 @@ export default function BlogDetail() {
         '@type': 'ListItem',
         'position': 1,
         'name': 'Home',
-        'item': 'https://www.afshaenterprises.com/'
+        'item': 'https://aaancart.com/'
       },
       {
         '@type': 'ListItem',
         'position': 2,
         'name': 'Blog',
-        'item': 'https://www.afshaenterprises.com/blogs'
+        'item': 'https://aaancart.com/blogs'
       },
       {
         '@type': 'ListItem',
@@ -242,18 +242,18 @@ export default function BlogDetail() {
   return (
     <>
       <Helmet>
-        <title>{blog.title} | Afsha Enterprises</title>
+        <title>{blog.title} | AAAN Cart</title>
         <meta name="description" content={blog.metaDescription} />
         <link rel="canonical" href={articleUrl} />
         {/* Open Graph */}
-        <meta property="og:title" content={`${blog.title} | Afsha Enterprises`} />
+        <meta property="og:title" content={`${blog.title} | AAAN Cart`} />
         <meta property="og:description" content={blog.metaDescription} />
         <meta property="og:type" content="article" />
         <meta property="og:url" content={articleUrl} />
-        <meta property="og:image" content={blog.image ? `https://www.afshaenterprises.com${blog.image}` : 'https://www.afshaenterprises.com/masage.jpg'} />
+        <meta property="og:image" content={blog.image ? `https://aaancart.com${blog.image}` : 'https://aaancart.com/favicon.svg'} />
         {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={`${blog.title} | Afsha Enterprises`} />
+        <meta name="twitter:title" content={`${blog.title} | AAAN Cart`} />
         <meta name="twitter:description" content={blog.metaDescription} />
 
         {/* Structured Data */}

@@ -40,7 +40,7 @@ export default function VerifyOtp() {
     setLoading(true);
     try {
       const user = await verifyOtp(email, code);
-      toastSuccess('Email verified!', 'Welcome to Afsha Enterprises.');
+      toastSuccess('Email verified!', 'Welcome to AAAN Cart.');
       navigate(user.role === 'admin' ? '/admin' : '/account', { replace: true });
     } catch (err) {
       setError(err.message || 'Verification failed');

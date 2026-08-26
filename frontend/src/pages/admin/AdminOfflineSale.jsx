@@ -202,9 +202,9 @@ export default function AdminOfflineSale() {
                 {/* Invoice Header */}
                 <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '2px solid var(--border)', paddingBottom: 24, marginBottom: 24 }}>
                   <div>
-                    <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.8rem', color: 'var(--text-dark)', margin: 0 }}>AFSHA ENTERPRISES</h2>
+                    <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.8rem', color: 'var(--text-dark)', margin: 0 }}>AAAN CART</h2>
                     <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)', margin: '4px 0 0', lineHeight: 1.4 }}>
-                      Premium Cosmetics & Skincare<br />
+                      3D Wall Art &amp; Botanical Decals<br />
                       75 Raja Muthai Road, Periyamet,<br />
                       Chennai - 600003<br />
                       Phone: +91 80 7378 6650
