@@ -11,6 +11,15 @@
   box-shadow: 0 -4px 20px rgba(15, 23, 42, 0.02);
 }
 
+/* Hide footer completely on mobile web app view */
+@media (max-width: 768px) {
+  .webapp-light-footer,
+  .luxury-footer-root,
+  footer {
+    display: none !important;
+  }
+}
+
 /* =========================================================
    1. Compact Trust Features Strip
    ========================================================= */
