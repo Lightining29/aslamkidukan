@@ -10,22 +10,27 @@ router.get('/flash-sale', async (_req, res) => {
   try {
     if (isMySQLActive()) {
       const mysqlProds = await mysqlGetProducts({ bestseller: true });
-      if (mysqlProds.length > 0) return res.json(mysqlProds);
+      if (mysqlProds && mysqlProds.length > 0) return res.json(mysqlProds);
     }
 
-    const now = new Date();
-    const products = await Product.find({
-      flashSale: true,
-      flashSalePrice: { $gt: 0 },
-      $or: [
-        { flashSaleEndsAt: { $gt: now } },
-        { flashSaleEndsAt: null },
-      ],
-    })
-      .select('-imageData -imageContentType -images.data')
-      .populate('category', 'name slug')
-      .sort({ salesCount: -1 });
-    res.json(products.map(enrichProduct));
+    try {
+      const now = new Date();
+      const products = await Product.find({
+        flashSale: true,
+        flashSalePrice: { $gt: 0 },
+        $or: [
+          { flashSaleEndsAt: { $gt: now } },
+          { flashSaleEndsAt: null },
+        ],
+      })
+        .select('-imageData -imageContentType -images.data')
+        .populate('category', 'name slug')
+        .sort({ salesCount: -1 });
+      return res.json(products.map(enrichProduct));
+    } catch {
+      const mysqlProds = await mysqlGetProducts({ bestseller: true });
+      return res.json(mysqlProds);
+    }
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -39,24 +44,34 @@ router.get('/', async (req, res) => {
       const filter = {};
       if (category) filter.category = category;
       if (bestseller === 'true') filter.bestseller = true;
+      if (limit) filter.limit = limit;
       const mysqlProds = await mysqlGetProducts(filter);
       if (mysqlProds && mysqlProds.length > 0) {
-        return res.json(limit ? mysqlProds.slice(0, parseInt(limit, 10)) : mysqlProds);
+        return res.json(mysqlProds);
       }
     }
 
-    const filter = {};
-    if (category) filter.category = category;
-    if (bestseller === 'true') filter.bestseller = true;
+    try {
+      const filter = {};
+      if (category) filter.category = category;
+      if (bestseller === 'true') filter.bestseller = true;
 
-    let query = Product.find(filter)
-      .select('-imageData -imageContentType -images.data')
-      .populate('category', 'name slug')
-      .sort({ salesCount: -1, createdAt: -1 });
-    if (limit) query = query.limit(parseInt(limit, 10));
+      let query = Product.find(filter)
+        .select('-imageData -imageContentType -images.data')
+        .populate('category', 'name slug')
+        .sort({ salesCount: -1, createdAt: -1 });
+      if (limit) query = query.limit(parseInt(limit, 10));
 
-    const products = await query;
-    res.json(products.map(enrichProduct));
+      const products = await query;
+      if (products && products.length > 0) {
+        return res.json(products.map(enrichProduct));
+      }
+    } catch {
+      // Fallback
+    }
+
+    const mysqlProds = await mysqlGetProducts({ category, bestseller: bestseller === 'true', limit });
+    return res.json(mysqlProds);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -69,11 +84,18 @@ router.get('/:slug', async (req, res) => {
       if (mysqlProd) return res.json(mysqlProd);
     }
 
-    const product = await Product.findOne({ slug: req.params.slug })
-      .select('-imageData -imageContentType -images.data')
-      .populate('category', 'name slug');
-    if (!product) return res.status(404).json({ message: 'Product not found' });
-    res.json(enrichProduct(product));
+    try {
+      const product = await Product.findOne({ slug: req.params.slug })
+        .select('-imageData -imageContentType -images.data')
+        .populate('category', 'name slug');
+      if (product) return res.json(enrichProduct(product));
+    } catch {
+      // Fallback
+    }
+
+    const mysqlProd = await mysqlGetProductBySlug(req.params.slug);
+    if (!mysqlProd) return res.status(404).json({ message: 'Product not found' });
+    return res.json(mysqlProd);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

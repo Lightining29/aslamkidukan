@@ -1,4 +1,5 @@
 import express from 'express';
+import { isMySQLActive, mysqlGetCategories, mysqlCreateCategory } from '../config/mysql.js';
 import Category from '../models/Category.js';
 import Product from '../models/Product.js';
 
@@ -6,45 +7,20 @@ const router = express.Router();
 
 router.get('/', async (req, res) => {
   try {
-    // Single aggregation: fetch all categories + product counts in one DB round-trip
-    const categories = await Category.aggregate([
-      { $sort: { name: 1 } },
-      {
-        $lookup: {
-          from: Product.collection.name,
-          localField: '_id',
-          foreignField: 'category',
-          as: '_products',
-          pipeline: [{ $project: { _id: 1 } }],
-        },
-      },
-      {
-        $addFields: {
-          productCount: { $size: '$_products' },
-        },
-      },
-      {
-        $project: {
-          _products: 0,
-          imageData: 0,
-          imageContentType: 0,
-        },
-      },
-    ]);
+    if (isMySQLActive()) {
+      const mysqlCats = await mysqlGetCategories();
+      if (mysqlCats && mysqlCats.length > 0) {
+        return res.json(mysqlCats);
+      }
+    }
 
-    const mapped = categories.map((c) => {
-      const v = c.updatedAt ? new Date(c.updatedAt).getTime() : Date.now();
-      // imageData was excluded by $project; check via a flag stored in the doc
-      // We re-check using imageContentType absence (already projected out).
-      // Instead use a workaround: re-query is avoided — imageUrl based on _id
-      // will 404 gracefully if no image is stored.
-      c.imageUrl = `/api/images/category/${c._id}?v=${v}`;
-      return c;
-    });
-
-    // Cache for 30 seconds on the client, 60 seconds on shared caches (CDN/proxy)
-    res.set('Cache-Control', 'public, max-age=30, s-maxage=60');
-    res.json(mapped);
+    try {
+      const categories = await Category.find().select('-imageData -imageContentType');
+      return res.json(categories);
+    } catch {
+      const mysqlCats = await mysqlGetCategories();
+      return res.json(mysqlCats);
+    }
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -52,21 +28,24 @@ router.get('/', async (req, res) => {
 
 router.get('/:slug', async (req, res) => {
   try {
-    const category = await Category.findOne({ slug: req.params.slug })
-      .select('-imageData -imageContentType');
-    if (!category) return res.status(404).json({ message: 'Category not found' });
+    if (isMySQLActive()) {
+      const mysqlCats = await mysqlGetCategories();
+      const cat = mysqlCats.find((c) => c.slug === req.params.slug);
+      if (cat) return res.json(cat);
+    }
 
-    const [count, obj] = await Promise.all([
-      Product.countDocuments({ category: category._id }),
-      Promise.resolve(category.toObject()),
-    ]);
+    try {
+      const category = await Category.findOne({ slug: req.params.slug })
+        .select('-imageData -imageContentType');
+      if (category) return res.json(category);
+    } catch {
+      // Fallback
+    }
 
-    obj.productCount = count;
-    const v = category.updatedAt ? category.updatedAt.getTime() : Date.now();
-    obj.imageUrl = `/api/images/category/${category._id}?v=${v}`;
-
-    res.set('Cache-Control', 'public, max-age=30, s-maxage=60');
-    res.json(obj);
+    const mysqlCats = await mysqlGetCategories();
+    const cat = mysqlCats.find((c) => c.slug === req.params.slug);
+    if (!cat) return res.status(404).json({ message: 'Category not found' });
+    return res.json(cat);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
