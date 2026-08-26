@@ -82,7 +82,7 @@ export default function MobileBottomNav({ onOpenCart, onOpenWishlist, onOpenProf
         if (onOpenProfile) {
           onOpenProfile();
         } else if (isAuthenticated) {
-          navigate('/account');
+          navigate('/account/settings');
         } else {
           if (typeof setShowLoginModal === 'function') {
             setShowLoginModal('login');

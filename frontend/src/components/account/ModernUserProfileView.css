@@ -1,0 +1,474 @@
+/* =========================================================
+   AAAN ENTERPRISES — MODERN IOS PROFILE SCREEN
+   Matches User Mockup with Avatar Card, Pro Banner, Card Groups & iOS Switches
+   ========================================================= */
+
+.modern-ios-profile-page {
+  width: 100%;
+  max-width: 440px;
+  margin: 0 auto;
+  min-height: 100vh;
+  background: #F8FAFC;
+  padding: 12px 18px 80px;
+  box-sizing: border-box;
+  font-family: -apple-system, BlinkMacSystemFont, 'Plus Jakarta Sans', 'SF Pro Text', 'Segoe UI', Roboto, sans-serif;
+  user-select: none;
+}
+
+/* =========================================================
+   Top iOS App Navigation Bar
+   ========================================================= */
+.ios-profile-navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0 16px;
+}
+
+.ios-nav-circle-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  color: #0F172A;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+  transition: all 0.2s ease;
+}
+
+.ios-nav-circle-btn:hover {
+  background: #F1F5F9;
+  transform: scale(1.05);
+}
+
+.ios-navbar-title {
+  margin: 0;
+  font-size: 1.18rem;
+  font-weight: 800;
+  color: #0F172A;
+  letter-spacing: -0.2px;
+}
+
+/* =========================================================
+   Main Profile Content Stack
+   ========================================================= */
+.ios-profile-content-container {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* User Card Row (Top Card) */
+.ios-user-hero-card {
+  background: #FFFFFF;
+  border-radius: 22px;
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid #E2E8F0;
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
+  cursor: pointer;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease;
+}
+
+.ios-user-hero-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+}
+
+.ios-user-hero-card:active {
+  transform: scale(0.98);
+}
+
+.user-hero-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.ios-avatar-badge {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #FEF08A;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(254, 240, 138, 0.5);
+  flex-shrink: 0;
+}
+
+.ios-avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.user-hero-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-hero-name {
+  margin: 0 0 2px 0;
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #0F172A;
+  line-height: 1.2;
+}
+
+.user-hero-email {
+  margin: 0;
+  font-size: 0.8rem;
+  color: #64748B;
+  font-weight: 500;
+}
+
+.ios-chevron-arrow {
+  color: #94A3B8;
+  flex-shrink: 0;
+}
+
+/* =========================================================
+   Upgrade to Pro Dark Obsidian Banner (Matches Mockup 1)
+   ========================================================= */
+.ios-pro-upgrade-card {
+  background: #18181B;
+  border-radius: 24px;
+  padding: 18px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  position: relative;
+  overflow: hidden;
+}
+
+.pro-card-left {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  flex: 1;
+}
+
+.pro-sparkle-badge {
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+  background: rgba(37, 99, 235, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.pro-star-icon {
+  color: #3B82F6;
+  fill: #3B82F6;
+}
+
+.pro-card-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.pro-title {
+  margin: 0 0 4px 0;
+  font-size: 1rem;
+  font-weight: 800;
+  color: #FFFFFF;
+}
+
+.pro-description {
+  margin: 0;
+  font-size: 0.74rem;
+  color: #94A3B8;
+  line-height: 1.4;
+  font-weight: 500;
+}
+
+.pro-upgrade-btn {
+  background: rgba(255, 255, 255, 0.12);
+  color: #FFFFFF;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 8px 16px;
+  border-radius: 50px;
+  font-size: 0.76rem;
+  font-weight: 800;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.pro-upgrade-btn:hover {
+  background: rgba(255, 255, 255, 0.24);
+  transform: scale(1.04);
+}
+
+/* =========================================================
+   iOS Card Stack Groups (Grouped Rounded Lists)
+   ========================================================= */
+.ios-card-stack-group {
+  background: #FFFFFF;
+  border-radius: 24px;
+  border: 1px solid #E2E8F0;
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.03);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.ios-stack-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px 20px;
+  border-bottom: 1px solid #F1F5F9;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.ios-stack-row:last-child {
+  border-bottom: none;
+}
+
+.ios-stack-row:hover {
+  background: #F8FAFC;
+}
+
+.ios-stack-row:active {
+  background: #F1F5F9;
+}
+
+.stack-row-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #1E293B;
+}
+
+.stack-row-icon {
+  color: #64748B;
+  flex-shrink: 0;
+}
+
+.stack-row-right-text {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.82rem;
+  color: #64748B;
+  font-weight: 600;
+}
+
+/* =========================================================
+   Interactive iOS Toggle Switch
+   ========================================================= */
+.ios-stack-row.toggle-row {
+  cursor: default;
+}
+
+.ios-switch-wrapper {
+  position: relative;
+  display: inline-block;
+  width: 48px;
+  height: 28px;
+}
+
+.ios-switch-wrapper input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.ios-switch-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #E2E8F0;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  border-radius: 34px;
+}
+
+.ios-switch-slider:before {
+  position: absolute;
+  content: "";
+  height: 22px;
+  width: 22px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  border-radius: 50%;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.ios-switch-wrapper input:checked + .ios-switch-slider {
+  background-color: #34C759; /* iOS Emerald Green */
+}
+
+.ios-switch-wrapper input:checked + .ios-switch-slider:before {
+  transform: translateX(20px);
+}
+
+/* =========================================================
+   Edit Profile & Pro Modal Sheets
+   ========================================================= */
+.ios-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(8px);
+  z-index: 100000;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+@media (min-width: 600px) {
+  .ios-modal-overlay {
+    align-items: center;
+    padding: 20px;
+  }
+}
+
+.ios-modal-sheet {
+  background: #FFFFFF;
+  width: 100%;
+  max-width: 440px;
+  border-radius: 28px 28px 0 0;
+  padding: 22px 22px 32px;
+  box-sizing: border-box;
+  box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.2);
+  animation: sheetSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@media (min-width: 600px) {
+  .ios-modal-sheet {
+    border-radius: 28px;
+  }
+}
+
+@keyframes sheetSlideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+.sheet-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+
+.sheet-header h3 {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #0F172A;
+}
+
+.sheet-close-btn {
+  background: #F1F5F9;
+  border: 1px solid #E2E8F0;
+  color: #64748B;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sheet-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sheet-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.sheet-field label {
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: #64748B;
+}
+
+.sheet-field input {
+  padding: 10px 14px;
+  border-radius: 14px;
+  border: 1.5px solid #E2E8F0;
+  font-size: 0.88rem;
+  outline: none;
+  background: #F8FAFC;
+}
+
+.sheet-field input:focus {
+  border-color: #0066FF;
+  background: #FFFFFF;
+}
+
+.sheet-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.btn-sheet-primary {
+  background: #0066FF;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 14px;
+  font-weight: 800;
+  font-size: 0.88rem;
+  cursor: pointer;
+}
+
+.btn-sheet-secondary {
+  background: #F1F5F9;
+  color: #0F172A;
+  border: 1.5px solid #E2E8F0;
+  padding: 12px;
+  border-radius: 14px;
+  font-weight: 700;
+  font-size: 0.84rem;
+  cursor: pointer;
+}
+
+/* Pro Sheet Benefits */
+.pro-sheet .pro-benefits-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 16px 0 20px;
+}
+
+.benefit-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: #1E293B;
+}

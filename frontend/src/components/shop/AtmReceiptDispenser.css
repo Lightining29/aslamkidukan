@@ -1,0 +1,452 @@
+/* =========================================================
+   AAAN ENTERPRISES — ATM / THERMAL PRINTER RECEIPT DISPENSER
+   Matches User Mockup with Rolling Paper Dispense Animation
+   ========================================================= */
+
+.atm-dispenser-screen-wrapper {
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
+  min-height: 100vh;
+  background: #F8FAFC;
+  display: flex;
+  flex-direction: column;
+  padding: 16px 20px 32px;
+  box-sizing: border-box;
+  font-family: -apple-system, BlinkMacSystemFont, 'Plus Jakarta Sans', 'Segoe UI', Roboto, sans-serif;
+  user-select: none;
+}
+
+/* Header */
+.atm-screen-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 0 18px;
+}
+
+.atm-nav-icon-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  color: #0F172A;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+  transition: all 0.2s ease;
+}
+
+.atm-nav-icon-btn:hover {
+  background: #F1F5F9;
+  transform: scale(1.05);
+}
+
+.atm-header-title {
+  margin: 0;
+  font-size: 1.18rem;
+  font-weight: 800;
+  color: #0F172A;
+  letter-spacing: -0.2px;
+}
+
+/* =========================================================
+   ATM Thermal Printer Slot & Paper Dispenser Container
+   ========================================================= */
+.atm-printer-machine-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 10px;
+  flex: 1;
+}
+
+/* Dark Machine Slot Bezel */
+.atm-slot-bezel {
+  width: 96%;
+  height: 44px;
+  background: #1E293B;
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 16px;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.35), inset 0 2px 6px rgba(255, 255, 255, 0.15);
+  border: 1.5px solid #334155;
+  z-index: 10;
+  position: relative;
+}
+
+.atm-slot-inner-slit {
+  width: 100%;
+  height: 10px;
+  background: #020617;
+  border-radius: 6px;
+  box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.8);
+}
+
+/* =========================================================
+   Animated Thermal Receipt Slip (Dispenses Downwards)
+   ========================================================= */
+.atm-receipt-paper-slip {
+  width: 90%;
+  background: #FFFFFF;
+  border-radius: 0 0 24px 24px;
+  padding: 24px 18px 20px;
+  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.14), 0 4px 16px rgba(0, 0, 0, 0.04);
+  border: 1px solid #E2E8F0;
+  border-top: none;
+  margin-top: -12px;
+  z-index: 5;
+  transform-origin: top center;
+  animation: receiptDispenseRoll 0.85s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  position: relative;
+}
+
+@keyframes receiptDispenseRoll {
+  0% {
+    transform: translateY(-80%) scaleY(0.1);
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  80% {
+    transform: translateY(4px) scaleY(1.02);
+  }
+  100% {
+    transform: translateY(0%) scaleY(1);
+    opacity: 1;
+  }
+}
+
+/* Top Monospace Header */
+.receipt-invoice-head {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.receipt-mono-title {
+  font-family: 'SF Mono', Monaco, Consolas, monospace;
+  font-size: 0.78rem;
+  color: #64748B;
+  text-align: center;
+  letter-spacing: 0.2px;
+}
+
+.receipt-dashed-divider {
+  width: 100%;
+  border-top: 1.5px dashed #CBD5E1;
+  margin: 6px 0 10px;
+}
+
+.receipt-total-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.receipt-total-label {
+  font-size: 0.95rem;
+  color: #64748B;
+  font-weight: 600;
+}
+
+.receipt-total-val {
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: #0F172A;
+  letter-spacing: -0.5px;
+}
+
+.receipt-subtotal-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.82rem;
+  color: #64748B;
+  font-weight: 600;
+}
+
+.badge-paid-text {
+  color: #059669;
+  font-weight: 800;
+  background: #ECFDF5;
+  padding: 3px 8px;
+  border-radius: 50px;
+  font-size: 0.72rem;
+  border: 1px solid #A7F3D0;
+}
+
+/* Breakdown Rows */
+.receipt-paid-breakdown-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 18px 0;
+  border-top: 1px solid #F1F5F9;
+  border-bottom: 1px solid #F1F5F9;
+  padding: 14px 0;
+}
+
+.receipt-payer-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.payer-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.payer-avatar-circle {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #F1F5F9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.88rem;
+}
+
+.payer-avatar-circle.user-avatar {
+  background: #FEF3C7;
+}
+
+.payer-avatar-circle.item-avatar {
+  background: #EFF6FF;
+}
+
+.payer-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.payer-text strong {
+  font-size: 0.84rem;
+  color: #0F172A;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.payer-text span {
+  font-size: 0.72rem;
+  color: #64748B;
+}
+
+.payer-paid-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: #ECFDF5;
+  color: #059669;
+  border: 1px solid #A7F3D0;
+  padding: 3px 8px;
+  border-radius: 50px;
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+
+.check-icon {
+  stroke-width: 3;
+}
+
+/* Payment Status Progress Stepper */
+.receipt-payment-status-block {
+  background: #F8FAFC;
+  border-radius: 16px;
+  padding: 12px 14px;
+  margin-bottom: 16px;
+  border: 1px solid #E2E8F0;
+}
+
+.status-label-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.76rem;
+  color: #64748B;
+  margin-bottom: 10px;
+}
+
+.status-highlight {
+  color: #0F172A;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+}
+
+.receipt-progress-stepper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  margin: 6px 4px 4px;
+}
+
+.step-point {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #E2E8F0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  color: white;
+}
+
+.step-point.completed {
+  background: #10B981;
+  box-shadow: 0 0 8px rgba(16, 185, 129, 0.4);
+}
+
+.step-point.active {
+  background: #0F172A;
+  box-shadow: 0 0 8px rgba(15, 23, 42, 0.3);
+}
+
+.step-point .dot-inner {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: white;
+}
+
+.step-line {
+  flex: 1;
+  height: 3px;
+  background: #E2E8F0;
+  margin: 0 -2px;
+  z-index: 1;
+}
+
+.step-line.completed {
+  background: #10B981;
+}
+
+.step-labels-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: #64748B;
+  margin-top: 6px;
+}
+
+/* Slip Buttons */
+.receipt-slip-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.btn-receipt-dark {
+  background: #1E293B;
+  color: #FFFFFF;
+  border: none;
+  padding: 10px;
+  border-radius: 50px;
+  font-size: 0.76rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-receipt-dark:hover {
+  background: #0F172A;
+  transform: translateY(-1px);
+}
+
+.btn-receipt-white {
+  background: #FFFFFF;
+  color: #0F172A;
+  border: 1.5px solid #CBD5E1;
+  padding: 10px;
+  border-radius: 50px;
+  font-size: 0.76rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-receipt-white:hover {
+  background: #F1F5F9;
+}
+
+/* =========================================================
+   Bottom Bar
+   ========================================================= */
+.atm-bottom-payment-bar {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.payment-method-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.82rem;
+  padding: 0 4px;
+}
+
+.pay-label {
+  color: #64748B;
+  font-weight: 600;
+}
+
+.pay-val-chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #0F172A;
+}
+
+.card-blue-badge {
+  width: 18px;
+  height: 12px;
+  background: #1E40AF;
+  border-radius: 3px;
+  display: inline-block;
+}
+
+.btn-atm-primary-done {
+  width: 100%;
+  padding: 15px;
+  border-radius: 20px;
+  background: #1E293B;
+  color: #FFFFFF;
+  border: none;
+  font-size: 0.95rem;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.2);
+  transition: all 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.btn-atm-primary-done:hover {
+  background: #0F172A;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.3);
+}
+
+.btn-atm-primary-done:active {
+  transform: scale(0.98);
+}
