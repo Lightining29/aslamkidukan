@@ -1,55 +1,511 @@
-:root{
-  --bg-gradient: linear-gradient(135deg,#7dd3fc 0%, #60a5fa 50%, #7c3aed 100%);
-  --card-bg: #ffffff;
-  --muted: #6b7280;
-  --accent: #7c3aed;
+/* =========================================================
+   AAAN ENTERPRISES — MODERN WEB APP CONTACT PAGE
+   Hero Banner · Topic Pills · Glassmorphic Cards · FAQ Accordion
+   ========================================================= */
+
+.contact-webapp-page {
+  min-height: 100vh;
+  background: #F8FAFC;
+  padding-bottom: 80px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Plus Jakarta Sans', 'Segoe UI', Roboto, sans-serif;
+  color: #0F172A;
 }
 
-.contact-hero{
-  background: var(--bg-gradient);
-  color: white;
-  padding: 60px 0;
-  border-bottom-left-radius: 18px;
-  border-bottom-right-radius: 18px;
+/* =========================================================
+   Hero Banner
+   ========================================================= */
+.contact-hero-banner {
+  background: linear-gradient(135deg, #0F172A 0%, #1E293B 60%, #0F172A 100%);
+  color: #FFFFFF;
+  padding: 48px 24px 40px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
 }
-.contact-hero-inner{ max-width: 900px; margin: 0 auto; text-align: left; }
-.contact-hero-inner h1{ font-size: 32px; margin: 0 0 8px; }
-.contact-hero-inner p{ margin: 0; opacity: 0.95; }
 
-.contact-wrapper{ margin-top: 28px; max-width: 1100px; margin-left: auto; margin-right: auto; padding: 24px; }
-.contact-grid{ display: grid; grid-template-columns: 1fr 360px; gap: 22px; align-items: start; }
+.contact-hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #FFE600;
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 5px 14px;
+  border-radius: 50px;
+  margin-bottom: 14px;
+  letter-spacing: 0.5px;
+}
 
-.card{ background: var(--card-bg); border-radius: 12px; box-shadow: 0 6px 20px rgba(13, 38, 59, 0.06); padding: 20px; }
+.contact-hero-title {
+  margin: 0 0 10px 0;
+  font-size: 2.1rem;
+  font-weight: 900;
+  letter-spacing: -0.5px;
+}
 
-.contact-form label{ display: block; font-size: 13px; color: var(--muted); margin-bottom: 6px; }
-.contact-form input,
-.contact-form textarea{ width: 100%; padding: 12px 14px; border-radius: 8px; border: 1px solid #e6eef8; font-size: 14px; background: #fff; }
-.contact-form textarea{ resize: vertical; min-height: 140px; }
+.contact-hero-subtitle {
+  margin: 0 0 24px 0;
+  font-size: 0.95rem;
+  color: #94A3B8;
+  max-width: 580px;
+  line-height: 1.5;
+}
 
-.form-row{ display: flex; gap: 12px; }
-.form-col{ flex: 1; }
+/* Floating Quick Contact Action Pills */
+.contact-quick-pills-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
 
-.form-actions{ display:flex; gap: 10px; margin-top: 12px; }
-.btn{ display:inline-flex; align-items:center; gap:8px; padding:10px 14px; border-radius:8px; border: none; cursor:pointer; }
-.btn.primary{ background: linear-gradient(90deg,#7c3aed,#60a5fa); color: #fff; }
-.btn.outline{ background: transparent; border: 1px solid #e6eef8; color: var(--muted); }
+.quick-pill-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: #FFFFFF;
+  padding: 8px 16px;
+  border-radius: 50px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
 
-.contact-notice{ padding: 12px; border-radius: 8px; margin-bottom: 12px; font-weight: 500; }
-.contact-notice.success{ background:#ecfdf5; color:#065f46; border:1px solid #d1fae5; }
-.contact-notice.error{ background:#fff1f2; color:#7f1d1d; border:1px solid #fecaca; }
+.quick-pill-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
 
-.contact-info h3{ margin-top: 0; }
-.info-list{ display:flex; flex-direction: column; gap:12px; margin-top:12px; }
-.info-item{ display:flex; gap:12px; align-items:flex-start; }
-.info-icon{ width:40px; height:40px; background:#f1f5f9; border-radius:8px; display:flex; align-items:center; justify-content:center; color:var(--accent); }
-.info-body strong{ display:block; }
-.info-body a, .info-body span{ color: #111827; font-size: 14px; text-decoration: none; }
-.hours{ margin-top: 18px; color: var(--muted); font-size: 14px; }
+.quick-pill-btn.whatsapp-pill {
+  border-color: rgba(37, 211, 102, 0.4);
+}
 
-/* Responsive */
-@media (max-width: 880px){
-  .contact-grid{ grid-template-columns: 1fr; }
-  .form-row{ flex-direction: column; }
-  .contact-wrapper{ padding: 12px; }
-  .contact-hero{ padding: 36px 0; }
+/* =========================================================
+   Main 2-Column Grid Container
+   ========================================================= */
+.contact-main-grid-container {
+  max-width: 1100px;
+  margin: -24px auto 40px;
+  padding: 0 20px;
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 24px;
+  position: relative;
+  z-index: 10;
+}
+
+@media (max-width: 900px) {
+  .contact-main-grid-container {
+    grid-template-columns: 1fr;
+    margin-top: 16px;
+  }
+}
+
+.contact-card-surface {
+  background: #FFFFFF;
+  border-radius: 26px;
+  padding: 28px;
+  border: 1.5px solid #E2E8F0;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05);
+  display: flex;
+  flex-direction: column;
+}
+
+/* Card Header */
+.card-head-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 22px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid #F1F5F9;
+}
+
+.card-head-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.card-head-title h3 {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #0F172A;
+}
+
+.priority-tag {
+  background: #EFF6FF;
+  color: #1E40AF;
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 4px 10px;
+  border-radius: 50px;
+  border: 1px solid #BFDBFE;
+}
+
+.verified-store-tag {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: #ECFDF5;
+  color: #065F46;
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 4px 10px;
+  border-radius: 50px;
+  border: 1px solid #A7F3D0;
+}
+
+/* =========================================================
+   Web App Form Controls & Topic Pills
+   ========================================================= */
+.webapp-contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.topic-selector-block {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.topic-pills-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.topic-pill {
+  background: #F8FAFC;
+  border: 1.5px solid #E2E8F0;
+  color: #475569;
+  padding: 6px 12px;
+  border-radius: 50px;
+  font-size: 0.76rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.topic-pill:hover {
+  border-color: #CBD5E1;
+  background: #F1F5F9;
+}
+
+.topic-pill.selected {
+  background: #0F172A;
+  color: #FFFFFF;
+  border-color: #0F172A;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.2);
+}
+
+.form-fields-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+@media (max-width: 600px) {
+  .form-fields-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.form-field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-field-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #475569;
+}
+
+.form-field-group input,
+.form-field-group textarea {
+  width: 100%;
+  padding: 11px 16px;
+  border-radius: 14px;
+  border: 1.5px solid #E2E8F0;
+  font-size: 0.88rem;
+  outline: none;
+  background: #F8FAFC;
+  box-sizing: border-box;
+  color: #0F172A;
+  transition: all 0.2s ease;
+}
+
+.form-field-group input:focus,
+.form-field-group textarea:focus {
+  background: #FFFFFF;
+  border-color: #0066FF;
+  box-shadow: 0 0 0 3px rgba(0, 102, 255, 0.12);
+}
+
+.btn-webapp-submit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #0066FF 0%, #4F46E5 100%);
+  color: #FFFFFF;
+  border: none;
+  padding: 14px;
+  border-radius: 50px;
+  font-size: 0.92rem;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(0, 102, 255, 0.25);
+  transition: all 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+  margin-top: 4px;
+}
+
+.btn-webapp-submit:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(0, 102, 255, 0.35);
+}
+
+.btn-webapp-submit:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* =========================================================
+   Store Headquarters & Right Column Card
+   ========================================================= */
+.store-address-box {
+  background: #F8FAFC;
+  border-radius: 18px;
+  padding: 16px;
+  border: 1px solid #E2E8F0;
+  margin-bottom: 18px;
+}
+
+.company-title {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #0F172A;
+  display: block;
+  margin-bottom: 6px;
+}
+
+.address-line {
+  margin: 0 0 6px 0;
+  font-size: 0.82rem;
+  color: #475569;
+  line-height: 1.45;
+}
+
+.gst-line {
+  margin: 0 0 12px 0;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #64748B;
+}
+
+.btn-store-map {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #FFFFFF;
+  border: 1.5px solid #CBD5E1;
+  color: #0F172A;
+  padding: 8px 14px;
+  border-radius: 50px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.btn-store-map:hover {
+  background: #F1F5F9;
+  border-color: #94A3B8;
+}
+
+.store-meta-features {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.meta-feature-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.feature-icon-badge {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: #F1F5F9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.meta-feature-row strong {
+  font-size: 0.84rem;
+  color: #0F172A;
+  display: block;
+}
+
+.meta-feature-row p {
+  margin: 0;
+  font-size: 0.76rem;
+  color: #64748B;
+}
+
+/* WhatsApp Card */
+.instant-whatsapp-card {
+  background: #F0FDF4;
+  border-radius: 18px;
+  padding: 16px;
+  border: 1px solid #BBF7D0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.wa-card-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+}
+
+.wa-card-left strong {
+  font-size: 0.88rem;
+  color: #065F46;
+  display: block;
+}
+
+.wa-card-left p {
+  margin: 0;
+  font-size: 0.74rem;
+  color: #047857;
+}
+
+.btn-wa-direct {
+  background: #25D366;
+  color: #FFFFFF;
+  padding: 8px 14px;
+  border-radius: 50px;
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+}
+
+.btn-wa-direct:hover {
+  background: #20BA5A;
+  transform: scale(1.04);
+}
+
+/* =========================================================
+   FAQ Accordion Section
+   ========================================================= */
+.contact-faq-section {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.faq-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.faq-head h2 {
+  margin: 0;
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #0F172A;
+}
+
+.faq-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+@media (max-width: 768px) {
+  .faq-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.faq-card {
+  background: #FFFFFF;
+  border-radius: 18px;
+  padding: 16px 18px;
+  border: 1.5px solid #E2E8F0;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.faq-card:hover {
+  border-color: #CBD5E1;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.04);
+}
+
+.faq-card.is-open {
+  border-color: #0066FF;
+  background: #FFFFFF;
+  box-shadow: 0 6px 20px rgba(0, 102, 255, 0.08);
+}
+
+.faq-question-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.faq-question-row strong {
+  font-size: 0.88rem;
+  color: #0F172A;
+}
+
+.faq-chevron {
+  color: #94A3B8;
+  transition: transform 0.2s ease;
+  flex-shrink: 0;
+}
+
+.faq-card.is-open .faq-chevron {
+  transform: rotate(180deg);
+  color: #0066FF;
+}
+
+.faq-answer-text {
+  margin: 10px 0 0 0;
+  font-size: 0.82rem;
+  color: #475569;
+  line-height: 1.5;
+  padding-top: 10px;
+  border-top: 1px solid #F1F5F9;
 }

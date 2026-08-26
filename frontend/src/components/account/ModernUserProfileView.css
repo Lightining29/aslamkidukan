@@ -326,46 +326,46 @@
 }
 
 /* =========================================================
-   Edit Profile & Pro Modal Sheets
+   Edit Profile & Pro Modal Sheets (Centered & 100% Visible)
    ========================================================= */
 .ios-modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(15, 23, 42, 0.6);
-  backdrop-filter: blur(8px);
-  z-index: 100000;
+  background: rgba(15, 23, 42, 0.68);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  z-index: 100005; /* Well above bottom navbar (9990) and chatbot (99999) */
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   justify-content: center;
-}
-
-@media (min-width: 600px) {
-  .ios-modal-overlay {
-    align-items: center;
-    padding: 20px;
-  }
+  padding: 16px;
+  box-sizing: border-box;
 }
 
 .ios-modal-sheet {
   background: #FFFFFF;
   width: 100%;
-  max-width: 440px;
-  border-radius: 28px 28px 0 0;
-  padding: 22px 22px 32px;
+  max-width: 420px;
+  max-height: 88vh;
+  overflow-y: auto;
+  border-radius: 26px;
+  padding: 22px 20px 24px;
   box-sizing: border-box;
-  box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.2);
-  animation: sheetSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.35), 0 4px 16px rgba(0, 0, 0, 0.08);
+  animation: sheetPopIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  position: relative;
+  margin: auto;
 }
 
-@media (min-width: 600px) {
-  .ios-modal-sheet {
-    border-radius: 28px;
+@keyframes sheetPopIn {
+  from {
+    opacity: 0;
+    transform: scale(0.92) translateY(14px);
   }
-}
-
-@keyframes sheetSlideUp {
-  from { transform: translateY(100%); }
-  to { transform: translateY(0); }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
 }
 
 .sheet-header {
