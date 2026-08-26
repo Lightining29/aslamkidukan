@@ -16,7 +16,6 @@ import MobileAppHeader from '../../components/layout/MobileAppHeader';
 import MobileHeroBanner from '../../components/shop/MobileHeroBanner';
 import DesktopHeroShowcase from '../../components/shop/DesktopHeroShowcase';
 import MovingStickersMarquee from '../../components/shop/MovingStickersMarquee';
-import Interactive3DStudio from '../../components/shop/Interactive3DStudio';
 import CategoryPills from '../../components/shop/CategoryPills';
 import StickerProductCard from '../../components/shop/StickerProductCard';
 import Interactive3DDetailModal from '../../components/product/Interactive3DDetailModal';
@@ -178,16 +177,6 @@ export default function Home() {
         products={products}
         onOpenModal={handleOpenProductModal}
       />
-
-      {/* Interactive 3D Wall Simulator Studio (Desktop Only) */}
-      {products.length > 0 && (
-        <div className="desktop-only-studio-wrapper">
-          <Interactive3DStudio
-            products={products}
-            onOpenModal={handleOpenProductModal}
-          />
-        </div>
-      )}
 
       {/* Main Products Catalog Section (Responsive 4-Col Desktop / 2-Col Mobile) */}
       <section className="catalog-main-section reveal-on-scroll" id="products-catalog-section">
