@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import { ArrowRight, Sparkles, Sun, ShieldCheck, Truck, Star, Award } from 'lucide-react';
 import { WALL_COLORS } from '../../data/stickersCatalog';
 import Bouncy3DLifeText from '../common/Bouncy3DLifeText';
+import interiorHeroImg from '../../assets/images/luxury_interior_hero.jpg';
 import './DesktopHeroShowcase.css';
 
 export default function DesktopHeroShowcase({ onExploreClick, onOpenModal, featuredSticker, products = [] }) {
@@ -105,7 +106,7 @@ export default function DesktopHeroShowcase({ onExploreClick, onOpenModal, featu
           >
             {/* Background High-End Interior House Image */}
             <img
-              src="/images/luxury_interior_hero.jpg"
+              src={interiorHeroImg}
               alt="Luxury Living Room Interior"
               className="interior-room-bg"
             />
