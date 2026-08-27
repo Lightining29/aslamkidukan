@@ -137,7 +137,6 @@ export default function CheckoutPage() {
       const payload = items.map((i) => ({
         productId: i._id || i.id,
         name: i.name,
-        image: i.image || i.imageUrl,
         price: getProductPrice(i),
         quantity: i.quantity,
       }));
