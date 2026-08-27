@@ -159,6 +159,7 @@ export default function Home() {
           onExploreClick={handleExploreClick}
           onOpenModal={handleOpenProductModal}
           featuredSticker={products[0]}
+          products={products}
         />
       )}
 

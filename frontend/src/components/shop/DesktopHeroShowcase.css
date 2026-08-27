@@ -16,12 +16,12 @@
 }
 
 .desktop-hero-container {
-  max-width: 1280px;
+  max-width: 1440px;
   margin: 0 auto;
-  padding: 0 24px;
+  padding: 0 32px;
   display: grid;
-  grid-template-columns: 1.15fr 1fr;
-  gap: 48px;
+  grid-template-columns: 0.95fr 1.65fr;
+  gap: 36px;
   align-items: center;
 }
 
@@ -49,7 +49,7 @@
 
 .desktop-hero-title {
   font-family: var(--font-serif, 'Outfit', sans-serif);
-  font-size: clamp(2.4rem, 4vw, 3.4rem);
+  font-size: clamp(2.3rem, 3.6vw, 3.2rem);
   font-weight: 900;
   color: #0F172A;
   line-height: 1.12;
@@ -64,11 +64,11 @@
 }
 
 .desktop-hero-lead {
-  font-size: 1.08rem;
+  font-size: 1.05rem;
   line-height: 1.6;
   color: #475569;
   margin: 0;
-  max-width: 540px;
+  max-width: 500px;
 }
 
 .desktop-hero-lead strong {
@@ -180,22 +180,22 @@
 }
 
 .desktop-discount-tag {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 8px;
-  background: #FFFBEB;
-  border: 1px dashed #F59E0B;
-  padding: 8px 16px;
-  border-radius: 30px;
+  background: #FEF3C7;
+  border: 1px solid #FDE68A;
+  padding: 6px 14px;
+  border-radius: 20px;
 }
 
 .discount-pill {
-  background: #EF4444;
-  color: #FFFFFF;
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   font-weight: 800;
-  padding: 2px 8px;
-  border-radius: 12px;
+  background: #D97706;
+  color: #FFFFFF;
+  padding: 2px 6px;
+  border-radius: 6px;
 }
 
 .code-text {
@@ -207,11 +207,11 @@
 .desktop-hero-stats-row {
   display: flex;
   align-items: center;
-  gap: 18px;
+  gap: 16px;
   margin-top: 14px;
   padding-top: 20px;
   border-top: 1px solid #E2E8F0;
-  max-width: 560px;
+  max-width: 520px;
 }
 
 .hero-stat-box {
@@ -232,7 +232,7 @@
 
 .hero-stat-box strong {
   display: block;
-  font-size: 0.88rem;
+  font-size: 0.86rem;
   font-weight: 800;
   color: #0F172A;
   line-height: 1.2;
@@ -249,233 +249,241 @@
   background: #CBD5E1;
 }
 
-/* Right Column: 3D Stage */
+/* Right Column: 70% Real Interior Room Stage */
 .desktop-hero-right {
   display: flex;
   justify-content: center;
-}
-
-.desktop-3d-hero-stage {
   width: 100%;
-  max-width: 520px;
+}
+
+.interior-room-hero-stage {
+  width: 100%;
   height: 520px;
-  border-radius: 36px;
+  border-radius: 32px;
   position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.08), inset 0 2px 8px rgba(255, 255, 255, 0.8);
-  border: 4px solid #FFFFFF;
   overflow: hidden;
-  transition: background 0.3s ease;
+  box-shadow: 0 25px 60px -12px rgba(15, 23, 42, 0.24), 0 0 0 1px rgba(226, 232, 240, 0.8);
+  cursor: pointer;
+  background: #E2D9D0;
 }
 
-.desktop-spotlight-beam {
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 280px;
-  height: 480px;
-  background: radial-gradient(ellipse at top, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0) 75%);
-  pointer-events: none;
-  z-index: 1;
-}
-
-/* 3D Stack */
-.desktop-3d-cards-stack {
-  position: relative;
-  width: 360px;
-  height: 400px;
-  transform-style: preserve-3d;
-  transition: transform 0.15s ease-out;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 2;
-}
-
-.floating-preview-card {
-  position: absolute;
-  border-radius: 20px;
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.16);
-  border: 4px solid #FFFFFF;
-  overflow: hidden;
-  transition: all 0.3s ease;
-}
-
-.card-preview-img {
+.interior-room-bg {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center;
+  display: block;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Main Card */
-.card-front {
-  width: 250px;
-  height: 310px;
-  background: #FFFFFF;
+.interior-room-hero-stage:hover .interior-room-bg {
+  transform: scale(1.025);
+}
+
+/* Hung Wall Art / Painting on Living Room Wall */
+.room-hung-painting-frame {
+  position: absolute;
+  top: 13%;
+  left: 44%;
+  width: 37%;
+  height: 39%;
   z-index: 5;
-  cursor: pointer;
+  transform-style: preserve-3d;
+  transition: transform 0.2s ease-out;
+  will-change: transform;
+}
+
+.painting-mat-border {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border: 7px solid #2B2118;
+  border-radius: 4px;
+  background: #FDFBF7;
+  box-shadow: 
+    0 18px 36px -6px rgba(0, 0, 0, 0.48),
+    0 8px 16px -4px rgba(0, 0, 0, 0.35),
+    0 0 0 2px rgba(212, 175, 55, 0.4),
+    inset 0 0 0 6px #F8F5EE;
+  overflow: hidden;
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
-.card-front .card-preview-img {
-  height: 200px;
+.painting-artwork-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s ease;
 }
 
-.card-front:hover {
-  transform: scale(1.04);
-  box-shadow: 0 24px 50px rgba(0, 0, 0, 0.22);
+.interior-room-hero-stage:hover .painting-artwork-img {
+  transform: scale(1.03);
 }
 
-.card-front-info {
-  padding: 10px 14px 12px 14px;
+.painting-glass-glaze {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.3) 0%,
+    rgba(255, 255, 255, 0.08) 40%,
+    transparent 60%,
+    rgba(0, 0, 0, 0.05) 100%
+  );
+  pointer-events: none;
+}
+
+.interior-spotlight-glow {
+  position: absolute;
+  top: 0;
+  left: 60%;
+  transform: translateX(-50%);
+  width: 340px;
+  height: 400px;
+  background: radial-gradient(ellipse at top, rgba(255, 248, 220, 0.75) 0%, rgba(255, 248, 220, 0) 70%);
+  pointer-events: none;
+  z-index: 4;
+  mix-blend-mode: overlay;
+}
+
+/* Floating Glassmorphic Product Card */
+.room-floating-product-card {
+  position: absolute;
+  bottom: 24px;
+  left: 24px;
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  border-radius: 20px;
+  padding: 14px 18px;
+  max-width: 320px;
+  z-index: 10;
+  box-shadow: 0 14px 34px rgba(15, 23, 42, 0.18);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.room-floating-product-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.24);
+}
+
+.rfp-badge-row {
   display: flex;
-  flex-direction: column;
-  gap: 3px;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+  gap: 10px;
 }
 
-.card-tag {
-  font-size: 0.62rem;
+.rfp-tag {
+  font-size: 0.65rem;
   font-weight: 800;
-  color: #10B981;
+  color: #059669;
+  letter-spacing: 0.5px;
 }
 
-.card-front-info h4 {
-  font-size: 0.85rem;
+.rfp-spotlight-toggle {
+  background: rgba(15, 23, 42, 0.08);
+  border: none;
+  border-radius: 12px;
+  padding: 2px 8px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: #334155;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+}
+
+.rfp-title {
+  font-size: 0.95rem;
   font-weight: 800;
   color: #0F172A;
-  margin: 0;
+  margin: 0 0 10px 0;
+  line-height: 1.25;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-.card-front-foot {
+.rfp-bottom-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-top: 4px;
+  gap: 12px;
 }
 
-.card-price {
-  font-size: 0.95rem;
-  font-weight: 800;
+.rfp-price {
+  font-size: 1.15rem;
+  font-weight: 900;
   color: #0F172A;
 }
 
-.card-price small {
-  font-size: 0.72rem;
+.rfp-orig-price {
+  font-size: 0.8rem;
   color: #94A3B8;
   text-decoration: line-through;
+  margin-left: 6px;
 }
 
-.card-interactive-btn {
+.rfp-view-btn {
   background: #0F172A;
   color: #FFFFFF;
   border: none;
-  font-size: 0.68rem;
-  font-weight: 700;
-  padding: 4px 8px;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-/* Back Cards */
-.card-back {
-  width: 160px;
-  height: 160px;
-  top: 10px;
-  right: -10px;
-  z-index: 3;
-  transform: rotate(10deg);
-}
-
-.card-side {
-  width: 150px;
-  height: 150px;
-  bottom: 20px;
-  left: -15px;
-  z-index: 4;
-  transform: rotate(-12deg);
-}
-
-.card-floating-pill {
-  position: absolute;
-  bottom: 8px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: rgba(15, 23, 42, 0.85);
-  color: #FFFFFF;
-  font-size: 0.62rem;
-  font-weight: 800;
-  padding: 3px 8px;
-  border-radius: 12px;
-  backdrop-filter: blur(4px);
-  white-space: nowrap;
-}
-
-/* Toolbar */
-.desktop-stage-toolbar {
-  position: absolute;
-  bottom: 18px;
-  left: 20px;
-  right: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  z-index: 10;
-}
-
-.desktop-light-toggle {
-  background: rgba(15, 23, 42, 0.85);
-  color: #FFFFFF;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
   padding: 6px 14px;
-  border-radius: 20px;
   font-size: 0.75rem;
-  font-weight: 700;
-  display: flex;
+  font-weight: 800;
+  display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
   cursor: pointer;
-  backdrop-filter: blur(6px);
+  transition: background 0.2s ease;
 }
 
-.desktop-light-toggle.on {
+.rfp-view-btn:hover {
   background: #10B981;
-  border-color: #10B981;
 }
 
-.desktop-wall-selector {
+/* Gallery Selector Thumbnails */
+.room-gallery-picker {
+  position: absolute;
+  bottom: 24px;
+  right: 24px;
   display: flex;
-  align-items: center;
-  gap: 6px;
-  background: rgba(255, 255, 255, 0.9);
-  padding: 4px 10px;
-  border-radius: 20px;
-  backdrop-filter: blur(6px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  gap: 8px;
+  background: rgba(15, 23, 42, 0.65);
+  backdrop-filter: blur(10px);
+  padding: 6px 10px;
+  border-radius: 16px;
+  z-index: 10;
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-.wall-selector-label {
-  font-size: 0.72rem;
-  font-weight: 700;
-  color: #475569;
-}
-
-.desktop-wall-dot {
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  border: 1.5px solid #CBD5E1;
+.room-picker-thumb {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  border: 2px solid transparent;
+  overflow: hidden;
+  padding: 0;
+  background: #000;
   cursor: pointer;
-  transition: transform 0.15s ease;
+  transition: transform 0.2s, border-color 0.2s;
 }
 
-.desktop-wall-dot.active {
-  border-color: #0F172A;
-  transform: scale(1.25);
+.room-picker-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.room-picker-thumb.active {
+  border-color: #10B981;
+  transform: scale(1.1);
 }

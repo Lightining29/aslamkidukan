@@ -4,23 +4,32 @@ import { WALL_COLORS } from '../../data/stickersCatalog';
 import Bouncy3DLifeText from '../common/Bouncy3DLifeText';
 import './DesktopHeroShowcase.css';
 
-export default function DesktopHeroShowcase({ onExploreClick, onOpenModal, featuredSticker }) {
-  const [tilt, setTilt] = useState({ x: 0, y: 0 });
+export default function DesktopHeroShowcase({ onExploreClick, onOpenModal, featuredSticker, products = [] }) {
+  const [activeIdx, setActiveIdx] = useState(0);
   const [spotlightOn, setSpotlightOn] = useState(true);
-  const [activeWall, setActiveWall] = useState(WALL_COLORS[0]);
-  const heroCardRef = useRef(null);
+  const [tilt, setTilt] = useState({ x: 0, y: 0 });
+  const roomRef = useRef(null);
+
+  const displayList = Array.isArray(products) && products.length > 0
+    ? products
+    : (featuredSticker ? [featuredSticker] : []);
+
+  const currentItem = displayList[activeIdx] || featuredSticker || displayList[0];
 
   const handleMouseMove = (e) => {
-    if (!heroCardRef.current) return;
-    const rect = heroCardRef.current.getBoundingClientRect();
-    const x = ((e.clientX - rect.left) / rect.width - 0.5) * 22;
-    const y = ((e.clientY - rect.top) / rect.height - 0.5) * -22;
+    if (!roomRef.current) return;
+    const rect = roomRef.current.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width - 0.5) * 12;
+    const y = ((e.clientY - rect.top) / rect.height - 0.5) * -12;
     setTilt({ x, y });
   };
 
   const handleMouseLeave = () => {
     setTilt({ x: 0, y: 0 });
   };
+
+  const currentImg = currentItem?.image || currentItem?.imageUrl || '/stickers/niche_monstera_3d_1787582973768.jpg';
+  const price = currentItem?.finalPrice || currentItem?.price || 499;
 
   return (
     <section className="desktop-hero-showcase-section">
@@ -85,88 +94,92 @@ export default function DesktopHeroShowcase({ onExploreClick, onOpenModal, featu
           </div>
         </div>
 
-        {/* Right Column: Interactive 3D Perspective Card Trio */}
+        {/* Right Column: 70% Real Interior Room Stage with Hanging Painting */}
         <div className="desktop-hero-right">
           <div
-            ref={heroCardRef}
-            className="desktop-3d-hero-stage"
-            style={{ background: activeWall.hex }}
+            ref={roomRef}
+            className="interior-room-hero-stage"
             onMouseMove={handleMouseMove}
             onMouseLeave={handleMouseLeave}
+            onClick={() => onOpenModal && currentItem && onOpenModal(currentItem)}
           >
-            {spotlightOn && <div className="desktop-spotlight-beam" />}
+            {/* Background High-End Interior House Image */}
+            <img
+              src="/images/luxury_interior_hero.jpg"
+              alt="Luxury Living Room Interior"
+              className="interior-room-bg"
+            />
 
-            {/* Overlapping 3D Cards Stack */}
+            {/* Ambient Spotlight Beam from Ceiling */}
+            {spotlightOn && <div className="interior-spotlight-glow" />}
+
+            {/* Hung Wall Art / Painting on the Living Room Wall */}
             <div
-              className="desktop-3d-cards-stack"
+              className="room-hung-painting-frame"
               style={{
-                transform: `perspective(1000px) rotateX(${tilt.y}deg) rotateY(${tilt.x}deg)`
+                transform: `perspective(900px) rotateX(${tilt.y}deg) rotateY(${tilt.x}deg)`
               }}
             >
-              {/* Back Card */}
-              <div className="floating-preview-card card-back">
+              <div className="painting-mat-border">
                 <img
-                  src={featuredSticker?.images?.[1] || featuredSticker?.image || '/stickers/blue_butterfly_3d_1787582894782.jpg'}
-                  alt="Luxury Decor Accent"
-                  className="card-preview-img"
+                  src={currentImg}
+                  alt={currentItem?.name || 'Luxury Wall Art'}
+                  className="painting-artwork-img"
                 />
-                <span className="card-floating-pill">✨ Modern Interior</span>
+                {/* Artwork Glaze & Real Shadow Sheen */}
+                <div className="painting-glass-glaze" />
+              </div>
+              <div className="painting-wall-drop-shadow" />
+            </div>
+
+            {/* Floating Glassmorphic Product Card in Room */}
+            <div className="room-floating-product-card" onClick={(e) => { e.stopPropagation(); onOpenModal && currentItem && onOpenModal(currentItem); }}>
+              <div className="rfp-badge-row">
+                <span className="rfp-tag">🏡 FEATURED WALL ART</span>
+                <button
+                  type="button"
+                  className="rfp-spotlight-toggle"
+                  onClick={(e) => { e.stopPropagation(); setSpotlightOn(!spotlightOn); }}
+                  title="Toggle Ceiling Spotlight"
+                >
+                  <Sun size={12} /> {spotlightOn ? 'Light: ON' : 'Light: OFF'}
+                </button>
               </div>
 
-              {/* Main Center Card */}
-              <div
-                className="floating-preview-card card-front"
-                onClick={() => onOpenModal && featuredSticker && onOpenModal(featuredSticker)}
-              >
-                <img
-                  src={featuredSticker?.image || featuredSticker?.imageUrl || '/stickers/niche_monstera_3d_1787582973768.jpg'}
-                  alt={featuredSticker?.name || 'Luxury Home Decor'}
-                  className="card-preview-img"
-                />
-                <div className="card-front-info">
-                  <span className="card-tag">FEATURED HOME DECOR</span>
-                  <h4>{featuredSticker?.name || 'Luxury 3D Wall Art Accent'}</h4>
-                  <div className="card-front-foot">
-                    <span className="card-price">₹{featuredSticker?.finalPrice || featuredSticker?.price || 499} {featuredSticker?.originalPrice ? <small>₹{featuredSticker.originalPrice}</small> : null}</span>
-                    <button className="card-interactive-btn">View Decor</button>
-                  </div>
+              <h4 className="rfp-title">{currentItem?.name || 'Aytul Kursi Luxury Wall Art'}</h4>
+
+              <div className="rfp-bottom-row">
+                <div className="rfp-price-col">
+                  <span className="rfp-price">₹{price}</span>
+                  {currentItem?.originalPrice ? (
+                    <span className="rfp-orig-price">₹{currentItem.originalPrice}</span>
+                  ) : null}
                 </div>
-              </div>
-
-              {/* Side Accent Card */}
-              <div className="floating-preview-card card-side">
-                <img
-                  src={featuredSticker?.images?.[2] || featuredSticker?.image || '/stickers/succulent_plant_3d_1787582910119.jpg'}
-                  alt="Aesthetic Living Accent"
-                  className="card-preview-img"
-                />
-                <span className="card-floating-pill">🏡 Aesthetic Living</span>
+                <button className="rfp-view-btn">
+                  <span>View in 3D</span>
+                  <ArrowRight size={13} />
+                </button>
               </div>
             </div>
 
-            {/* Stage Interactive Controls */}
-            <div className="desktop-stage-toolbar">
-              <button
-                className={`desktop-light-toggle ${spotlightOn ? 'on' : ''}`}
-                onClick={() => setSpotlightOn(!spotlightOn)}
-              >
-                <Sun size={14} />
-                <span>{spotlightOn ? 'Spotlight: ON' : 'Spotlight: OFF'}</span>
-              </button>
-
-              <div className="desktop-wall-selector">
-                <span className="wall-selector-label">Wall:</span>
-                {WALL_COLORS.map((w) => (
+            {/* Gallery Selector Dots / Thumbnails at Bottom Right */}
+            {displayList.length > 1 && (
+              <div className="room-gallery-picker" onClick={(e) => e.stopPropagation()}>
+                {displayList.slice(0, 4).map((item, idx) => (
                   <button
-                    key={w.id}
-                    className={`desktop-wall-dot ${activeWall.id === w.id ? 'active' : ''}`}
-                    style={{ background: w.hex }}
-                    onClick={() => setActiveWall(w)}
-                    title={w.name}
-                  />
+                    key={item._id || item.id || idx}
+                    className={`room-picker-thumb ${activeIdx === idx ? 'active' : ''}`}
+                    onClick={() => setActiveIdx(idx)}
+                    title={item.name}
+                  >
+                    <img
+                      src={item.image || item.imageUrl || '/aaan-logo.svg'}
+                      alt={item.name}
+                    />
+                  </button>
                 ))}
               </div>
-            </div>
+            )}
           </div>
         </div>
 
