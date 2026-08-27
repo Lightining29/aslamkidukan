@@ -135,7 +135,10 @@ export default function CheckoutPage() {
     setLoading(true);
     try {
       const payload = items.map((i) => ({
-        productId: i._id,
+        productId: i._id || i.id,
+        name: i.name,
+        image: i.image || i.imageUrl,
+        price: getProductPrice(i),
         quantity: i.quantity,
       }));
       const result = await checkout(payload, form);

@@ -167,17 +167,40 @@ router.post('/checkout', protect, async (req, res) => {
     let subtotal = 0;
 
     for (const item of items) {
-      const price = Number(item.price || item.flashSalePrice || 499);
-      const qty = Number(item.quantity || 1);
+      const prodId = item.productId || item._id || item.id;
+      let realPrice = 0;
+      let prodName = item.name || 'Home Decor';
+      let prodImage = item.image || item.imageUrl || '';
+
+      // 1. Fetch real price directly from MySQL
+      if (isMySQLActive() && prodId) {
+        try {
+          const dbProd = await mysqlGetProductBySlug(String(prodId));
+          if (dbProd) {
+            realPrice = Number(dbProd.flashSale ? dbProd.flashSalePrice : dbProd.price);
+            prodName = dbProd.name || prodName;
+            prodImage = dbProd.image || prodImage;
+          }
+        } catch {
+          // fallback
+        }
+      }
+
+      // 2. If not in DB, fallback to price passed in payload
+      if (!realPrice) {
+        realPrice = Number(item.price || item.finalPrice || item.flashSalePrice || 0);
+      }
+
+      const qty = Math.max(1, parseInt(item.quantity || 1, 10));
       orderItems.push({
-        product: item.productId || item._id || item.id,
-        productId: item.productId || item._id || item.id,
-        name: item.name || '3D Wall Sticker',
-        image: item.image || item.imageUrl || '',
-        price,
+        product: prodId,
+        productId: prodId,
+        name: prodName,
+        image: prodImage,
+        price: realPrice,
         quantity: qty,
       });
-      subtotal += price * qty;
+      subtotal += realPrice * qty;
     }
 
     const orderNumber = `ORD-AAAN-${Date.now().toString().slice(-6)}`;
