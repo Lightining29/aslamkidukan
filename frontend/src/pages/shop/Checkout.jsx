@@ -81,18 +81,48 @@ export default function CheckoutPage() {
       return;
     }
 
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth <= 768;
+
     const rzp = new window.Razorpay({
       key: result.key || import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_test_TUT0EPQqGMykqp',
       amount: result.amount,
       currency: result.currency || 'INR',
       name: 'AAAN Cart',
-      description: `3D Wall Art Order #${result.orderId}`,
+      description: `Home Decor Order #${result.orderId}`,
       image: '/favicon.svg',
       order_id: result.razorpayOrderId,
       prefill: { 
         name: form.fullName, 
         email: form.email, 
-        contact: form.phone 
+        contact: form.phone,
+        ...(isMobile ? { method: 'upi' } : {}),
+      },
+      config: {
+        display: {
+          blocks: {
+            upi: {
+              name: 'Pay via UPI (GPay, PhonePe, Paytm, CRED)',
+              instruments: [
+                {
+                  method: 'upi',
+                  flows: isMobile ? ['intent', 'qr', 'collect'] : ['qr', 'collect', 'intent']
+                }
+              ]
+            },
+            other: {
+              name: 'Debit / Credit Card / Netbanking',
+              instruments: [
+                { method: 'card' },
+                { method: 'netbanking' },
+                { method: 'wallet' }
+              ]
+            }
+          },
+          sequence: ['block.upi', 'block.other'],
+          preferences: {
+            show_default_blocks: true
+          }
+        }
       },
       theme: {
         color: '#10B981',
