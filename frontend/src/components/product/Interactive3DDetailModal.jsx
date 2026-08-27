@@ -386,33 +386,31 @@ export default function Interactive3DDetailModal({ product, onClose, onBuyNow })
 
         </div>
 
-        {/* Sticky Mobile Floating Action Footer */}
-        <div className="mobile-detail-bottom-actions">
-          <div className="bottom-total-col">
-            <span className="bottom-total-label">Total Payable</span>
-            <div className="bottom-total-amount">
-              <span className="curr">₹</span>
-              <span className="num">{price * quantity}</span>
+        {/* Sticky Floating Action Footer */}
+        <div className="mobile-detail-sticky-bar">
+          <div className="detail-sticky-total-col">
+            <span className="sticky-total-label">Total Payable</span>
+            <div className="sticky-total-amount">
+              <span className="sticky-curr">₹</span>
+              <span className="sticky-val">{price * quantity}</span>
             </div>
           </div>
 
-          <div className="bottom-action-buttons">
-            <button
-              className={`btn-add-cart-float ${addedAnim ? 'added' : ''}`}
-              onClick={handleAddToCart}
-            >
-              {addedAnim ? <Check size={18} /> : <ShoppingBag size={18} />}
-              <span>{addedAnim ? 'Added!' : 'Add to Cart'}</span>
-            </button>
+          <button
+            className={`detail-add-cart-outline-btn ${addedAnim ? 'added' : ''}`}
+            onClick={handleAddToCart}
+          >
+            {addedAnim ? <Check size={18} /> : <ShoppingBag size={18} />}
+            <span>{addedAnim ? 'Added!' : 'Add to Cart'}</span>
+          </button>
 
-            <button
-              className="btn-buy-now-float"
-              onClick={handleDirectBuy}
-            >
-              <Zap size={18} />
-              <span>Buy Now</span>
-            </button>
-          </div>
+          <button
+            className="detail-buy-now-btn"
+            onClick={handleDirectBuy}
+          >
+            <Zap size={18} />
+            <span>Buy Now</span>
+          </button>
         </div>
 
       </div>
