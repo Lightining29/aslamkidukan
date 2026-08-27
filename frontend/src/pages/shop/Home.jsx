@@ -31,8 +31,8 @@ import '../../styles/microinteractions.css';
 import '../../styles/pageTransitions.css';
 import './Home.css';
 
-const siteTitle = 'AAAN Cart — 3D Plant & Butterfly Wall Stickers Store';
-const siteDescription = 'Shop hyper-realistic 3D optical illusion wall niche stickers, 3D botanical plant decals, and shimmering 3D butterfly wall sets with free shipping on AAAN Cart.';
+const siteTitle = 'AAAN Cart — Luxury Home Decor & Modern Wall Art';
+const siteDescription = 'Transform your living spaces with handcrafted home decor, luxury 3D wall art, architectural accents, and aesthetic decor with free delivery across India.';
 
 export default function Home() {
   const { cartItems = [], cartCount, cartTotal, addToCart, isInWishlist, toggleWishlist } = useCart();
@@ -220,58 +220,58 @@ export default function Home() {
                 className="reset-search-btn liquid-btn-effect"
                 onClick={() => { setSearchQuery(''); setSelectedCategory('all'); }}
               >
-                View All 3D Stickers
+                View All Home Decor
               </button>
             </div>
           )}
         </div>
       </section>
 
-      {/* 3D Niche Wall Art Feature Showcase Card */}
+      {/* Modern Home Decor Feature Showcase Card */}
       <section className="container niche-spotlight-feature-section reveal-on-scroll">
         <div className="niche-spotlight-card">
           <div className="niche-spotlight-text">
-            <span className="niche-spotlight-badge">💡 ARCHITECTURAL 3D DECOR</span>
-            <h3 className="niche-spotlight-title">How 3D Optical Illusion Niches Work</h3>
+            <span className="niche-spotlight-badge">🏡 ARCHITECTURAL HOME DECOR</span>
+            <h3 className="niche-spotlight-title">The Art of Modern Living Accents</h3>
             <p className="niche-spotlight-desc">
-              Each decal is printed with 300 DPI micro-gradients simulating a built-in recessed wall cavity and an overhead spotlight beam. It creates authentic 3D shadows and realism without making any holes or construction in your walls!
+              Every home decor accent is designed with precision micro-textures, rich ambient depth, and refined finishes that seamlessly enhance your living room, bedroom, and dining walls. Elevate your space with effortless designer luxury!
             </p>
             <div className="niche-spotlight-chips">
-              <span className="spotlight-chip">✓ Removable Peel &amp; Stick</span>
-              <span className="spotlight-chip">✓ Waterproof &amp; Wipeable</span>
-              <span className="spotlight-chip">✓ Safe on Painted Walls</span>
+              <span className="spotlight-chip">✓ Handcrafted Luxury Finishes</span>
+              <span className="spotlight-chip">✓ Durable &amp; Wipe-Clean</span>
+              <span className="spotlight-chip">✓ Seamless Room Transformation</span>
             </div>
           </div>
           <div className="niche-spotlight-img-wrap">
             <img
               src="/stickers/niche_flowers_3d_1787582996187.jpg"
-              alt="3D Flower & Butterfly Niche"
+              alt="Luxury Home Decor Piece"
               className="niche-spotlight-img"
             />
           </div>
         </div>
       </section>
 
-      {/* About AAAN Cart & 3D Stickers Section */}
+      {/* About AAAN Cart Home Decor Section */}
       <section className="container about-3d-section reveal-on-scroll" id="about">
         <div className="about-3d-card">
           <div className="about-3d-content">
-            <span className="about-eyebrow">🌿 ABOUT AAAN CART</span>
-            <h3 className="about-title">Pioneering 3D Optical Illusion Wall Art</h3>
+            <span className="about-eyebrow">🏡 ABOUT AAAN CART</span>
+            <h3 className="about-title">Crafting Aesthetic Living Spaces</h3>
             <p className="about-desc">
-              At <strong>AAAN Cart</strong>, we transform everyday rooms into stunning architectural living spaces. Our signature 3D wall niche decals and holographic butterfly sets combine precision micro-embossed printing, simulated ceiling spotlights, and residue-free removable vinyl. Elevate your walls in minutes—no drilling or renovation needed.
+              At <strong>AAAN Cart</strong>, we curate exquisite home decor, architectural 3D wall art, and modern accents designed to turn any living space into a designer masterpiece. Each piece is crafted with premium materials to provide timeless elegance and modern aesthetic charm.
             </p>
             <div className="about-stats-grid">
               <div className="about-stat">
                 <strong>50,000+</strong>
-                <span>Walls Transformed</span>
+                <span>Homes Decorated</span>
               </div>
               <div className="about-stat">
                 <strong>100%</strong>
-                <span>Removable Vinyl</span>
+                <span>Quality Inspected</span>
               </div>
               <div className="about-stat">
-                <strong>4.9 ★</strong>
+                <strong>4.95 ★</strong>
                 <span>Customer Satisfaction</span>
               </div>
             </div>
@@ -285,16 +285,16 @@ export default function Home() {
           <div className="trust-cell-desktop">
             <div className="trust-icon-box"><Truck size={22} color="#10B981" /></div>
             <div>
-              <strong>Free Express Shipping</strong>
-              <span>Fast 24-hour dispatch across India</span>
+              <strong>Free Express Delivery</strong>
+              <span>Fast doorstep dispatch across India</span>
             </div>
           </div>
 
           <div className="trust-cell-desktop">
             <div className="trust-icon-box"><ShieldCheck size={22} color="#6366F1" /></div>
             <div>
-              <strong>100% 3D Depth Guaranteed</strong>
-              <span>High definition bubble-free vinyl</span>
+              <strong>100% Quality Assured</strong>
+              <span>Handpicked materials &amp; premium finishes</span>
             </div>
           </div>
 
@@ -302,7 +302,7 @@ export default function Home() {
             <div className="trust-icon-box"><RotateCcw size={22} color="#F59E0B" /></div>
             <div>
               <strong>Easy 7-Day Replacement</strong>
-              <span>Hassle-free customer return policy</span>
+              <span>Hassle-free customer satisfaction policy</span>
             </div>
           </div>
         </div>

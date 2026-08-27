@@ -15,12 +15,12 @@ export default function CategoryPills({ selectedCategory, onSelectCategory }) {
       .catch(() => {});
   }, []);
 
-  const allCategoryPill = { id: 'all', slug: 'all', name: 'All Decals', icon: '✨' };
+  const allCategoryPill = { id: 'all', slug: 'all', name: 'All Decor', icon: '✨' };
   const displayCategories = [allCategoryPill, ...categories.map(c => ({
     id: c.slug || c.id || c._id,
     slug: c.slug || c.id || c._id,
     name: c.name,
-    icon: '🪴'
+    icon: '🏡'
   }))];
 
   return (

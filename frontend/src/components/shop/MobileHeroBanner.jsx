@@ -6,39 +6,39 @@ import './MobileHeroBanner.css';
 const HERO_SLIDES = [
   {
     id: 1,
-    tag: '⚡ 3D WALL ART INNOVATION',
-    title: 'Transform Walls with 3D Life',
-    subtitle: 'Hyperrealistic optical illusion alcoves & 3D butterfly wall sets',
-    discount: 'UP TO 50% OFF',
+    tag: '🏡 LUXURY HOME DECOR',
+    title: 'Elevate Your Living Space',
+    subtitle: 'Handcrafted 3D wall art, architectural alcoves & aesthetic accents',
+    discount: 'SPECIAL OFFER',
     image: '/stickers/niche_monstera_3d_1787582973768.jpg',
     bgColor: 'linear-gradient(135deg, #F5EBE1 0%, #E8DFD8 100%)',
     badgeColor: '#10B981',
-    cta: 'Shop 3D Niches',
-    category: 'niche'
+    cta: 'Shop Decor',
+    category: 'all'
   },
   {
     id: 2,
-    tag: '🦋 HOLOGRAPHIC 3D COLLECTION',
-    title: 'Flying Crystal Butterfly Sets',
-    subtitle: 'Foldable 3D wings with iridescent metallic shimmer & real shadows',
-    discount: 'FLAT 50% OFF',
+    tag: '✨ MODERN WALL ART',
+    title: 'Contemporary 3D Wall Art',
+    subtitle: 'Premium relief designs with metallic accents & natural shadows',
+    discount: 'NEW ARRIVAL',
     image: '/stickers/blue_butterfly_3d_1787582894782.jpg',
     bgColor: 'linear-gradient(135deg, #E0F2FE 0%, #BAE6FD 100%)',
     badgeColor: '#0284C7',
-    cta: 'Explore Butterflies',
-    category: 'butterflies'
+    cta: 'Explore Art',
+    category: 'all'
   },
   {
     id: 3,
-    tag: '🌸 BOTANICAL EMBOSSED VINYL',
-    title: '3D Succulents & Flora Decals',
-    subtitle: 'Glossy multi-layer relief leaves and blooms for modern living rooms',
-    discount: 'FROM ₹299',
+    tag: '🌿 AESTHETIC LIVING ACCENTS',
+    title: 'Handpicked Botanical Accents',
+    subtitle: 'Elevated textures and lush visual elements for modern interiors',
+    discount: 'BESTSELLER',
     image: '/stickers/succulent_plant_3d_1787582910119.jpg',
     bgColor: 'linear-gradient(135deg, #FDF2F8 0%, #FCE7F3 100%)',
     badgeColor: '#EC4899',
-    cta: 'Shop Botanicals',
-    category: 'plants'
+    cta: 'Shop Collection',
+    category: 'all'
   }
 ];
 

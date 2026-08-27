@@ -30,26 +30,26 @@ export default function DesktopHeroShowcase({ onExploreClick, onOpenModal, featu
         <div className="desktop-hero-left">
           <div className="hero-eyebrow-chip">
             <Sparkles size={15} color="#10B981" />
-            <span>✨ 2026 OFFICIAL 3D WALL ART COLLECTION</span>
+            <span>✨ 2026 LUXURY HOME DECOR &amp; WALL ART</span>
           </div>
 
           <h1 className="desktop-hero-title">
-            Breathe <Bouncy3DLifeText /> Into <br />
-            Every Plain Wall.
+            Elevate Your Space with <br />
+            Modern Luxury Decor.
           </h1>
 
           <p className="desktop-hero-lead">
-            Discover hyper-realistic <strong>3D optical illusion niche alcoves</strong>, <strong>embossed botanical monstera decals</strong>, and <strong>flying holographic 3D butterfly sets</strong> with instant peel &amp; stick magic.
+            Transform your living room, bedroom, and walls with handcrafted <strong>3D architectural wall art</strong>, <strong>aesthetic relief accents</strong>, and <strong>designer home decor</strong>.
           </p>
 
           <div className="desktop-hero-cta-group">
             <button className="desktop-hero-btn-primary" onClick={onExploreClick}>
-              <span>Explore 3D Catalog</span>
+              <span>Explore Home Decor</span>
               <ArrowRight size={18} />
             </button>
             <div className="desktop-discount-tag">
-              <span className="discount-pill">50% OFF</span>
-              <span className="code-text">Code: <strong>3DART50</strong></span>
+              <span className="discount-pill">SPECIAL OFFER</span>
+              <span className="code-text">Direct from <strong>AAAN Cart</strong></span>
             </div>
           </div>
 
@@ -59,7 +59,7 @@ export default function DesktopHeroShowcase({ onExploreClick, onOpenModal, featu
               <div className="stat-icon-wrap"><Award size={18} color="#F59E0B" /></div>
               <div>
                 <strong>4.95 ★★★★★</strong>
-                <span>Over 12,000+ Reviews</span>
+                <span>Verified Customer Loved</span>
               </div>
             </div>
 
@@ -68,8 +68,8 @@ export default function DesktopHeroShowcase({ onExploreClick, onOpenModal, featu
             <div className="hero-stat-box">
               <div className="stat-icon-wrap"><Truck size={18} color="#10B981" /></div>
               <div>
-                <strong>Free Express Dispatch</strong>
-                <span>All India in 24 Hours</span>
+                <strong>Free Express Delivery</strong>
+                <span>All India Fast Dispatch</span>
               </div>
             </div>
 
@@ -78,8 +78,8 @@ export default function DesktopHeroShowcase({ onExploreClick, onOpenModal, featu
             <div className="hero-stat-box">
               <div className="stat-icon-wrap"><ShieldCheck size={18} color="#6366F1" /></div>
               <div>
-                <strong>3D Illusion Tested</strong>
-                <span>Removable &amp; Residue-Free</span>
+                <strong>100% Quality Assured</strong>
+                <span>Premium Luxury Finishes</span>
               </div>
             </div>
           </div>
@@ -103,44 +103,44 @@ export default function DesktopHeroShowcase({ onExploreClick, onOpenModal, featu
                 transform: `perspective(1000px) rotateX(${tilt.y}deg) rotateY(${tilt.x}deg)`
               }}
             >
-              {/* Back Card: 3D Blue Butterfly */}
+              {/* Back Card */}
               <div className="floating-preview-card card-back">
                 <img
-                  src="/stickers/blue_butterfly_3d_1787582894782.jpg"
-                  alt="3D Blue Butterfly"
+                  src={featuredSticker?.images?.[1] || featuredSticker?.image || '/stickers/blue_butterfly_3d_1787582894782.jpg'}
+                  alt="Luxury Decor Accent"
                   className="card-preview-img"
                 />
-                <span className="card-floating-pill">🦋 Foldable 3D Wings</span>
+                <span className="card-floating-pill">✨ Modern Interior</span>
               </div>
 
-              {/* Main Center Card: 3D Monstera Niche */}
+              {/* Main Center Card */}
               <div
                 className="floating-preview-card card-front"
-                onClick={() => onOpenModal(featuredSticker)}
+                onClick={() => onOpenModal && featuredSticker && onOpenModal(featuredSticker)}
               >
                 <img
-                  src="/stickers/niche_monstera_3d_1787582973768.jpg"
-                  alt="3D Monstera Niche Wall Sticker"
+                  src={featuredSticker?.image || featuredSticker?.imageUrl || '/stickers/niche_monstera_3d_1787582973768.jpg'}
+                  alt={featuredSticker?.name || 'Luxury Home Decor'}
                   className="card-preview-img"
                 />
                 <div className="card-front-info">
-                  <span className="card-tag">3D OPTICAL ILLUSION NICHE</span>
-                  <h4>3D Monstera Niche Wall Decal</h4>
+                  <span className="card-tag">FEATURED HOME DECOR</span>
+                  <h4>{featuredSticker?.name || 'Luxury 3D Wall Art Accent'}</h4>
                   <div className="card-front-foot">
-                    <span className="card-price">₹499 <small>₹999</small></span>
-                    <button className="card-interactive-btn">Click for 3D View</button>
+                    <span className="card-price">₹{featuredSticker?.finalPrice || featuredSticker?.price || 499} {featuredSticker?.originalPrice ? <small>₹{featuredSticker.originalPrice}</small> : null}</span>
+                    <button className="card-interactive-btn">View Decor</button>
                   </div>
                 </div>
               </div>
 
-              {/* Side Accent Card: 3D Echeveria Succulent */}
+              {/* Side Accent Card */}
               <div className="floating-preview-card card-side">
                 <img
-                  src="/stickers/succulent_plant_3d_1787582910119.jpg"
-                  alt="3D Succulent Sticker"
+                  src={featuredSticker?.images?.[2] || featuredSticker?.image || '/stickers/succulent_plant_3d_1787582910119.jpg'}
+                  alt="Aesthetic Living Accent"
                   className="card-preview-img"
                 />
-                <span className="card-floating-pill">🌸 Layered 3D Relief</span>
+                <span className="card-floating-pill">🏡 Aesthetic Living</span>
               </div>
             </div>
 

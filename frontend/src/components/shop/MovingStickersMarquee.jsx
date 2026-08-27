@@ -27,13 +27,13 @@ export default function MovingStickersMarquee({ products = [], onOpenModal }) {
       <div className="container marquee-header-row">
         <div className="marquee-header-left">
           <span className="marquee-tag">
-            <Sparkles size={14} /> LIVE 3D WALL GALLERY
+            <Sparkles size={14} /> CURATED HOME DECOR SHOWCASE
           </span>
           <h2 className="marquee-title">
-            Trending 3D Stickers in Motion
+            Trending Luxury Home Decor &amp; Wall Art
           </h2>
           <p className="marquee-subtitle">
-            Hover over any 3D sticker to pause and preview realistic optical depth &amp; illumination.
+            Hover over any piece to preview realistic optical depth, textures &amp; architectural illumination.
           </p>
         </div>
       </div>
