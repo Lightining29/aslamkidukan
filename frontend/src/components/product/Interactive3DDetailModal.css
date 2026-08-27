@@ -127,6 +127,12 @@
   transform: scale(1.08);
 }
 
+.detail-header-logo-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .detail-header-brand-badge {
   display: flex;
   align-items: center;

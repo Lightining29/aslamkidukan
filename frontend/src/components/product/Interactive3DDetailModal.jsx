@@ -1,8 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { ChevronLeft, Heart, ShoppingBag, Star, Sparkles, Check, Sun, Shield, RotateCw, X, Truck, Zap, ZoomIn, ZoomOut, Maximize2, Layers } from 'lucide-react';
+import { ChevronLeft, Heart, ShoppingBag, Star, Sparkles, Check, Sun, Shield, RotateCw, X, Truck, Zap, ZoomIn, ZoomOut } from 'lucide-react';
 import { useCart } from '../../context/CartContext';
 import { useAuth } from '../../context/AuthContext';
+import AaanLogo from '../common/AaanLogo';
 import { WALL_COLORS } from '../../data/stickersCatalog';
 import './Interactive3DDetailModal.css';
 
@@ -155,9 +156,8 @@ export default function Interactive3DDetailModal({ product, onClose, onBuyNow })
           <button className="detail-back-btn" onClick={handleAnimatedClose} aria-label="Close">
             <X size={20} />
           </button>
-          <div className="detail-header-brand-badge">
-            <span className="live-dot-pulse" />
-            <span>3D Interactive Preview</span>
+          <div className="detail-header-logo-wrap">
+            <AaanLogo size="sm" variant="full" />
           </div>
           <button
             className={`detail-heart-btn ${wished ? 'wished' : ''}`}
