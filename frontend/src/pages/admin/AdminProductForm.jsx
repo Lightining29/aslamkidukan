@@ -24,7 +24,7 @@ const emptyForm = {
   discountPercent: 0,
   bestseller: false,
   warranty: '1 Year AAAN Official Warranty',
-  shippingType: 'Free Express Shipping',
+  shippingType: 'Reliable Express Delivery',
 };
 
 export default function AdminProductForm() {
@@ -429,7 +429,7 @@ export default function AdminProductForm() {
               <div className="apf-group">
                 <label>Fulfillment Shipping</label>
                 <select value={form.shippingType} onChange={update('shippingType')} className="apf-select">
-                  <option value="Free Express Shipping">Free Same-Day Express Dispatch</option>
+                  <option value="Reliable Express Delivery">Reliable Express Doorstep Delivery</option>
                   <option value="Standard Ground Courier">Standard Ground Courier</option>
                   <option value="COD Supported">Cash on Delivery Supported</option>
                 </select>

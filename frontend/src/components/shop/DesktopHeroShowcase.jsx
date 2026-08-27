@@ -77,8 +77,8 @@ export default function DesktopHeroShowcase({ onExploreClick, onOpenModal, featu
             <div className="hero-stat-box">
               <div className="stat-icon-wrap"><Truck size={18} color="#10B981" /></div>
               <div>
-                <strong>Free Express Delivery</strong>
-                <span>All India Fast Dispatch</span>
+                <strong>Reliable Express Delivery</strong>
+                <span>All India Safe &amp; Tracked Dispatch</span>
               </div>
             </div>
 

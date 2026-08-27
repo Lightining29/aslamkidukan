@@ -256,7 +256,7 @@ export default function Interactive3DDetailModal({ product, onClose, onBuyNow })
             <div className="detail-tags-row">
               <span className="detail-cat-badge">🌿 Home Decor</span>
               <span className="detail-discount-badge">Special Offer</span>
-              <span className="detail-free-ship-badge"><Truck size={12} /> Free Shipping</span>
+              <span className="detail-free-ship-badge"><Truck size={12} /> Reliable Delivery</span>
             </div>
 
             <div className="mobile-detail-title-row">
@@ -341,8 +341,8 @@ export default function Interactive3DDetailModal({ product, onClose, onBuyNow })
               <div className="guarantee-item">
                 <Truck size={16} color="#10B981" />
                 <div>
-                  <strong>Free Express Delivery</strong>
-                  <span>Delivery in 2-4 Days</span>
+                  <strong>Reliable Doorstep Delivery</strong>
+                  <span>Safe &amp; Insured in 2-4 Days</span>
                 </div>
               </div>
               <div className="guarantee-item">

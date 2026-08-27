@@ -286,8 +286,8 @@ export default function Home() {
           <div className="trust-cell-desktop">
             <div className="trust-icon-box"><Truck size={22} color="#10B981" /></div>
             <div>
-              <strong>Free Express Delivery</strong>
-              <span>Fast doorstep dispatch across India</span>
+              <strong>Reliable Doorstep Delivery</strong>
+              <span>Safe &amp; insured dispatch across India</span>
             </div>
           </div>
 
