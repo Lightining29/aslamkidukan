@@ -188,7 +188,7 @@ export default function Home() {
                 <Sparkles size={13} /> {searchQuery ? 'SEARCH RESULTS' : 'CURATED 3D WALL ART'}
               </span>
               <h2 className="catalog-title">
-                {searchQuery ? `Results for "${searchQuery}"` : 'All 3D Plants & Butterfly Stickers'}
+                {searchQuery ? `Results for "${searchQuery}"` : 'Curated Luxury Home Decor'}
               </h2>
             </div>
 
@@ -215,7 +215,7 @@ export default function Home() {
 
           {filteredProducts.length === 0 && (
             <div className="no-products-empty-state">
-              <p>No 3D stickers found matching "{searchQuery}".</p>
+              <p>{searchQuery ? `No decor items found matching "${searchQuery}".` : 'No decor products found in this category.'}</p>
               <button
                 className="reset-search-btn liquid-btn-effect"
                 onClick={() => { setSearchQuery(''); setSelectedCategory('all'); }}

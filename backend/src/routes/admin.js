@@ -93,11 +93,11 @@ router.get('/products', async (req, res) => {
   }
 });
 
-router.post('/products', upload.array('images', 5), async (req, res) => {
+router.post('/products', upload.array('images', 10), async (req, res) => {
   try {
     const {
       name, description, price, originalPrice,
-      category, stockQuantity, discountPercent, bestseller, tagline, badge, image
+      category, stockQuantity, discountPercent, bestseller, tagline, badge, image, images
     } = req.body;
 
     if (!name || !price) {
@@ -106,23 +106,29 @@ router.post('/products', upload.array('images', 5), async (req, res) => {
 
     const slug = slugify(name);
     const qty = parseInt(stockQuantity ?? 50, 10);
-    let primaryImage = image || '';
-
+    
+    let imageList = [];
     if (req.files && req.files.length > 0) {
-      const f = req.files[0];
-      primaryImage = `data:${f.mimetype};base64,${f.buffer.toString('base64')}`;
+      imageList = req.files.map((f) => `data:${f.mimetype};base64,${f.buffer.toString('base64')}`);
+    } else if (Array.isArray(images) && images.length > 0) {
+      imageList = images;
+    } else if (image) {
+      imageList = [image];
     }
+
+    const primaryImage = imageList[0] || image || '';
 
     const newProduct = await mysqlCreateProduct({
       name,
       slug,
       price: parseFloat(price),
       originalPrice: originalPrice ? parseFloat(originalPrice) : null,
-      categorySlug: typeof category === 'string' ? category : category?.slug || 'botanical',
+      categorySlug: typeof category === 'string' ? category : category?.slug || 'home-decor',
       description: description || '',
       tagline: tagline || '',
       badge: badge || '',
       image: primaryImage,
+      images: imageList,
       stock: qty,
       discountPercent: parseInt(discountPercent ?? 0, 10),
       bestseller: bestseller === 'true' || bestseller === true,
@@ -134,7 +140,7 @@ router.post('/products', upload.array('images', 5), async (req, res) => {
   }
 });
 
-router.put('/products/:id', upload.array('images', 5), async (req, res) => {
+router.put('/products/:id', upload.array('images', 10), async (req, res) => {
   try {
     const { id } = req.params;
     const updateData = { ...req.body };
@@ -154,12 +160,12 @@ router.put('/products/:id', upload.array('images', 5), async (req, res) => {
 
     delete updateData.deleteImageIndex;
     delete updateData.replaceImages;
-    delete updateData.images;
     delete updateData.stockQuantity;
 
     if (req.files && req.files.length > 0) {
-      const f = req.files[0];
-      updateData.image = `data:${f.mimetype};base64,${f.buffer.toString('base64')}`;
+      const newImages = req.files.map((f) => `data:${f.mimetype};base64,${f.buffer.toString('base64')}`);
+      updateData.image = newImages[0];
+      updateData.images = newImages;
     }
 
     const updated = await mysqlUpdateProduct(id, updateData);

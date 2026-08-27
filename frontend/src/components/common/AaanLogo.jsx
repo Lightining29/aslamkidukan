@@ -150,7 +150,7 @@ export default function AaanLogo({
               marginTop: '3px'
             }}
           >
-            3D STICKERS STUDIO
+            HOME DECOR STUDIO
           </span>
         </div>
       )}

@@ -46,7 +46,7 @@ export default function MobileAppHeader({ searchQuery, setSearchQuery, onSearchS
           <input
             type="text"
             className="mobile-search-input"
-            placeholder="Search 3D plant & butterfly stickers..."
+            placeholder="Search modern home decor & 3D wall art..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />

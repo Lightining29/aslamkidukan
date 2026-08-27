@@ -146,7 +146,7 @@ export default function MobileNavDrawer({
             <div className="drawer-guest-details">
               <h2 className="drawer-guest-title">Welcome to AAAN Cart</h2>
               <p className="drawer-guest-subtext">
-                Sign in to track orders, save 3D wall stickers to wishlist &amp; access member discounts.
+                Sign in to track orders, save home decor to wishlist &amp; access member discounts.
               </p>
               
               <button className="drawer-guest-auth-btn" onClick={handleAuthClick}>
@@ -178,7 +178,7 @@ export default function MobileNavDrawer({
             onClick={() => handleNavClick('/shop')}
           >
             <Sparkles size={18} className="tab-pill-icon" />
-            <span className="tab-pill-label">3D Wall Stickers</span>
+            <span className="tab-pill-label">Home Decor</span>
           </button>
 
           {/* 3. Wishlist / Likes Tab */}

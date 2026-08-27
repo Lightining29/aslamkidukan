@@ -8,7 +8,7 @@ import './Navbar.css';
 
 const navLinks = [
   { label: 'Home', href: '#home' },
-  { label: 'All 3D Stickers', href: '#products-catalog-section' },
+  { label: 'Home Decor', href: '#products-catalog-section' },
   { label: 'About', href: '#about' },
 ];
 

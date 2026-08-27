@@ -1,21 +1,20 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { ChevronLeft, Heart, ShoppingBag, Star, Sparkles, Check, Sun, Shield, RotateCw, X, Truck, Zap, ZoomIn, ZoomOut, Maximize2 } from 'lucide-react';
+import { ChevronLeft, Heart, ShoppingBag, Star, Sparkles, Check, Sun, Shield, RotateCw, X, Truck, Zap, ZoomIn, ZoomOut, Maximize2, Layers } from 'lucide-react';
 import { useCart } from '../../context/CartContext';
 import { useAuth } from '../../context/AuthContext';
-import { FINISH_OPTIONS, WALL_COLORS } from '../../data/stickersCatalog';
+import { WALL_COLORS } from '../../data/stickersCatalog';
 import './Interactive3DDetailModal.css';
 
 export default function Interactive3DDetailModal({ product, onClose, onBuyNow }) {
   const { addToCart, isInWishlist, toggleWishlist } = useCart();
   const { isAuthenticated, setShowLoginModal } = useAuth();
 
-  const [selectedFinish, setSelectedFinish] = useState(FINISH_OPTIONS[0]);
+  const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [selectedSize, setSelectedSize] = useState(product?.sizes ? product.sizes[0] : '40 × 60 cm');
   const [selectedWall, setSelectedWall] = useState(WALL_COLORS[0]);
   const [spotlightOn, setSpotlightOn] = useState(true);
-  const [tilt, setTilt] = useState({ x: 0, y: 0 });
-  const [zoomLevel, setZoomLevel] = useState(1); // 1x, 1.7x, 2.4x
+  const [zoomLevel, setZoomLevel] = useState(1); // 1x, 1.75x, 2.5x
   const [isClosing, setIsClosing] = useState(false);
   const [quantity, setQuantity] = useState(1);
   const [showMore, setShowMore] = useState(false);
@@ -37,9 +36,16 @@ export default function Interactive3DDetailModal({ product, onClose, onBuyNow })
 
   if (!product) return null;
 
-  const wished = isInWishlist(product._id);
-  const price = product.finalPrice || product.price;
-  const originalPrice = product.price > price ? product.price : Math.round(price * 1.8);
+  // Extract multi-image gallery
+  const images = Array.isArray(product.images) && product.images.length > 0
+    ? product.images
+    : [product.image || product.imageUrl || '/aaan-logo.svg'];
+
+  const currentImage = images[activeImageIndex] || images[0] || product.image || '/aaan-logo.svg';
+
+  const wished = isInWishlist(product._id || product.id);
+  const price = product.finalPrice || product.price || 0;
+  const originalPrice = product.originalPrice || (product.price > price ? product.price : Math.round(price * 1.8));
 
   // Smooth Cut-Out Close Handler
   const handleAnimatedClose = () => {
@@ -111,7 +117,6 @@ export default function Interactive3DDetailModal({ product, onClose, onBuyNow })
     addToCart(
       {
         ...product,
-        selectedFinish: selectedFinish.name,
         selectedSize: selectedSize
       },
       quantity
@@ -124,7 +129,6 @@ export default function Interactive3DDetailModal({ product, onClose, onBuyNow })
     addToCart(
       {
         ...product,
-        selectedFinish: selectedFinish.name,
         selectedSize: selectedSize
       },
       quantity
@@ -178,7 +182,7 @@ export default function Interactive3DDetailModal({ product, onClose, onBuyNow })
             onMouseMove={handleMouseMove}
             onMouseLeave={handleMouseLeave}
             onClick={handleToggleZoom}
-            title="Click or Tap to Zoom 3D Sticker"
+            title="Click or Tap to Zoom"
           >
             {/* Optional Spotlight Effect Glow Overlay */}
             {spotlightOn && (
@@ -194,7 +198,7 @@ export default function Interactive3DDetailModal({ product, onClose, onBuyNow })
               }}
             >
               <img
-                src={product.image}
+                src={currentImage}
                 alt={product.name}
                 className="stage-3d-main-img"
               />
@@ -243,12 +247,28 @@ export default function Interactive3DDetailModal({ product, onClose, onBuyNow })
             </div>
           </div>
 
+          {/* Multiple Image Thumbnails Gallery */}
+          {images.length > 1 && (
+            <div className="modal-gallery-thumbs-row">
+              {images.map((img, idx) => (
+                <button
+                  key={idx}
+                  className={`modal-gallery-thumb-btn ${activeImageIndex === idx ? 'selected' : ''}`}
+                  onClick={() => setActiveImageIndex(idx)}
+                >
+                  <img src={img} alt={`Thumbnail ${idx + 1}`} />
+                  {activeImageIndex === idx && <span className="active-thumb-pip" />}
+                </button>
+              ))}
+            </div>
+          )}
+
           {/* Product Title & Price Header */}
           <div className="mobile-detail-info-block">
             
             <div className="detail-tags-row">
-              <span className="detail-cat-badge">🌿 3D Wall Decor</span>
-              <span className="detail-discount-badge">50% OFF</span>
+              <span className="detail-cat-badge">🌿 Home Decor</span>
+              <span className="detail-discount-badge">Special Offer</span>
               <span className="detail-free-ship-badge"><Truck size={12} /> Free Shipping</span>
             </div>
 
@@ -262,8 +282,12 @@ export default function Interactive3DDetailModal({ product, onClose, onBuyNow })
                 <span className="detail-currency">₹</span>
                 <span className="detail-price-val">{price}</span>
               </div>
-              <span className="detail-price-orig">₹{originalPrice}</span>
-              <span className="detail-save-pill">Save ₹{originalPrice - price}</span>
+              {originalPrice > price && (
+                <>
+                  <span className="detail-price-orig">₹{originalPrice}</span>
+                  <span className="detail-save-pill">Save ₹{originalPrice - price}</span>
+                </>
+              )}
             </div>
 
             {/* Rating and review count */}
@@ -272,53 +296,26 @@ export default function Interactive3DDetailModal({ product, onClose, onBuyNow })
                 <Star size={13} fill="#F59E0B" color="#F59E0B" />
                 <span>{product.rating || 4.9}</span>
               </div>
-              <span className="rating-review-count">({product.reviewCount || 312} verified reviews)</span>
+              <span className="rating-review-count">({product.reviewCount || 24} verified reviews)</span>
               <span className="stock-pill">In Stock · Ready to Dispatch</span>
             </div>
 
             {/* Description */}
-            <p className="mobile-detail-description">
-              {showMore
-                ? product.description
-                : `${product.description?.slice(0, 150)}... `}
-              <button
-                className="show-more-toggle"
-                onClick={() => setShowMore(!showMore)}
-              >
-                {showMore ? 'Show less' : 'Read more'}
-              </button>
-            </p>
-
-            {/* Finish / Material Options */}
-            <div className="mobile-detail-options-group">
-              <div className="options-header-row">
-                <label className="options-group-title">Sticker Finish Material</label>
-                <span className="selected-finish-label">{selectedFinish.name}</span>
-              </div>
-              <div className="finish-swatches-grid">
-                {FINISH_OPTIONS.map((finish) => {
-                  const isSelected = selectedFinish.id === finish.id;
-                  return (
-                    <button
-                      key={finish.id}
-                      className={`finish-swatch-item ${isSelected ? 'selected' : ''}`}
-                      onClick={() => setSelectedFinish(finish)}
-                    >
-                      <div
-                        className="finish-swatch-preview"
-                        style={{ background: finish.color }}
-                      >
-                        {isSelected && <Check size={12} color="#FFFFFF" />}
-                      </div>
-                      <div className="finish-swatch-text">
-                        <span className="finish-swatch-name">{finish.name}</span>
-                        <span className="finish-swatch-tag">{finish.tag}</span>
-                      </div>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
+            {product.description && (
+              <p className="mobile-detail-description">
+                {showMore
+                  ? product.description
+                  : `${product.description?.slice(0, 150)}${product.description?.length > 150 ? '... ' : ''}`}
+                {product.description?.length > 150 && (
+                  <button
+                    className="show-more-toggle"
+                    onClick={() => setShowMore(!showMore)}
+                  >
+                    {showMore ? 'Show less' : 'Read more'}
+                  </button>
+                )}
+              </p>
+            )}
 
             {/* Size Selector */}
             <div className="mobile-detail-options-group">
@@ -350,7 +347,7 @@ export default function Interactive3DDetailModal({ product, onClose, onBuyNow })
                 >
                   -
                 </button>
-                <span className="qty-num">{quantity}</span>
+                <span className="qty-val-display">{quantity}</span>
                 <button
                   className="qty-btn"
                   onClick={() => setQuantity((q) => q + 1)}
@@ -360,49 +357,67 @@ export default function Interactive3DDetailModal({ product, onClose, onBuyNow })
               </div>
             </div>
 
-            {/* Quality Guarantees Bar */}
+            {/* Guarantees & Features */}
             <div className="sticker-guarantees-bar">
               <div className="guarantee-item">
-                <Shield size={16} color="#10B981" />
-                <span>3D Optical Depth Tested</span>
+                <Truck size={16} color="#10B981" />
+                <div>
+                  <strong>Free Express Delivery</strong>
+                  <span>Delivery in 2-4 Days</span>
+                </div>
               </div>
               <div className="guarantee-item">
-                <Sparkles size={16} color="#6366F1" />
-                <span>Zero Residue Peel &amp; Stick</span>
+                <Shield size={16} color="#6366F1" />
+                <div>
+                  <strong>100% Quality Guaranteed</strong>
+                  <span>Direct from AAAN Cart</span>
+                </div>
               </div>
               <div className="guarantee-item">
                 <Zap size={16} color="#F59E0B" />
-                <span>Waterproof &amp; Wipeable</span>
+                <div>
+                  <strong>Cash on Delivery Available</strong>
+                  <span>Pay at Doorstep</span>
+                </div>
               </div>
             </div>
 
           </div>
+
         </div>
 
-        {/* Sticky Bottom Actions Bar */}
-        <div className="mobile-detail-sticky-bar">
-          <button
-            className={`detail-add-cart-outline-btn ${addedAnim ? 'added' : ''}`}
-            onClick={handleAddToCart}
-          >
-            <ShoppingBag size={18} />
-            <span>{addedAnim ? 'Added to Cart ✓' : 'Add to Cart'}</span>
-          </button>
-          
-          <button
-            className="detail-buy-now-btn"
-            onClick={handleDirectBuy}
-          >
-            <ShoppingBag size={18} />
-            <span>Buy Now · ₹{price * quantity}</span>
-          </button>
+        {/* Sticky Mobile Floating Action Footer */}
+        <div className="mobile-detail-bottom-actions">
+          <div className="bottom-total-col">
+            <span className="bottom-total-label">Total Payable</span>
+            <div className="bottom-total-amount">
+              <span className="curr">₹</span>
+              <span className="num">{price * quantity}</span>
+            </div>
+          </div>
+
+          <div className="bottom-action-buttons">
+            <button
+              className={`btn-add-cart-float ${addedAnim ? 'added' : ''}`}
+              onClick={handleAddToCart}
+            >
+              {addedAnim ? <Check size={18} /> : <ShoppingBag size={18} />}
+              <span>{addedAnim ? 'Added!' : 'Add to Cart'}</span>
+            </button>
+
+            <button
+              className="btn-buy-now-float"
+              onClick={handleDirectBuy}
+            >
+              <Zap size={18} />
+              <span>Buy Now</span>
+            </button>
+          </div>
         </div>
 
       </div>
     </div>
   );
 
-  return typeof document !== 'undefined'
-    ? createPortal(modalContent, document.body)
-    : modalContent;
+  return createPortal(modalContent, document.body);
 }

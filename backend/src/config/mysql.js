@@ -120,6 +120,7 @@ export async function initMySQLDatabase() {
         tagline VARCHAR(255),
         badge VARCHAR(100),
         image LONGTEXT,
+        images LONGTEXT,
         stock INT DEFAULT 100,
         salesCount INT DEFAULT 0,
         rating DECIMAL(3, 2) DEFAULT 4.9,
@@ -132,6 +133,13 @@ export async function initMySQLDatabase() {
         updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
     `);
+
+    // Ensure images column exists if table was created previously
+    try {
+      await db.query('ALTER TABLE products ADD COLUMN IF NOT EXISTS images LONGTEXT;');
+    } catch {
+      // Ignored if already present
+    }
 
     // 5. Orders Table
     await db.query(`
@@ -286,21 +294,32 @@ export async function mysqlCreateProduct(data) {
   const db = getMySQLPool();
   const {
     name, slug, price, originalPrice, categorySlug,
-    description, tagline, badge, image, stock, discountPercent, bestseller,
+    description, tagline, badge, image, images, stock, discountPercent, bestseller,
   } = data;
+
+  let imagesJson = '';
+  if (Array.isArray(images)) {
+    imagesJson = JSON.stringify(images);
+  } else if (typeof images === 'string' && images) {
+    imagesJson = images;
+  } else if (image) {
+    imagesJson = JSON.stringify([image]);
+  }
+
+  const primaryImage = image || (Array.isArray(images) && images[0]) || '';
 
   const [res] = await db.query(
     `INSERT INTO products 
-      (name, slug, price, originalPrice, categorySlug, description, tagline, badge, image, stock, discountPercent, bestseller)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      (name, slug, price, originalPrice, categorySlug, description, tagline, badge, image, images, stock, discountPercent, bestseller)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     [
-      name, slug, price, originalPrice || null, categorySlug || 'botanical',
-      description || '', tagline || '', badge || '', image || '',
+      name, slug, price, originalPrice || null, categorySlug || 'home-decor',
+      description || '', tagline || '', badge || '', primaryImage, imagesJson,
       stock || 50, discountPercent || 0, bestseller ? 1 : 0
     ]
   );
 
-  return { id: res.insertId, _id: String(res.insertId), ...data };
+  return { id: res.insertId, _id: String(res.insertId), ...data, image: primaryImage, images: Array.isArray(images) ? images : (primaryImage ? [primaryImage] : []) };
 }
 
 export async function mysqlUpdateProduct(id, data) {
@@ -310,8 +329,13 @@ export async function mysqlUpdateProduct(id, data) {
 
   for (const [key, value] of Object.entries(data)) {
     if (key !== 'id' && key !== '_id') {
-      fields.push(`\`${key}\` = ?`);
-      params.push(value);
+      if (key === 'images' && Array.isArray(value)) {
+        fields.push(`\`${key}\` = ?`);
+        params.push(JSON.stringify(value));
+      } else {
+        fields.push(`\`${key}\` = ?`);
+        params.push(value);
+      }
     }
   }
 
@@ -330,6 +354,16 @@ export async function mysqlDeleteProduct(id) {
 }
 
 function formatMySQLProduct(p) {
+  let parsedImages = [];
+  try {
+    parsedImages = typeof p.images === 'string' ? JSON.parse(p.images) : (p.images || []);
+  } catch {
+    parsedImages = [];
+  }
+  if (!parsedImages.length && p.image) {
+    parsedImages = [p.image];
+  }
+
   return {
     _id: String(p.id),
     id: p.id,
@@ -342,8 +376,9 @@ function formatMySQLProduct(p) {
     description: p.description,
     tagline: p.tagline,
     badge: p.badge,
-    imageUrl: p.image || `/api/images/product/${p.id}`,
-    image: p.image,
+    imageUrl: p.image || (parsedImages[0]) || `/api/images/product/${p.id}`,
+    image: p.image || (parsedImages[0]) || '',
+    images: parsedImages,
     stockQuantity: p.stock || 50,
     salesCount: p.salesCount || 0,
     rating: Number(p.rating || 4.9),

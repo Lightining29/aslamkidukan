@@ -50,7 +50,7 @@ export default function Footer() {
               </div>
             </Link>
             <p className="light-footer-desc">
-              India's favorite botanical stickers, acrylic wall niches &amp; 3D butterfly wall decor for modern homes.
+              India's favorite modern home decor, acrylic wall art &amp; 3D luxury decor for contemporary spaces.
             </p>
             
             {/* Social Pills */}
@@ -90,11 +90,11 @@ export default function Footer() {
 
           {/* Quick Links */}
           <div className="light-footer-links-col">
-            <h5>Explore Decals</h5>
-            <Link to="/shop">All 3D Wall Stickers</Link>
-            <Link to="/categories">Botanical Plants</Link>
+            <h5>Explore Decor</h5>
+            <Link to="/shop">All Home Decor</Link>
+            <Link to="/categories">Wall Art &amp; Panels</Link>
             <Link to="/shop">Wall Niches</Link>
-            <Link to="/shop">3D Butterflies</Link>
+            <Link to="/shop">3D Luxury Decor</Link>
           </div>
 
           {/* Account & Help */}

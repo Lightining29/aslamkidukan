@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ArrowLeft, CreditCard } from 'lucide-react';
+import { ArrowLeft, ShieldCheck, Lock, CreditCard } from 'lucide-react';
 import { useCart } from '../../context/CartContext';
 import { useAuth } from '../../context/AuthContext';
 import { checkout, verifyPayment, formatPrice, getProductPrice } from '../../api';
@@ -196,8 +196,9 @@ export default function CheckoutPage() {
                   <input value={form.zip} onChange={update('zip')} required />
                 </div>
               </div>
-              <button type="submit" className="btn btn-sky" style={{ width: '100%', marginTop: 24, justifyContent: 'center' }} disabled={loading}>
-                {loading ? 'Processing...' : `Pay ${formatPrice(cartTotal)}`}
+              <button type="submit" className="checkout-pay-btn" disabled={loading}>
+                <ShieldCheck size={20} />
+                <span>{loading ? 'Processing...' : `Pay ${formatPrice(cartTotal)} via Razorpay`}</span>
               </button>
             </form>
 

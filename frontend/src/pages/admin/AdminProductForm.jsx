@@ -9,7 +9,7 @@ import '../../styles/Panel.css';
 import '../auth/Auth.css';
 import './AdminProductForm.css';
 
-const MAX_IMAGES = 5;
+const MAX_IMAGES = 10;
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5 MB
 
 const emptyForm = {
