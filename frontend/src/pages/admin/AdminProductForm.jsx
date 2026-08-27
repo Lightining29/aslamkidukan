@@ -19,6 +19,7 @@ const emptyForm = {
   price: '',
   originalPrice: '',
   category: '',
+  dimensions: '',
   stockQuantity: 50,
   discountPercent: 0,
   bestseller: false,
@@ -104,6 +105,7 @@ export default function AdminProductForm() {
             price: p.price,
             originalPrice: p.originalPrice || '',
             category: p.category?._id || p.category,
+            dimensions: p.dimensions || '',
             stockQuantity: p.stockQuantity,
             discountPercent: p.discountPercent || 0,
             bestseller: p.bestseller || false,
@@ -388,53 +390,25 @@ export default function AdminProductForm() {
             </div>
           </div>
 
-          {/* Card 3: Size & Dimension Selector */}
+          {/* Card 3: Dimensions & Specifications */}
           <div className="apf-card">
             <div className="card-head-between">
-              <h3 className="card-title">📏 Size Options &amp; Measurement Guide</h3>
-              <span className="cat-mode-badge">
-                {isClothing ? '👔 Clothes Mode (S-XXXL)' : isFurnitureOrElectronics ? '📐 Dimensions Mode (cm)' : 'Standard'}
-              </span>
+              <h3 className="card-title">📐 Product Dimensions &amp; Size</h3>
             </div>
 
             <p className="apf-card-hint">
-              {isClothing
-                ? 'Select clothing sizes customers can choose from:'
-                : isFurnitureOrElectronics
-                ? 'Select or add dimensions in centimeters (cm):'
-                : 'Select product options available for purchase:'}
+              Enter the exact physical dimensions of this home decor item (displayed as fixed specifications on the storefront):
             </p>
 
-            <div className="apf-size-chips">
-              {(isClothing
-                ? ['S', 'M', 'L', 'XL', 'XXL', 'XXXL']
-                : ['30 × 20 cm', '50 × 40 cm', '100 × 60 cm', '120 × 80 cm', '150 × 90 cm', '200 × 100 cm']
-              ).map((sz) => {
-                const active = (form.sizes || []).includes(sz);
-                return (
-                  <button
-                    type="button"
-                    key={sz}
-                    className={`apf-size-chip ${active ? 'active' : ''}`}
-                    onClick={() => toggleSize(sz)}
-                  >
-                    {sz} {active ? '✓' : '+'}
-                  </button>
-                );
-              })}
-            </div>
-
-            <div className="apf-custom-size-row">
+            <div className="apf-group" style={{ marginTop: 12 }}>
+              <label>Dimensions (e.g. 50 × 80 cm / 40 × 60 cm)</label>
               <input
                 type="text"
-                placeholder={isClothing ? 'Custom size (e.g. XS, Free Size)' : 'Custom size in cm (e.g. 75 × 45 cm)'}
-                value={customSizeInput}
-                onChange={(e) => setCustomSizeInput(e.target.value)}
-                onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); addCustomSize(); } }}
+                placeholder="e.g. 40 × 60 cm, 50 × 80 cm, or 12 × 18 Inches"
+                value={form.dimensions || ''}
+                onChange={update('dimensions')}
+                className="apf-input"
               />
-              <button type="button" className="btn-add-custom-size" onClick={addCustomSize}>
-                + Add Size Option
-              </button>
             </div>
           </div>
 

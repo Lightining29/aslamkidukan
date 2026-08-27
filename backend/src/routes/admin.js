@@ -97,7 +97,7 @@ router.post('/products', upload.array('images', 10), async (req, res) => {
   try {
     const {
       name, description, price, originalPrice,
-      category, stockQuantity, discountPercent, bestseller, tagline, badge, image, images
+      category, stockQuantity, discountPercent, bestseller, tagline, badge, dimensions, image, images
     } = req.body;
 
     if (!name || !price) {
@@ -127,6 +127,7 @@ router.post('/products', upload.array('images', 10), async (req, res) => {
       description: description || '',
       tagline: tagline || '',
       badge: badge || '',
+      dimensions: dimensions || '',
       image: primaryImage,
       images: imageList,
       stock: qty,

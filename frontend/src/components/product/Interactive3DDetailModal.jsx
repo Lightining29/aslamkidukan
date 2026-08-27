@@ -12,7 +12,6 @@ export default function Interactive3DDetailModal({ product, onClose, onBuyNow })
   const { isAuthenticated, setShowLoginModal } = useAuth();
 
   const [activeImageIndex, setActiveImageIndex] = useState(0);
-  const [selectedSize, setSelectedSize] = useState(product?.sizes ? product.sizes[0] : '40 × 60 cm');
   const [selectedWall, setSelectedWall] = useState(WALL_COLORS[0]);
   const [spotlightOn, setSpotlightOn] = useState(true);
   const [zoomLevel, setZoomLevel] = useState(1); // 1x, 1.75x, 2.5x
@@ -115,25 +114,13 @@ export default function Interactive3DDetailModal({ product, onClose, onBuyNow })
   };
 
   const handleAddToCart = () => {
-    addToCart(
-      {
-        ...product,
-        selectedSize: selectedSize
-      },
-      quantity
-    );
+    addToCart(product, quantity);
     setAddedAnim(true);
     setTimeout(() => setAddedAnim(false), 1500);
   };
 
   const handleDirectBuy = () => {
-    addToCart(
-      {
-        ...product,
-        selectedSize: selectedSize
-      },
-      quantity
-    );
+    addToCart(product, quantity);
     if (onBuyNow) {
       onBuyNow();
     } else {
@@ -317,24 +304,16 @@ export default function Interactive3DDetailModal({ product, onClose, onBuyNow })
               </p>
             )}
 
-            {/* Size Selector */}
-            <div className="mobile-detail-options-group">
-              <label className="options-group-title">Select Size / Dimension</label>
-              <div className="size-pills-row">
-                {(product.sizes || ['40 × 60 cm', '50 × 80 cm', '60 × 100 cm']).map((size) => {
-                  const isSelected = selectedSize === size;
-                  return (
-                    <button
-                      key={size}
-                      className={`size-pill-btn ${isSelected ? 'selected' : ''}`}
-                      onClick={() => setSelectedSize(size)}
-                    >
-                      {size}
-                    </button>
-                  );
-                })}
+            {/* Dimensions Specification provided by Admin */}
+            {(product.dimensions || (Array.isArray(product.sizes) && product.sizes.length > 0)) && (
+              <div className="mobile-detail-options-group">
+                <label className="options-group-title">Product Dimensions</label>
+                <div className="static-dimension-badge">
+                  <span className="dim-icon">📐</span>
+                  <span className="dim-text">{product.dimensions || product.sizes[0]}</span>
+                </div>
               </div>
-            </div>
+            )}
 
             {/* Quantity Selector */}
             <div className="mobile-detail-options-group qty-group">

@@ -134,9 +134,10 @@ export async function initMySQLDatabase() {
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
     `);
 
-    // Ensure images column exists if table was created previously
+    // Ensure images and dimensions columns exist if table was created previously
     try {
       await db.query('ALTER TABLE products ADD COLUMN IF NOT EXISTS images LONGTEXT;');
+      await db.query('ALTER TABLE products ADD COLUMN IF NOT EXISTS dimensions VARCHAR(255);');
     } catch {
       // Ignored if already present
     }
@@ -294,7 +295,7 @@ export async function mysqlCreateProduct(data) {
   const db = getMySQLPool();
   const {
     name, slug, price, originalPrice, categorySlug,
-    description, tagline, badge, image, images, stock, discountPercent, bestseller,
+    description, tagline, badge, dimensions, image, images, stock, discountPercent, bestseller,
   } = data;
 
   let imagesJson = '';
@@ -310,16 +311,16 @@ export async function mysqlCreateProduct(data) {
 
   const [res] = await db.query(
     `INSERT INTO products 
-      (name, slug, price, originalPrice, categorySlug, description, tagline, badge, image, images, stock, discountPercent, bestseller)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      (name, slug, price, originalPrice, categorySlug, description, tagline, badge, dimensions, image, images, stock, discountPercent, bestseller)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     [
       name, slug, price, originalPrice || null, categorySlug || 'home-decor',
-      description || '', tagline || '', badge || '', primaryImage, imagesJson,
+      description || '', tagline || '', badge || '', dimensions || '', primaryImage, imagesJson,
       stock || 50, discountPercent || 0, bestseller ? 1 : 0
     ]
   );
 
-  return { id: res.insertId, _id: String(res.insertId), ...data, image: primaryImage, images: Array.isArray(images) ? images : (primaryImage ? [primaryImage] : []) };
+  return { id: res.insertId, _id: String(res.insertId), ...data, dimensions: dimensions || '', image: primaryImage, images: Array.isArray(images) ? images : (primaryImage ? [primaryImage] : []) };
 }
 
 export async function mysqlUpdateProduct(id, data) {
@@ -376,6 +377,7 @@ function formatMySQLProduct(p) {
     description: p.description,
     tagline: p.tagline,
     badge: p.badge,
+    dimensions: p.dimensions || '',
     imageUrl: p.image || (parsedImages[0]) || `/api/images/product/${p.id}`,
     image: p.image || (parsedImages[0]) || '',
     images: parsedImages,
