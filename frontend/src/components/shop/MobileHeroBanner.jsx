@@ -1,112 +1,111 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowRight, Sparkles, ChevronLeft, ChevronRight } from 'lucide-react';
-import Bouncy3DLifeText from '../common/Bouncy3DLifeText';
+import { ArrowRight, Sparkles, Sun } from 'lucide-react';
+import interiorHeroImg from '../../assets/images/luxury_interior_hero.jpg';
 import './MobileHeroBanner.css';
 
-const HERO_SLIDES = [
-  {
-    id: 1,
-    tag: '🏡 LUXURY HOME DECOR',
-    title: 'Elevate Your Living Space',
-    subtitle: 'Handcrafted 3D wall art, architectural alcoves & aesthetic accents',
-    discount: 'SPECIAL OFFER',
-    image: '/stickers/niche_monstera_3d_1787582973768.jpg',
-    bgColor: 'linear-gradient(135deg, #F5EBE1 0%, #E8DFD8 100%)',
-    badgeColor: '#10B981',
-    cta: 'Shop Decor',
-    category: 'all'
-  },
-  {
-    id: 2,
-    tag: '✨ MODERN WALL ART',
-    title: 'Contemporary 3D Wall Art',
-    subtitle: 'Premium relief designs with metallic accents & natural shadows',
-    discount: 'NEW ARRIVAL',
-    image: '/stickers/blue_butterfly_3d_1787582894782.jpg',
-    bgColor: 'linear-gradient(135deg, #E0F2FE 0%, #BAE6FD 100%)',
-    badgeColor: '#0284C7',
-    cta: 'Explore Art',
-    category: 'all'
-  },
-  {
-    id: 3,
-    tag: '🌿 AESTHETIC LIVING ACCENTS',
-    title: 'Handpicked Botanical Accents',
-    subtitle: 'Elevated textures and lush visual elements for modern interiors',
-    discount: 'BESTSELLER',
-    image: '/stickers/succulent_plant_3d_1787582910119.jpg',
-    bgColor: 'linear-gradient(135deg, #FDF2F8 0%, #FCE7F3 100%)',
-    badgeColor: '#EC4899',
-    cta: 'Shop Collection',
-    category: 'all'
-  }
-];
-
-export default function MobileHeroBanner({ onSelectCategory }) {
+export default function MobileHeroBanner({ products = [], onOpenModal, onSelectCategory }) {
   const [current, setCurrent] = useState(0);
+  const [spotlightOn, setSpotlightOn] = useState(true);
+
+  const displayList = Array.isArray(products) && products.length > 0
+    ? products
+    : [
+        {
+          _id: 'default-1',
+          name: 'Aytul Kursi Luxury Wall Art',
+          price: 499,
+          originalPrice: 999,
+          image: '/stickers/niche_monstera_3d_1787582973768.jpg'
+        }
+      ];
 
   useEffect(() => {
+    if (displayList.length <= 1) return;
     const timer = setInterval(() => {
-      setCurrent((prev) => (prev + 1) % HERO_SLIDES.length);
+      setCurrent((prev) => (prev + 1) % Math.min(displayList.length, 5));
     }, 4500);
     return () => clearInterval(timer);
-  }, []);
+  }, [displayList.length]);
 
-  const slide = HERO_SLIDES[current];
+  const activeItem = displayList[current] || displayList[0];
+  const activeImg = activeItem?.image || activeItem?.imageUrl || '/stickers/niche_monstera_3d_1787582973768.jpg';
+  const price = activeItem?.finalPrice || activeItem?.price || 499;
 
   return (
     <div className="mobile-hero-carousel-wrap">
       <div
-        className="mobile-hero-banner-card"
-        style={{ background: slide.bgColor }}
+        className="mobile-interior-hero-card"
+        onClick={() => onOpenModal && activeItem && onOpenModal(activeItem)}
       >
-        <div className="mobile-hero-text-side">
-          <span className="mobile-hero-chip" style={{ color: slide.badgeColor }}>
-            <Sparkles size={11} /> {slide.tag}
-          </span>
-          <h2 className="mobile-hero-heading">
-            {slide.id === 1 ? (
-              <>Transform Walls with <Bouncy3DLifeText /></>
-            ) : (
-              slide.title
-            )}
-          </h2>
-          <p className="mobile-hero-desc">{slide.subtitle}</p>
+        {/* Living Room Interior Image */}
+        <img
+          src={interiorHeroImg}
+          alt="Luxury Living Room"
+          className="mobile-interior-bg"
+        />
 
-          <div className="mobile-hero-bottom-action">
-            <button
-              className="mobile-hero-shop-btn"
-              onClick={() => onSelectCategory(slide.category)}
-            >
-              <span>{slide.cta}</span>
-              <ArrowRight size={14} />
-            </button>
-            <span className="mobile-hero-discount-badge">{slide.discount}</span>
+        {/* Ambient Ceiling Spotlight */}
+        {spotlightOn && <div className="mobile-spotlight-glow" />}
+
+        {/* Top Eyebrow Badge */}
+        <div className="mobile-hero-top-badge">
+          <span className="mhb-chip">
+            <Sparkles size={11} /> LUXURY HOME DECOR
+          </span>
+          <button
+            type="button"
+            className="mhb-light-toggle"
+            onClick={(e) => { e.stopPropagation(); setSpotlightOn(!spotlightOn); }}
+          >
+            <Sun size={11} /> {spotlightOn ? 'ON' : 'OFF'}
+          </button>
+        </div>
+
+        {/* Hung Wall Art / Painting on Living Room Wall */}
+        <div className="mobile-hung-painting-frame">
+          <div className="mobile-painting-mat">
+            <img
+              src={activeImg}
+              alt={activeItem?.name || 'Home Decor'}
+              className="mobile-painting-img"
+            />
+            <div className="mobile-painting-glaze" />
           </div>
         </div>
 
-        <div className="mobile-hero-image-side">
-          <div className="mobile-hero-3d-img-container">
-            <img
-              src={slide.image}
-              alt={slide.title}
-              className="mobile-hero-3d-asset"
-            />
+        {/* Floating Bottom Info Pill */}
+        <div className="mobile-room-info-card" onClick={(e) => { e.stopPropagation(); onOpenModal && activeItem && onOpenModal(activeItem); }}>
+          <div className="mric-left">
+            <span className="mric-tag">FEATURED DECOR</span>
+            <h3 className="mric-title">{activeItem?.name || 'Luxury Wall Art'}</h3>
+            <div className="mric-price-row">
+              <span className="mric-price">₹{price}</span>
+              {activeItem?.originalPrice ? (
+                <span className="mric-orig">₹{activeItem.originalPrice}</span>
+              ) : null}
+            </div>
           </div>
+
+          <button className="mric-action-btn">
+            <span>3D View</span>
+            <ArrowRight size={13} />
+          </button>
         </div>
       </div>
 
       {/* Pagination Dots */}
-      <div className="mobile-hero-dots-row">
-        {HERO_SLIDES.map((s, idx) => (
-          <button
-            key={s.id}
-            className={`hero-dot-btn ${idx === current ? 'active' : ''}`}
-            onClick={() => setCurrent(idx)}
-            aria-label={`Slide ${idx + 1}`}
-          />
-        ))}
-      </div>
+      {displayList.length > 1 && (
+        <div className="mobile-hero-dots-row">
+          {displayList.slice(0, 5).map((s, idx) => (
+            <button
+              key={s._id || s.id || idx}
+              className={`hero-dot-btn ${idx === current ? 'active' : ''}`}
+              onClick={() => setCurrent(idx)}
+              aria-label={`Product ${idx + 1}`}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 }

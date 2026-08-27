@@ -163,9 +163,11 @@ export default function Home() {
         />
       )}
 
-      {/* Mobile Hero Carousel Banner (Visible on Mobile only) */}
+      {/* Mobile Hero Living Room Showcase */}
       <div className="mobile-hero-only-wrapper">
         <MobileHeroBanner
+          products={products}
+          onOpenModal={handleOpenProductModal}
           onSelectCategory={(catId) => {
             setSelectedCategory(catId);
             handleExploreClick();
