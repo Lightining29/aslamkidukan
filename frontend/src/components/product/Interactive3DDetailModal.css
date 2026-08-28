@@ -669,25 +669,28 @@
   bottom: 0;
   left: 0;
   right: 0;
-  padding: 14px 20px 20px 20px;
-  background: #FFFFFF;
-  border-top: 1px solid #E2E8F0;
+  padding: 12px 18px 16px 18px;
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-top: 1px solid rgba(226, 232, 240, 0.85);
   display: flex;
   align-items: center;
   gap: 12px;
-  z-index: 20;
-  box-shadow: 0 -6px 24px rgba(0, 0, 0, 0.08);
+  z-index: 30;
+  box-shadow: 0 -8px 25px rgba(15, 23, 42, 0.08);
 }
 
 .detail-sticky-total-col {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  min-width: 80px;
+  min-width: 75px;
+  flex-shrink: 0;
 }
 
 .sticky-total-label {
-  font-size: 0.72rem;
+  font-size: 0.68rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -708,71 +711,109 @@
 }
 
 .sticky-val {
-  font-size: 1.3rem;
+  font-size: 1.35rem;
   font-weight: 900;
   color: #0F172A;
   font-family: 'Plus Jakarta Sans', sans-serif;
   letter-spacing: -0.5px;
 }
 
+/* Beautiful Add to Cart Button */
 .detail-add-cart-outline-btn {
   flex: 1;
-  height: 52px;
-  border-radius: 16px;
-  background: #F8FAFC;
-  border: 2px solid #0F172A;
+  min-width: 120px;
+  height: 50px;
+  border-radius: 14px;
+  background: #FFFFFF;
+  border: 1.8px solid #0F172A;
   color: #0F172A;
-  font-size: 0.92rem;
+  font-size: 0.9rem;
   font-weight: 800;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
   cursor: pointer;
-  animation: buttonScaleIncrease 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s both;
-  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.06);
+  transition: all 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+  white-space: nowrap;
 }
 
 .detail-add-cart-outline-btn:hover {
-  transform: translateY(-2px) scale(1.03);
-  background: #FFFFFF;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+  transform: translateY(-2px);
+  background: #F8FAFC;
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.12);
+}
+
+.detail-add-cart-outline-btn:active {
+  transform: scale(0.96);
 }
 
 .detail-add-cart-outline-btn.added {
   background: #10B981;
   border-color: #10B981;
   color: #FFFFFF;
-  transform: scale(1.05);
+  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
 }
 
+/* Beautiful Buy Now Button */
 .detail-buy-now-btn {
-  flex: 1.4;
-  height: 52px;
-  border-radius: 16px;
-  background: #0F172A;
+  flex: 1.35;
+  min-width: 130px;
+  height: 50px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
   color: #FFFFFF;
-  border: none;
-  font-size: 0.98rem;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  font-size: 0.95rem;
   font-weight: 900;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
   cursor: pointer;
-  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.3);
-  animation: buttonScaleIncrease 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) 0.15s both;
-  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 6px 20px rgba(15, 23, 42, 0.25);
+  transition: all 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+  white-space: nowrap;
 }
 
 .detail-buy-now-btn:hover {
-  transform: translateY(-2px) scale(1.04);
-  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.38);
-  background: #1E293B;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.35);
+  background: linear-gradient(135deg, #1E293B 0%, #0F172A 100%);
 }
 
 .detail-buy-now-btn:active {
-  transform: scale(0.97);
+  transform: scale(0.96);
+}
+
+@media (max-width: 400px) {
+  .mobile-detail-sticky-bar {
+    padding: 10px 12px 14px 12px;
+    gap: 8px;
+  }
+  
+  .detail-sticky-total-col {
+    min-width: 65px;
+  }
+  
+  .sticky-val {
+    font-size: 1.18rem;
+  }
+  
+  .detail-add-cart-outline-btn {
+    min-width: 100px;
+    font-size: 0.82rem;
+    padding: 0 10px;
+    height: 46px;
+  }
+  
+  .detail-buy-now-btn {
+    min-width: 110px;
+    font-size: 0.88rem;
+    padding: 0 12px;
+    height: 46px;
+  }
 }
 
 @keyframes buttonScaleIncrease {

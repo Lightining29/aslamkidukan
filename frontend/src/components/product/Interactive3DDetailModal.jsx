@@ -336,31 +336,6 @@ export default function Interactive3DDetailModal({ product, onClose, onBuyNow })
               </div>
             </div>
 
-            {/* Guarantees & Features */}
-            <div className="sticker-guarantees-bar">
-              <div className="guarantee-item">
-                <Truck size={16} color="#10B981" />
-                <div>
-                  <strong>Reliable Doorstep Delivery</strong>
-                  <span>Safe &amp; Insured in 2-4 Days</span>
-                </div>
-              </div>
-              <div className="guarantee-item">
-                <Shield size={16} color="#6366F1" />
-                <div>
-                  <strong>100% Quality Guaranteed</strong>
-                  <span>Direct from AAAN Cart</span>
-                </div>
-              </div>
-              <div className="guarantee-item">
-                <Zap size={16} color="#F59E0B" />
-                <div>
-                  <strong>Cash on Delivery Available</strong>
-                  <span>Pay at Doorstep</span>
-                </div>
-              </div>
-            </div>
-
           </div>
 
         </div>
