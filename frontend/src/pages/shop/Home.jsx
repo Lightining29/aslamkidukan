@@ -188,7 +188,7 @@ export default function Home() {
           <div className="catalog-header-bar">
             <div>
               <span className="catalog-eyebrow">
-                <Sparkles size={13} /> {searchQuery ? 'SEARCH RESULTS' : 'CURATED 3D WALL ART'}
+                <Sparkles size={13} /> {searchQuery ? 'SEARCH RESULTS' : 'CURATED WALL ART'}
               </span>
               <h2 className="catalog-title">
                 {searchQuery ? `Results for "${searchQuery}"` : 'Curated Luxury Home Decor'}
@@ -262,7 +262,7 @@ export default function Home() {
             <span className="about-eyebrow">🏡 ABOUT AAAN CART</span>
             <h3 className="about-title">Crafting Aesthetic Living Spaces</h3>
             <p className="about-desc">
-              At <strong>AAAN Cart</strong>, we curate exquisite home decor, architectural 3D wall art, and modern accents designed to turn any living space into a designer masterpiece. Each piece is crafted with premium materials to provide timeless elegance and modern aesthetic charm.
+              At <strong>AAAN Cart</strong>, we curate exquisite home decor, architectural wall art, and modern accents designed to turn any living space into a designer masterpiece. Each piece is crafted with premium materials to provide timeless elegance and modern aesthetic charm.
             </p>
             <div className="about-stats-grid">
               <div className="about-stat">

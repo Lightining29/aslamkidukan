@@ -80,7 +80,7 @@ export default function StickerProductCard({ product, onOpenModal }) {
         />
         <div className="card-zoom-indicator-pill">
           <ZoomIn size={12} />
-          <span>Zoom 3D</span>
+          <span>Zoom</span>
         </div>
       </div>
 

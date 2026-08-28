@@ -87,7 +87,7 @@ export default function MobileHeroBanner({ products = [], onOpenModal, onSelectC
           </div>
 
           <button className="mric-action-btn">
-            <span>3D View</span>
+            <span>View Details</span>
             <ArrowRight size={13} />
           </button>
         </div>

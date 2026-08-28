@@ -184,7 +184,7 @@ export default function Interactive3DStudio({ products = [], onOpenModal }) {
             <div className="studio-bottom-action-bar">
               <div>
                 <span className="studio-price-tag">₹{price}</span>
-                <span className="studio-free-ship">Free Shipping &amp; Cash On Delivery</span>
+                <span className="studio-free-ship">Reliable Delivery &amp; COD Available</span>
               </div>
 
               <div className="studio-action-btns">
@@ -192,7 +192,7 @@ export default function Interactive3DStudio({ products = [], onOpenModal }) {
                   className="btn-quick-preview"
                   onClick={() => onOpenModal && onOpenModal(selectedSticker)}
                 >
-                  <Eye size={16} /> 3D View
+                  <Eye size={16} /> View Details
                 </button>
                 <button
                   className={`btn-add-studio-cart ${added ? 'added' : ''}`}

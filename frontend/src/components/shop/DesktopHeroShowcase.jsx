@@ -49,7 +49,7 @@ export default function DesktopHeroShowcase({ onExploreClick, onOpenModal, featu
           </h1>
 
           <p className="desktop-hero-lead">
-            Transform your living room, bedroom, and walls with handcrafted <strong>3D architectural wall art</strong>, <strong>aesthetic relief accents</strong>, and <strong>designer home decor</strong>.
+            Transform your living room, bedroom, and walls with handcrafted <strong>architectural wall art</strong>, <strong>aesthetic relief accents</strong>, and <strong>designer home decor</strong>.
           </p>
 
           <div className="desktop-hero-cta-group">
@@ -157,7 +157,7 @@ export default function DesktopHeroShowcase({ onExploreClick, onOpenModal, featu
                   ) : null}
                 </div>
                 <button className="rfp-view-btn">
-                  <span>View in 3D</span>
+                  <span>View Details</span>
                   <ArrowRight size={13} />
                 </button>
               </div>
